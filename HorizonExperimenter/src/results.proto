@@ -1,0 +1,8 @@
+package core.io;
+
+message Result{
+	required int64 randseed = 1;
+	required int32 episode = 2;
+	required double v_error = 3;
+	repeated double model_theta = 4 [packed=true];
+}

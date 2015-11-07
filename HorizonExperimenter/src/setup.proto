@@ -1,0 +1,18 @@
+syntax = "proto3";
+//This is where you describe your experiment format
+
+message Experiment{
+	string experiment_name = 0;
+	repeated Parameter params = 1;
+}
+
+message Parameter{
+	required string param_name = 0;
+	required Value min_value = 1;
+	Value max_value = 2;
+	Value growth_value = 3; 
+	enum GrowthPattern{
+		LINEAR = 0;
+		GEOMETRIC = 1;
+	}	
+}

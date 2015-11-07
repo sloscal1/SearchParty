@@ -1,0 +1,18 @@
+package search;
+
+option java_package = "core.messages";
+option java_outer_classname = "EmploySearcher";
+
+//This message comes with the startup of a new core.party.Searcher to
+//let that object know where the dispatcher is, and any other
+//pertinent details needed to get the experimentation architecture
+//up and running.
+message Contract{
+	//The IPv4 address where the Dispatcher can be found.
+	//e.g., 127.0.0.1, localhost, etc.
+	required string dispatch_address = 1;
+	//The port that the dispatcher will be listening to.
+	required int32 dispatch_port = 2;
+	//The secret to share in the communications (should be unique per contract)
+	optional int64 secret = 3;
+}
