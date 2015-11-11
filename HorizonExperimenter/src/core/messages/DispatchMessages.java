@@ -3555,6 +3555,21 @@ public final class DispatchMessages {
      * <code>optional int32 replicates = 2 [default = 1];</code>
      */
     int getReplicates();
+
+    // optional string username = 3;
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    boolean hasUsername();
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    java.lang.String getUsername();
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getUsernameBytes();
   }
   /**
    * Protobuf type {@code search.Machine}
@@ -3615,6 +3630,11 @@ public final class DispatchMessages {
             case 16: {
               bitField0_ |= 0x00000002;
               replicates_ = input.readInt32();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              username_ = input.readBytes();
               break;
             }
           }
@@ -3716,9 +3736,53 @@ public final class DispatchMessages {
       return replicates_;
     }
 
+    // optional string username = 3;
+    public static final int USERNAME_FIELD_NUMBER = 3;
+    private java.lang.Object username_;
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    public boolean hasUsername() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    public java.lang.String getUsername() {
+      java.lang.Object ref = username_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          username_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string username = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUsernameBytes() {
+      java.lang.Object ref = username_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        username_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       name_ = "";
       replicates_ = 1;
+      username_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3742,6 +3806,9 @@ public final class DispatchMessages {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, replicates_);
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getUsernameBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -3758,6 +3825,10 @@ public final class DispatchMessages {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, replicates_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getUsernameBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3879,6 +3950,8 @@ public final class DispatchMessages {
         bitField0_ = (bitField0_ & ~0x00000001);
         replicates_ = 1;
         bitField0_ = (bitField0_ & ~0x00000002);
+        username_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -3915,6 +3988,10 @@ public final class DispatchMessages {
           to_bitField0_ |= 0x00000002;
         }
         result.replicates_ = replicates_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.username_ = username_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3938,6 +4015,11 @@ public final class DispatchMessages {
         }
         if (other.hasReplicates()) {
           setReplicates(other.getReplicates());
+        }
+        if (other.hasUsername()) {
+          bitField0_ |= 0x00000004;
+          username_ = other.username_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -4073,6 +4155,80 @@ public final class DispatchMessages {
       public Builder clearReplicates() {
         bitField0_ = (bitField0_ & ~0x00000002);
         replicates_ = 1;
+        onChanged();
+        return this;
+      }
+
+      // optional string username = 3;
+      private java.lang.Object username_ = "";
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public boolean hasUsername() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public java.lang.String getUsername() {
+        java.lang.Object ref = username_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          username_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUsernameBytes() {
+        java.lang.Object ref = username_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          username_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public Builder setUsername(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        username_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public Builder clearUsername() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        username_ = getDefaultInstance().getUsername();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string username = 3;</code>
+       */
+      public Builder setUsernameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        username_ = value;
         onChanged();
         return this;
       }
@@ -5035,14 +5191,14 @@ public final class DispatchMessages {
       "\022)\n\013environment\030\010 \003(\0132\024.search.Env_Varia" +
       "ble\022!\n\010machines\030\t \003(\0132\017.search.Machine\"+" +
       "\n\014Env_Variable\022\014\n\004name\030\001 \002(\t\022\r\n\005value\030\002 " +
-      "\002(\t\".\n\007Machine\022\014\n\004name\030\001 \002(\t\022\025\n\nreplicat" +
-      "es\030\002 \001(\005:\0011\"\301\001\n\tParameter\022\022\n\nparam_name\030",
-      "\001 \002(\t\022\021\n\tmin_value\030\002 \002(\001\022\021\n\tmax_value\030\003 " +
-      "\002(\001\022\024\n\014growth_value\030\004 \001(\001\0228\n\007pattern\030\005 \001" +
-      "(\0162\037.search.Parameter.GrowthPattern:\006LIN" +
-      "EAR\"*\n\rGrowthPattern\022\n\n\006LINEAR\020\000\022\r\n\tGEOM" +
-      "ETRIC\020\001B!\n\rcore.messagesB\020DispatchMessag" +
-      "es"
+      "\002(\t\"@\n\007Machine\022\014\n\004name\030\001 \002(\t\022\025\n\nreplicat" +
+      "es\030\002 \001(\005:\0011\022\020\n\010username\030\003 \001(\t\"\301\001\n\tParame",
+      "ter\022\022\n\nparam_name\030\001 \002(\t\022\021\n\tmin_value\030\002 \002" +
+      "(\001\022\021\n\tmax_value\030\003 \002(\001\022\024\n\014growth_value\030\004 " +
+      "\001(\001\0228\n\007pattern\030\005 \001(\0162\037.search.Parameter." +
+      "GrowthPattern:\006LINEAR\"*\n\rGrowthPattern\022\n" +
+      "\n\006LINEAR\020\000\022\r\n\tGEOMETRIC\020\001B!\n\rcore.messag" +
+      "esB\020DispatchMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5066,7 +5222,7 @@ public final class DispatchMessages {
           internal_static_search_Machine_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Machine_descriptor,
-              new java.lang.String[] { "Name", "Replicates", });
+              new java.lang.String[] { "Name", "Replicates", "Username", });
           internal_static_search_Parameter_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_search_Parameter_fieldAccessorTable = new

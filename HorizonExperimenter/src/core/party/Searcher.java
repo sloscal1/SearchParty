@@ -1,22 +1,26 @@
 package core.party;
 
-import gnu.getopt.Getopt;
-import gnu.getopt.LongOpt;
-
-import java.util.HashMap;
-import java.util.HashSet;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.TextFormat;
+import com.google.protobuf.TextFormat.ParseException;
 
 import core.io.Arg;
+import core.io.ProgramParameter;
 import core.messages.EmploySearcher;
 import core.messages.EmploySearcher.Contract;
+import core.messages.EmploySearcher.Experiment.Env_Variable;
 
 /**
  * This an instance of this class runs on a machine that is to
@@ -29,10 +33,30 @@ import core.messages.EmploySearcher.Contract;
  *
  */
 public class Searcher {
+	public static List<ProgramParameter> allParams = new ArrayList<>();
+	static{
+		allParams.add(new ProgramParameter("contract-proto", Arg.REQUIRED, 'c'){
+			@Override
+			public boolean process(String value, Map<ProgramParameter, Object> values) {
+				boolean error = false;
+				try {
+					EmploySearcher.Contract.Builder builder = EmploySearcher.Contract.newBuilder();
+					TextFormat.merge(value, builder);
+					EmploySearcher.Contract contract = builder.build();
+					values.put(this,contract);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return error;
+			}
+		});
+	}
+	
 	private ZMQ.Context context;
 	private ZMQ.Socket basecomms;
-	private List<Experiment> incomplete;
-	private List<Experiment> complete;
+//	private List<Experiment> incomplete;
+//	private List<Experiment> complete;
 	private int numIOThreads = 4;
 	private int localPort;
 
@@ -40,9 +64,7 @@ public class Searcher {
 	 * Receives the address:port of the Dispatcher.
 	 */
 	public Searcher(Contract msg){
-		
 		new Thread(new DispatcherTask(msg)).start();
-		
 	}
 
 	private class DispatcherTask implements Runnable{
@@ -55,129 +77,79 @@ public class Searcher {
 		@Override
 		public void run() {
 			//Need to set up the communications with the Dispatcher.
-			try(ZContext ctx = new ZContext()){
-				basecomms = ctx.createSocket(ZMQ.REP);
-				localPort = basecomms.bindToRandomPort("tcp://127.0.0.1");
-				basecomms.connect(msg.getDispatchAddress()+":"+msg.getDispatchPort());
+			try(ZMQ.Context ctx = ZMQ.context(1)){
+				basecomms = ctx.socket(ZMQ.REQ);
+				try {
+					localPort = basecomms.bindToRandomPort("tcp://"+InetAddress.getLocalHost().getHostAddress());
+				} catch (UnknownHostException e) {
+					localPort = basecomms.bindToRandomPort("tcp://127.0.0.1");
+				}
+				basecomms.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getDispatchPort());
 				
 				//Let the Searcher know that all is well...
-				basecomms.send(msg.getSecret()+":"+localPort);
+				basecomms.send(EmploySearcher.Response.newBuilder()
+								.setSearcherPort(localPort)
+								.setSecret(msg.getSecret())
+								.build().toByteArray(), ZMQ.DONTWAIT);
 				
 				//Now loop on Experiment type messages
+				//Need to setup the executor service to run the experiments locally:
+				ExecutorService exec = Executors.newFixedThreadPool(msg.getNumReplicates());
 				for(;;){
-					byte[] bytes = basecomms.recv();
+					byte[] msg = basecomms.recv();
+					try {
+						EmploySearcher.Experiment exp = EmploySearcher.Experiment.parseFrom(msg);
+						//TODO Need to track experiments that failed.
+						//TODO Need to set up some sockets or something to receive results.
+						exec.submit(new ExperimentTask(exp));
+					} catch (InvalidProtocolBufferException e) {
+						System.err.println("Unknown message was received. Ignoring...");
+					}
 				}
 			}
+		}
+	}
+	
+	private class ExperimentTask implements Callable<Integer>{
+		private EmploySearcher.Experiment exp;
+		private ExperimentTask(EmploySearcher.Experiment exp){
+			this.exp = exp;
+		}
+		
+		@Override
+		public Integer call() {
+			//Get the command set
+			String[] command = new String[exp.getArgumentCount()+1];
+			command[0] = exp.getProgramName();
+			int pos = 1;
+			for(String arg : exp.getArgumentList())
+				command[pos++] = arg;
+			ProcessBuilder builder = new ProcessBuilder(command);
+			
+			//Set up the environment for this process
+			Map<String, String> env = builder.environment();
+			for(Env_Variable var : exp.getEnvironmentList())
+				env.put(var.getKey(), var.getValue());
+			
+			Process proc = null;
+			int retVal = -1;
+			try {
+				proc = builder.start();
+				retVal = proc.waitFor();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				System.err.println("Searcher was killed, so too will its things...");
+				proc.destroyForcibly();
+				e.printStackTrace();
+			}
+			return retVal;
 		}
 	}
 
 	public static void main(String[] args) throws Exception{
-		Map<CLArgs, Object> vals = getValues(args);
+		Map<ProgramParameter, Object> vals = ProgramParameter.getValues(args, allParams, allParams);
 		if(vals != null)
-			new Searcher((Contract)vals.get(CLArgs.CONTRACT_PROTO));
-	}
-
-	private enum CLArgs{
-		CONTRACT_PROTO("contract-proto", Arg.REQUIRED, 'c'){
-			@Override
-			public boolean process(String value, Map<CLArgs, Object> values) {
-				boolean error = false;
-				try {
-					values.put(this, EmploySearcher.Contract.parseFrom(value.getBytes()));
-				} catch (InvalidProtocolBufferException e) {
-					error = true;
-					e.printStackTrace();
-				}
-				return error;
-			}
-		};
-		//Everything from here down in the enum is boilerplate and should not change from
-		//experiment to experiment.
-		private String longName;
-		private Arg required;
-		private char shortChar;
-
-		private CLArgs(String longName, Arg required, char shortChar){
-			this.longName = longName;
-			this.required = required;
-			this.shortChar = shortChar;
-		}
-		public String getLongName(){return longName;}
-		public char getShortChar(){return shortChar;}
-		public Arg getRequiredVal(){return required;}
-		/**
-		 * Perform the required initialization actions on the given field of obj with
-		 * value.
-		 * @param obj to initialize, must not be null
-		 * @param value the value to parse to fill in a member of obj
-		 * @return true if an error occurred during initiatlization
-		 */
-		public boolean process(String value, Map<CLArgs, Object> values){return false;}
-	}
-
-	/**
-	 * This method creates an object of type SampleExperiment, and then initializes its
-	 * values according to the command line arguments, and the arguments that the program
-	 * is looking for according to the {@link CLIKey} enum.
-	 * @param commandLineArgs
-	 * @return initialized SampleExperiment object
-	 * @throws Exception 
-	 */
-	public static Map<CLArgs, Object> getValues(String[] commandLineArgs) throws Exception{
-		//Make a list of all required flags
-		Set<CLArgs> requiredFlags = new HashSet<>();
-		//We need a value of Number of episodes or else this is a no go!
-		requiredFlags.add(CLArgs.CONTRACT_PROTO);
-
-		//*********** NOTHING CHANGES BELOW THIS LINE*********************
-		//Return structure:
-		Map<CLArgs, Object> retVals = new HashMap<>();
-		//Build all of the long options to process from the command line...
-		LongOpt[] options = new LongOpt[CLArgs.values().length];
-		CLArgs[] keys = CLArgs.values();
-		Map<Character, Integer> reverseLookup = new HashMap<>();
-		String getOptString = "";
-		for(int i = 0; i < options.length; ++i){
-			Arg req = keys[i].getRequiredVal();
-			char single = keys[i].getShortChar();
-			options[i] = new LongOpt(keys[i].getLongName(), req.getValue(), null, single);
-			reverseLookup.put(single, i);
-			//Need to make the opt string, this one should be a:e:l:n:di:b:p:s:
-			getOptString += single;
-			if(req == Arg.REQUIRED)
-				getOptString += ":";
-			else if(req == Arg.OPTIONAL)
-				getOptString += "::";
-		}
-		//Now parse the options:
-		Getopt opts = new Getopt("SampleExperiment", commandLineArgs, getOptString, options);
-		opts.setOpterr(true);
-
-		boolean error = false;
-		for(int c = opts.getopt(); c != -1 && !error; c = opts.getopt()){
-			//Got an unexpected error
-			if(c == '?'){
-				System.err.println("Unexpected command line parameter: "+opts.getopt());
-				error = true;
-				continue;
-			}
-			//Otherwise, getopts returns the single char flag - map back to the long key
-			if(c != 0)
-				c = reverseLookup.get((char)c);
-			//Otherwise, getopts returns 0 if a long flag was used - pull out the long index
-			else
-				c = opts.getLongind();
-
-			error = keys[c].process(opts.getOptarg(), retVals);
-			requiredFlags.remove(keys[c]);
-		}
-
-		//Check to see if a required flag was not present:
-		if(!requiredFlags.isEmpty()){
-			error = true;
-			for(CLArgs key : requiredFlags)
-				System.err.println("Error: Required flag: --"+key.getLongName()+" (-"+key.getShortChar()+") is not specified.");
-		}
-		return error? null : retVals;
+			new Searcher((Contract)vals.get(allParams.get(0)));
 	}
 }

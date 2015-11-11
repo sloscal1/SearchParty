@@ -15,4 +15,35 @@ message Contract{
 	required int32 dispatch_port = 2;
 	//The secret to share in the communications (should be unique per contract)
 	optional int64 secret = 3;
+	//The number of replicates that this machine will run with
+	optional int32 num_replicates = 4 [default = 1];
+}
+
+//This is the response format of the message that is
+//sent back from the Searcher to establish the connection with
+//the Dispatcher
+message Response{
+	//The port where the searcher will listen to messages from the dispatcher.
+	required int32 searcher_port = 1;
+	//The response secret to confirm the correct Searcher is responding.
+	optional int64 secret = 2;
+}
+
+//Encapsulates the needed information to start up a task.
+message Experiment{
+	//Name of the executable that will conduct this experiment
+	required string program_name = 1;
+	//The arguments to pass to the experiment program
+	repeated string argument = 2;
+	//Any additional variables that will need to linked against 
+	//to enable experiment program execution.
+	repeated Env_Variable environment = 3;
+	
+	//Key-Value pairs for things like LD_LIBRARY_PATH=/usr/local/lib etc.
+	message Env_Variable{
+		//The system variable name
+		required string key = 1;
+		//The system variable value
+		required string value = 2;
+	}
 }

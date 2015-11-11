@@ -1,0 +1,5 @@
+git_uri : "unset"
+git_branch : "master"	
+machines {
+	name : "localhost"
+}

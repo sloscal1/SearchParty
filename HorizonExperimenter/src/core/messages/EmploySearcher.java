@@ -76,6 +76,24 @@ public final class EmploySearcher {
      * </pre>
      */
     long getSecret();
+
+    // optional int32 num_replicates = 4 [default = 1];
+    /**
+     * <code>optional int32 num_replicates = 4 [default = 1];</code>
+     *
+     * <pre>
+     *The number of replicates that this machine will run with
+     * </pre>
+     */
+    boolean hasNumReplicates();
+    /**
+     * <code>optional int32 num_replicates = 4 [default = 1];</code>
+     *
+     * <pre>
+     *The number of replicates that this machine will run with
+     * </pre>
+     */
+    int getNumReplicates();
   }
   /**
    * Protobuf type {@code search.Contract}
@@ -148,6 +166,11 @@ public final class EmploySearcher {
             case 24: {
               bitField0_ |= 0x00000004;
               secret_ = input.readInt64();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              numReplicates_ = input.readInt32();
               break;
             }
           }
@@ -296,10 +319,35 @@ public final class EmploySearcher {
       return secret_;
     }
 
+    // optional int32 num_replicates = 4 [default = 1];
+    public static final int NUM_REPLICATES_FIELD_NUMBER = 4;
+    private int numReplicates_;
+    /**
+     * <code>optional int32 num_replicates = 4 [default = 1];</code>
+     *
+     * <pre>
+     *The number of replicates that this machine will run with
+     * </pre>
+     */
+    public boolean hasNumReplicates() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int32 num_replicates = 4 [default = 1];</code>
+     *
+     * <pre>
+     *The number of replicates that this machine will run with
+     * </pre>
+     */
+    public int getNumReplicates() {
+      return numReplicates_;
+    }
+
     private void initFields() {
       dispatchAddress_ = "";
       dispatchPort_ = 0;
       secret_ = 0L;
+      numReplicates_ = 1;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -330,6 +378,9 @@ public final class EmploySearcher {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt64(3, secret_);
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, numReplicates_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -350,6 +401,10 @@ public final class EmploySearcher {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(3, secret_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, numReplicates_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -480,6 +535,8 @@ public final class EmploySearcher {
         bitField0_ = (bitField0_ & ~0x00000002);
         secret_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
+        numReplicates_ = 1;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -520,6 +577,10 @@ public final class EmploySearcher {
           to_bitField0_ |= 0x00000004;
         }
         result.secret_ = secret_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.numReplicates_ = numReplicates_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -546,6 +607,9 @@ public final class EmploySearcher {
         }
         if (other.hasSecret()) {
           setSecret(other.getSecret());
+        }
+        if (other.hasNumReplicates()) {
+          setNumReplicates(other.getNumReplicates());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -784,6 +848,55 @@ public final class EmploySearcher {
         return this;
       }
 
+      // optional int32 num_replicates = 4 [default = 1];
+      private int numReplicates_ = 1;
+      /**
+       * <code>optional int32 num_replicates = 4 [default = 1];</code>
+       *
+       * <pre>
+       *The number of replicates that this machine will run with
+       * </pre>
+       */
+      public boolean hasNumReplicates() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional int32 num_replicates = 4 [default = 1];</code>
+       *
+       * <pre>
+       *The number of replicates that this machine will run with
+       * </pre>
+       */
+      public int getNumReplicates() {
+        return numReplicates_;
+      }
+      /**
+       * <code>optional int32 num_replicates = 4 [default = 1];</code>
+       *
+       * <pre>
+       *The number of replicates that this machine will run with
+       * </pre>
+       */
+      public Builder setNumReplicates(int value) {
+        bitField0_ |= 0x00000008;
+        numReplicates_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 num_replicates = 4 [default = 1];</code>
+       *
+       * <pre>
+       *The number of replicates that this machine will run with
+       * </pre>
+       */
+      public Builder clearNumReplicates() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        numReplicates_ = 1;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:search.Contract)
     }
 
@@ -795,11 +908,2636 @@ public final class EmploySearcher {
     // @@protoc_insertion_point(class_scope:search.Contract)
   }
 
+  public interface ResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required int32 searcher_port = 1;
+    /**
+     * <code>required int32 searcher_port = 1;</code>
+     *
+     * <pre>
+     *The port where the searcher will listen to messages from the dispatcher.
+     * </pre>
+     */
+    boolean hasSearcherPort();
+    /**
+     * <code>required int32 searcher_port = 1;</code>
+     *
+     * <pre>
+     *The port where the searcher will listen to messages from the dispatcher.
+     * </pre>
+     */
+    int getSearcherPort();
+
+    // optional int64 secret = 2;
+    /**
+     * <code>optional int64 secret = 2;</code>
+     *
+     * <pre>
+     *The response secret to confirm the correct Searcher is responding.
+     * </pre>
+     */
+    boolean hasSecret();
+    /**
+     * <code>optional int64 secret = 2;</code>
+     *
+     * <pre>
+     *The response secret to confirm the correct Searcher is responding.
+     * </pre>
+     */
+    long getSecret();
+  }
+  /**
+   * Protobuf type {@code search.Response}
+   *
+   * <pre>
+   *This is the response format of the message that is
+   *sent back from the Searcher to establish the connection with
+   *the Dispatcher
+   * </pre>
+   */
+  public static final class Response extends
+      com.google.protobuf.GeneratedMessage
+      implements ResponseOrBuilder {
+    // Use Response.newBuilder() to construct.
+    private Response(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Response(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Response defaultInstance;
+    public static Response getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Response getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Response(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              searcherPort_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              secret_ = input.readInt64();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return core.messages.EmploySearcher.internal_static_search_Response_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return core.messages.EmploySearcher.internal_static_search_Response_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              core.messages.EmploySearcher.Response.class, core.messages.EmploySearcher.Response.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Response> PARSER =
+        new com.google.protobuf.AbstractParser<Response>() {
+      public Response parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Response(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Response> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required int32 searcher_port = 1;
+    public static final int SEARCHER_PORT_FIELD_NUMBER = 1;
+    private int searcherPort_;
+    /**
+     * <code>required int32 searcher_port = 1;</code>
+     *
+     * <pre>
+     *The port where the searcher will listen to messages from the dispatcher.
+     * </pre>
+     */
+    public boolean hasSearcherPort() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required int32 searcher_port = 1;</code>
+     *
+     * <pre>
+     *The port where the searcher will listen to messages from the dispatcher.
+     * </pre>
+     */
+    public int getSearcherPort() {
+      return searcherPort_;
+    }
+
+    // optional int64 secret = 2;
+    public static final int SECRET_FIELD_NUMBER = 2;
+    private long secret_;
+    /**
+     * <code>optional int64 secret = 2;</code>
+     *
+     * <pre>
+     *The response secret to confirm the correct Searcher is responding.
+     * </pre>
+     */
+    public boolean hasSecret() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional int64 secret = 2;</code>
+     *
+     * <pre>
+     *The response secret to confirm the correct Searcher is responding.
+     * </pre>
+     */
+    public long getSecret() {
+      return secret_;
+    }
+
+    private void initFields() {
+      searcherPort_ = 0;
+      secret_ = 0L;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasSearcherPort()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, searcherPort_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt64(2, secret_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, searcherPort_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(2, secret_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static core.messages.EmploySearcher.Response parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static core.messages.EmploySearcher.Response parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static core.messages.EmploySearcher.Response parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static core.messages.EmploySearcher.Response parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static core.messages.EmploySearcher.Response parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static core.messages.EmploySearcher.Response parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static core.messages.EmploySearcher.Response parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static core.messages.EmploySearcher.Response parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static core.messages.EmploySearcher.Response parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static core.messages.EmploySearcher.Response parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(core.messages.EmploySearcher.Response prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code search.Response}
+     *
+     * <pre>
+     *This is the response format of the message that is
+     *sent back from the Searcher to establish the connection with
+     *the Dispatcher
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements core.messages.EmploySearcher.ResponseOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return core.messages.EmploySearcher.internal_static_search_Response_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return core.messages.EmploySearcher.internal_static_search_Response_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                core.messages.EmploySearcher.Response.class, core.messages.EmploySearcher.Response.Builder.class);
+      }
+
+      // Construct using core.messages.EmploySearcher.Response.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        searcherPort_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        secret_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return core.messages.EmploySearcher.internal_static_search_Response_descriptor;
+      }
+
+      public core.messages.EmploySearcher.Response getDefaultInstanceForType() {
+        return core.messages.EmploySearcher.Response.getDefaultInstance();
+      }
+
+      public core.messages.EmploySearcher.Response build() {
+        core.messages.EmploySearcher.Response result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public core.messages.EmploySearcher.Response buildPartial() {
+        core.messages.EmploySearcher.Response result = new core.messages.EmploySearcher.Response(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.searcherPort_ = searcherPort_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.secret_ = secret_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof core.messages.EmploySearcher.Response) {
+          return mergeFrom((core.messages.EmploySearcher.Response)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(core.messages.EmploySearcher.Response other) {
+        if (other == core.messages.EmploySearcher.Response.getDefaultInstance()) return this;
+        if (other.hasSearcherPort()) {
+          setSearcherPort(other.getSearcherPort());
+        }
+        if (other.hasSecret()) {
+          setSecret(other.getSecret());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasSearcherPort()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        core.messages.EmploySearcher.Response parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (core.messages.EmploySearcher.Response) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required int32 searcher_port = 1;
+      private int searcherPort_ ;
+      /**
+       * <code>required int32 searcher_port = 1;</code>
+       *
+       * <pre>
+       *The port where the searcher will listen to messages from the dispatcher.
+       * </pre>
+       */
+      public boolean hasSearcherPort() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required int32 searcher_port = 1;</code>
+       *
+       * <pre>
+       *The port where the searcher will listen to messages from the dispatcher.
+       * </pre>
+       */
+      public int getSearcherPort() {
+        return searcherPort_;
+      }
+      /**
+       * <code>required int32 searcher_port = 1;</code>
+       *
+       * <pre>
+       *The port where the searcher will listen to messages from the dispatcher.
+       * </pre>
+       */
+      public Builder setSearcherPort(int value) {
+        bitField0_ |= 0x00000001;
+        searcherPort_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 searcher_port = 1;</code>
+       *
+       * <pre>
+       *The port where the searcher will listen to messages from the dispatcher.
+       * </pre>
+       */
+      public Builder clearSearcherPort() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        searcherPort_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int64 secret = 2;
+      private long secret_ ;
+      /**
+       * <code>optional int64 secret = 2;</code>
+       *
+       * <pre>
+       *The response secret to confirm the correct Searcher is responding.
+       * </pre>
+       */
+      public boolean hasSecret() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional int64 secret = 2;</code>
+       *
+       * <pre>
+       *The response secret to confirm the correct Searcher is responding.
+       * </pre>
+       */
+      public long getSecret() {
+        return secret_;
+      }
+      /**
+       * <code>optional int64 secret = 2;</code>
+       *
+       * <pre>
+       *The response secret to confirm the correct Searcher is responding.
+       * </pre>
+       */
+      public Builder setSecret(long value) {
+        bitField0_ |= 0x00000002;
+        secret_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int64 secret = 2;</code>
+       *
+       * <pre>
+       *The response secret to confirm the correct Searcher is responding.
+       * </pre>
+       */
+      public Builder clearSecret() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        secret_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:search.Response)
+    }
+
+    static {
+      defaultInstance = new Response(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:search.Response)
+  }
+
+  public interface ExperimentOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required string program_name = 1;
+    /**
+     * <code>required string program_name = 1;</code>
+     *
+     * <pre>
+     *Name of the executable that will conduct this experiment
+     * </pre>
+     */
+    boolean hasProgramName();
+    /**
+     * <code>required string program_name = 1;</code>
+     *
+     * <pre>
+     *Name of the executable that will conduct this experiment
+     * </pre>
+     */
+    java.lang.String getProgramName();
+    /**
+     * <code>required string program_name = 1;</code>
+     *
+     * <pre>
+     *Name of the executable that will conduct this experiment
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getProgramNameBytes();
+
+    // repeated string argument = 2;
+    /**
+     * <code>repeated string argument = 2;</code>
+     *
+     * <pre>
+     *The arguments to pass to the experiment program
+     * </pre>
+     */
+    java.util.List<java.lang.String>
+    getArgumentList();
+    /**
+     * <code>repeated string argument = 2;</code>
+     *
+     * <pre>
+     *The arguments to pass to the experiment program
+     * </pre>
+     */
+    int getArgumentCount();
+    /**
+     * <code>repeated string argument = 2;</code>
+     *
+     * <pre>
+     *The arguments to pass to the experiment program
+     * </pre>
+     */
+    java.lang.String getArgument(int index);
+    /**
+     * <code>repeated string argument = 2;</code>
+     *
+     * <pre>
+     *The arguments to pass to the experiment program
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getArgumentBytes(int index);
+
+    // repeated .search.Experiment.Env_Variable environment = 3;
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    java.util.List<core.messages.EmploySearcher.Experiment.Env_Variable> 
+        getEnvironmentList();
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    core.messages.EmploySearcher.Experiment.Env_Variable getEnvironment(int index);
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    int getEnvironmentCount();
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    java.util.List<? extends core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder> 
+        getEnvironmentOrBuilderList();
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder getEnvironmentOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code search.Experiment}
+   *
+   * <pre>
+   *Encapsulates the needed information to start up a task.
+   * </pre>
+   */
+  public static final class Experiment extends
+      com.google.protobuf.GeneratedMessage
+      implements ExperimentOrBuilder {
+    // Use Experiment.newBuilder() to construct.
+    private Experiment(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Experiment(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Experiment defaultInstance;
+    public static Experiment getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Experiment getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Experiment(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              programName_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                argument_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              argument_.add(input.readBytes());
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                environment_ = new java.util.ArrayList<core.messages.EmploySearcher.Experiment.Env_Variable>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              environment_.add(input.readMessage(core.messages.EmploySearcher.Experiment.Env_Variable.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          argument_ = new com.google.protobuf.UnmodifiableLazyStringList(argument_);
+        }
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          environment_ = java.util.Collections.unmodifiableList(environment_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return core.messages.EmploySearcher.internal_static_search_Experiment_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return core.messages.EmploySearcher.internal_static_search_Experiment_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              core.messages.EmploySearcher.Experiment.class, core.messages.EmploySearcher.Experiment.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Experiment> PARSER =
+        new com.google.protobuf.AbstractParser<Experiment>() {
+      public Experiment parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Experiment(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Experiment> getParserForType() {
+      return PARSER;
+    }
+
+    public interface Env_VariableOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
+
+      // required string key = 1;
+      /**
+       * <code>required string key = 1;</code>
+       *
+       * <pre>
+       *The system variable name
+       * </pre>
+       */
+      boolean hasKey();
+      /**
+       * <code>required string key = 1;</code>
+       *
+       * <pre>
+       *The system variable name
+       * </pre>
+       */
+      java.lang.String getKey();
+      /**
+       * <code>required string key = 1;</code>
+       *
+       * <pre>
+       *The system variable name
+       * </pre>
+       */
+      com.google.protobuf.ByteString
+          getKeyBytes();
+
+      // required string value = 2;
+      /**
+       * <code>required string value = 2;</code>
+       *
+       * <pre>
+       *The system variable value
+       * </pre>
+       */
+      boolean hasValue();
+      /**
+       * <code>required string value = 2;</code>
+       *
+       * <pre>
+       *The system variable value
+       * </pre>
+       */
+      java.lang.String getValue();
+      /**
+       * <code>required string value = 2;</code>
+       *
+       * <pre>
+       *The system variable value
+       * </pre>
+       */
+      com.google.protobuf.ByteString
+          getValueBytes();
+    }
+    /**
+     * Protobuf type {@code search.Experiment.Env_Variable}
+     *
+     * <pre>
+     *Key-Value pairs for things like LD_LIBRARY_PATH=/usr/local/lib etc.
+     * </pre>
+     */
+    public static final class Env_Variable extends
+        com.google.protobuf.GeneratedMessage
+        implements Env_VariableOrBuilder {
+      // Use Env_Variable.newBuilder() to construct.
+      private Env_Variable(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+        super(builder);
+        this.unknownFields = builder.getUnknownFields();
+      }
+      private Env_Variable(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+      private static final Env_Variable defaultInstance;
+      public static Env_Variable getDefaultInstance() {
+        return defaultInstance;
+      }
+
+      public Env_Variable getDefaultInstanceForType() {
+        return defaultInstance;
+      }
+
+      private final com.google.protobuf.UnknownFieldSet unknownFields;
+      @java.lang.Override
+      public final com.google.protobuf.UnknownFieldSet
+          getUnknownFields() {
+        return this.unknownFields;
+      }
+      private Env_Variable(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        initFields();
+        int mutable_bitField0_ = 0;
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder();
+        try {
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              default: {
+                if (!parseUnknownField(input, unknownFields,
+                                       extensionRegistry, tag)) {
+                  done = true;
+                }
+                break;
+              }
+              case 10: {
+                bitField0_ |= 0x00000001;
+                key_ = input.readBytes();
+                break;
+              }
+              case 18: {
+                bitField0_ |= 0x00000002;
+                value_ = input.readBytes();
+                break;
+              }
+            }
+          }
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(this);
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(
+              e.getMessage()).setUnfinishedMessage(this);
+        } finally {
+          this.unknownFields = unknownFields.build();
+          makeExtensionsImmutable();
+        }
+      }
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return core.messages.EmploySearcher.internal_static_search_Experiment_Env_Variable_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return core.messages.EmploySearcher.internal_static_search_Experiment_Env_Variable_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                core.messages.EmploySearcher.Experiment.Env_Variable.class, core.messages.EmploySearcher.Experiment.Env_Variable.Builder.class);
+      }
+
+      public static com.google.protobuf.Parser<Env_Variable> PARSER =
+          new com.google.protobuf.AbstractParser<Env_Variable>() {
+        public Env_Variable parsePartialFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return new Env_Variable(input, extensionRegistry);
+        }
+      };
+
+      @java.lang.Override
+      public com.google.protobuf.Parser<Env_Variable> getParserForType() {
+        return PARSER;
+      }
+
+      private int bitField0_;
+      // required string key = 1;
+      public static final int KEY_FIELD_NUMBER = 1;
+      private java.lang.Object key_;
+      /**
+       * <code>required string key = 1;</code>
+       *
+       * <pre>
+       *The system variable name
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string key = 1;</code>
+       *
+       * <pre>
+       *The system variable name
+       * </pre>
+       */
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            key_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>required string key = 1;</code>
+       *
+       * <pre>
+       *The system variable name
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      // required string value = 2;
+      public static final int VALUE_FIELD_NUMBER = 2;
+      private java.lang.Object value_;
+      /**
+       * <code>required string value = 2;</code>
+       *
+       * <pre>
+       *The system variable value
+       * </pre>
+       */
+      public boolean hasValue() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string value = 2;</code>
+       *
+       * <pre>
+       *The system variable value
+       * </pre>
+       */
+      public java.lang.String getValue() {
+        java.lang.Object ref = value_;
+        if (ref instanceof java.lang.String) {
+          return (java.lang.String) ref;
+        } else {
+          com.google.protobuf.ByteString bs = 
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            value_ = s;
+          }
+          return s;
+        }
+      }
+      /**
+       * <code>required string value = 2;</code>
+       *
+       * <pre>
+       *The system variable value
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getValueBytes() {
+        java.lang.Object ref = value_;
+        if (ref instanceof java.lang.String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          value_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
+      private void initFields() {
+        key_ = "";
+        value_ = "";
+      }
+      private byte memoizedIsInitialized = -1;
+      public final boolean isInitialized() {
+        byte isInitialized = memoizedIsInitialized;
+        if (isInitialized != -1) return isInitialized == 1;
+
+        if (!hasKey()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        if (!hasValue()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+        memoizedIsInitialized = 1;
+        return true;
+      }
+
+      public void writeTo(com.google.protobuf.CodedOutputStream output)
+                          throws java.io.IOException {
+        getSerializedSize();
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          output.writeBytes(1, getKeyBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          output.writeBytes(2, getValueBytes());
+        }
+        getUnknownFields().writeTo(output);
+      }
+
+      private int memoizedSerializedSize = -1;
+      public int getSerializedSize() {
+        int size = memoizedSerializedSize;
+        if (size != -1) return size;
+
+        size = 0;
+        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(1, getKeyBytes());
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          size += com.google.protobuf.CodedOutputStream
+            .computeBytesSize(2, getValueBytes());
+        }
+        size += getUnknownFields().getSerializedSize();
+        memoizedSerializedSize = size;
+        return size;
+      }
+
+      private static final long serialVersionUID = 0L;
+      @java.lang.Override
+      protected java.lang.Object writeReplace()
+          throws java.io.ObjectStreamException {
+        return super.writeReplace();
+      }
+
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseFrom(
+          com.google.protobuf.ByteString data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseFrom(
+          com.google.protobuf.ByteString data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseFrom(byte[] data)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data);
+      }
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseFrom(
+          byte[] data,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return PARSER.parseFrom(data, extensionRegistry);
+      }
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseDelimitedFrom(java.io.InputStream input)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input);
+      }
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseDelimitedFrom(
+          java.io.InputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseDelimitedFrom(input, extensionRegistry);
+      }
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseFrom(
+          com.google.protobuf.CodedInputStream input)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input);
+      }
+      public static core.messages.EmploySearcher.Experiment.Env_Variable parseFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        return PARSER.parseFrom(input, extensionRegistry);
+      }
+
+      public static Builder newBuilder() { return Builder.create(); }
+      public Builder newBuilderForType() { return newBuilder(); }
+      public static Builder newBuilder(core.messages.EmploySearcher.Experiment.Env_Variable prototype) {
+        return newBuilder().mergeFrom(prototype);
+      }
+      public Builder toBuilder() { return newBuilder(this); }
+
+      @java.lang.Override
+      protected Builder newBuilderForType(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        Builder builder = new Builder(parent);
+        return builder;
+      }
+      /**
+       * Protobuf type {@code search.Experiment.Env_Variable}
+       *
+       * <pre>
+       *Key-Value pairs for things like LD_LIBRARY_PATH=/usr/local/lib etc.
+       * </pre>
+       */
+      public static final class Builder extends
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder {
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return core.messages.EmploySearcher.internal_static_search_Experiment_Env_Variable_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return core.messages.EmploySearcher.internal_static_search_Experiment_Env_Variable_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  core.messages.EmploySearcher.Experiment.Env_Variable.class, core.messages.EmploySearcher.Experiment.Env_Variable.Builder.class);
+        }
+
+        // Construct using core.messages.EmploySearcher.Experiment.Env_Variable.newBuilder()
+        private Builder() {
+          maybeForceBuilderInitialization();
+        }
+
+        private Builder(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          super(parent);
+          maybeForceBuilderInitialization();
+        }
+        private void maybeForceBuilderInitialization() {
+          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          }
+        }
+        private static Builder create() {
+          return new Builder();
+        }
+
+        public Builder clear() {
+          super.clear();
+          key_ = "";
+          bitField0_ = (bitField0_ & ~0x00000001);
+          value_ = "";
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+
+        public Builder clone() {
+          return create().mergeFrom(buildPartial());
+        }
+
+        public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+          return core.messages.EmploySearcher.internal_static_search_Experiment_Env_Variable_descriptor;
+        }
+
+        public core.messages.EmploySearcher.Experiment.Env_Variable getDefaultInstanceForType() {
+          return core.messages.EmploySearcher.Experiment.Env_Variable.getDefaultInstance();
+        }
+
+        public core.messages.EmploySearcher.Experiment.Env_Variable build() {
+          core.messages.EmploySearcher.Experiment.Env_Variable result = buildPartial();
+          if (!result.isInitialized()) {
+            throw newUninitializedMessageException(result);
+          }
+          return result;
+        }
+
+        public core.messages.EmploySearcher.Experiment.Env_Variable buildPartial() {
+          core.messages.EmploySearcher.Experiment.Env_Variable result = new core.messages.EmploySearcher.Experiment.Env_Variable(this);
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
+          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+            to_bitField0_ |= 0x00000001;
+          }
+          result.key_ = key_;
+          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+            to_bitField0_ |= 0x00000002;
+          }
+          result.value_ = value_;
+          result.bitField0_ = to_bitField0_;
+          onBuilt();
+          return result;
+        }
+
+        public Builder mergeFrom(com.google.protobuf.Message other) {
+          if (other instanceof core.messages.EmploySearcher.Experiment.Env_Variable) {
+            return mergeFrom((core.messages.EmploySearcher.Experiment.Env_Variable)other);
+          } else {
+            super.mergeFrom(other);
+            return this;
+          }
+        }
+
+        public Builder mergeFrom(core.messages.EmploySearcher.Experiment.Env_Variable other) {
+          if (other == core.messages.EmploySearcher.Experiment.Env_Variable.getDefaultInstance()) return this;
+          if (other.hasKey()) {
+            bitField0_ |= 0x00000001;
+            key_ = other.key_;
+            onChanged();
+          }
+          if (other.hasValue()) {
+            bitField0_ |= 0x00000002;
+            value_ = other.value_;
+            onChanged();
+          }
+          this.mergeUnknownFields(other.getUnknownFields());
+          return this;
+        }
+
+        public final boolean isInitialized() {
+          if (!hasKey()) {
+            
+            return false;
+          }
+          if (!hasValue()) {
+            
+            return false;
+          }
+          return true;
+        }
+
+        public Builder mergeFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          core.messages.EmploySearcher.Experiment.Env_Variable parsedMessage = null;
+          try {
+            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            parsedMessage = (core.messages.EmploySearcher.Experiment.Env_Variable) e.getUnfinishedMessage();
+            throw e;
+          } finally {
+            if (parsedMessage != null) {
+              mergeFrom(parsedMessage);
+            }
+          }
+          return this;
+        }
+        private int bitField0_;
+
+        // required string key = 1;
+        private java.lang.Object key_ = "";
+        /**
+         * <code>required string key = 1;</code>
+         *
+         * <pre>
+         *The system variable name
+         * </pre>
+         */
+        public boolean hasKey() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required string key = 1;</code>
+         *
+         * <pre>
+         *The system variable name
+         * </pre>
+         */
+        public java.lang.String getKey() {
+          java.lang.Object ref = key_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            key_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>required string key = 1;</code>
+         *
+         * <pre>
+         *The system variable name
+         * </pre>
+         */
+        public com.google.protobuf.ByteString
+            getKeyBytes() {
+          java.lang.Object ref = key_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            key_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string key = 1;</code>
+         *
+         * <pre>
+         *The system variable name
+         * </pre>
+         */
+        public Builder setKey(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          key_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string key = 1;</code>
+         *
+         * <pre>
+         *The system variable name
+         * </pre>
+         */
+        public Builder clearKey() {
+          bitField0_ = (bitField0_ & ~0x00000001);
+          key_ = getDefaultInstance().getKey();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string key = 1;</code>
+         *
+         * <pre>
+         *The system variable name
+         * </pre>
+         */
+        public Builder setKeyBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+          key_ = value;
+          onChanged();
+          return this;
+        }
+
+        // required string value = 2;
+        private java.lang.Object value_ = "";
+        /**
+         * <code>required string value = 2;</code>
+         *
+         * <pre>
+         *The system variable value
+         * </pre>
+         */
+        public boolean hasValue() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>required string value = 2;</code>
+         *
+         * <pre>
+         *The system variable value
+         * </pre>
+         */
+        public java.lang.String getValue() {
+          java.lang.Object ref = value_;
+          if (!(ref instanceof java.lang.String)) {
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            value_ = s;
+            return s;
+          } else {
+            return (java.lang.String) ref;
+          }
+        }
+        /**
+         * <code>required string value = 2;</code>
+         *
+         * <pre>
+         *The system variable value
+         * </pre>
+         */
+        public com.google.protobuf.ByteString
+            getValueBytes() {
+          java.lang.Object ref = value_;
+          if (ref instanceof String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            value_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+        /**
+         * <code>required string value = 2;</code>
+         *
+         * <pre>
+         *The system variable value
+         * </pre>
+         */
+        public Builder setValue(
+            java.lang.String value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          value_ = value;
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string value = 2;</code>
+         *
+         * <pre>
+         *The system variable value
+         * </pre>
+         */
+        public Builder clearValue() {
+          bitField0_ = (bitField0_ & ~0x00000002);
+          value_ = getDefaultInstance().getValue();
+          onChanged();
+          return this;
+        }
+        /**
+         * <code>required string value = 2;</code>
+         *
+         * <pre>
+         *The system variable value
+         * </pre>
+         */
+        public Builder setValueBytes(
+            com.google.protobuf.ByteString value) {
+          if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+          value_ = value;
+          onChanged();
+          return this;
+        }
+
+        // @@protoc_insertion_point(builder_scope:search.Experiment.Env_Variable)
+      }
+
+      static {
+        defaultInstance = new Env_Variable(true);
+        defaultInstance.initFields();
+      }
+
+      // @@protoc_insertion_point(class_scope:search.Experiment.Env_Variable)
+    }
+
+    private int bitField0_;
+    // required string program_name = 1;
+    public static final int PROGRAM_NAME_FIELD_NUMBER = 1;
+    private java.lang.Object programName_;
+    /**
+     * <code>required string program_name = 1;</code>
+     *
+     * <pre>
+     *Name of the executable that will conduct this experiment
+     * </pre>
+     */
+    public boolean hasProgramName() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string program_name = 1;</code>
+     *
+     * <pre>
+     *Name of the executable that will conduct this experiment
+     * </pre>
+     */
+    public java.lang.String getProgramName() {
+      java.lang.Object ref = programName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          programName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string program_name = 1;</code>
+     *
+     * <pre>
+     *Name of the executable that will conduct this experiment
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getProgramNameBytes() {
+      java.lang.Object ref = programName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        programName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // repeated string argument = 2;
+    public static final int ARGUMENT_FIELD_NUMBER = 2;
+    private com.google.protobuf.LazyStringList argument_;
+    /**
+     * <code>repeated string argument = 2;</code>
+     *
+     * <pre>
+     *The arguments to pass to the experiment program
+     * </pre>
+     */
+    public java.util.List<java.lang.String>
+        getArgumentList() {
+      return argument_;
+    }
+    /**
+     * <code>repeated string argument = 2;</code>
+     *
+     * <pre>
+     *The arguments to pass to the experiment program
+     * </pre>
+     */
+    public int getArgumentCount() {
+      return argument_.size();
+    }
+    /**
+     * <code>repeated string argument = 2;</code>
+     *
+     * <pre>
+     *The arguments to pass to the experiment program
+     * </pre>
+     */
+    public java.lang.String getArgument(int index) {
+      return argument_.get(index);
+    }
+    /**
+     * <code>repeated string argument = 2;</code>
+     *
+     * <pre>
+     *The arguments to pass to the experiment program
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getArgumentBytes(int index) {
+      return argument_.getByteString(index);
+    }
+
+    // repeated .search.Experiment.Env_Variable environment = 3;
+    public static final int ENVIRONMENT_FIELD_NUMBER = 3;
+    private java.util.List<core.messages.EmploySearcher.Experiment.Env_Variable> environment_;
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    public java.util.List<core.messages.EmploySearcher.Experiment.Env_Variable> getEnvironmentList() {
+      return environment_;
+    }
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    public java.util.List<? extends core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder> 
+        getEnvironmentOrBuilderList() {
+      return environment_;
+    }
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    public int getEnvironmentCount() {
+      return environment_.size();
+    }
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    public core.messages.EmploySearcher.Experiment.Env_Variable getEnvironment(int index) {
+      return environment_.get(index);
+    }
+    /**
+     * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+     *
+     * <pre>
+     *Any additional variables that will need to linked against 
+     *to enable experiment program execution.
+     * </pre>
+     */
+    public core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder getEnvironmentOrBuilder(
+        int index) {
+      return environment_.get(index);
+    }
+
+    private void initFields() {
+      programName_ = "";
+      argument_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      environment_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasProgramName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      for (int i = 0; i < getEnvironmentCount(); i++) {
+        if (!getEnvironment(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getProgramNameBytes());
+      }
+      for (int i = 0; i < argument_.size(); i++) {
+        output.writeBytes(2, argument_.getByteString(i));
+      }
+      for (int i = 0; i < environment_.size(); i++) {
+        output.writeMessage(3, environment_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getProgramNameBytes());
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < argument_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(argument_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getArgumentList().size();
+      }
+      for (int i = 0; i < environment_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, environment_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static core.messages.EmploySearcher.Experiment parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static core.messages.EmploySearcher.Experiment parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static core.messages.EmploySearcher.Experiment parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static core.messages.EmploySearcher.Experiment parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static core.messages.EmploySearcher.Experiment parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static core.messages.EmploySearcher.Experiment parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static core.messages.EmploySearcher.Experiment parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static core.messages.EmploySearcher.Experiment parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static core.messages.EmploySearcher.Experiment parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static core.messages.EmploySearcher.Experiment parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(core.messages.EmploySearcher.Experiment prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code search.Experiment}
+     *
+     * <pre>
+     *Encapsulates the needed information to start up a task.
+     * </pre>
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements core.messages.EmploySearcher.ExperimentOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return core.messages.EmploySearcher.internal_static_search_Experiment_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return core.messages.EmploySearcher.internal_static_search_Experiment_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                core.messages.EmploySearcher.Experiment.class, core.messages.EmploySearcher.Experiment.Builder.class);
+      }
+
+      // Construct using core.messages.EmploySearcher.Experiment.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getEnvironmentFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        programName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        argument_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        if (environmentBuilder_ == null) {
+          environment_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+        } else {
+          environmentBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return core.messages.EmploySearcher.internal_static_search_Experiment_descriptor;
+      }
+
+      public core.messages.EmploySearcher.Experiment getDefaultInstanceForType() {
+        return core.messages.EmploySearcher.Experiment.getDefaultInstance();
+      }
+
+      public core.messages.EmploySearcher.Experiment build() {
+        core.messages.EmploySearcher.Experiment result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public core.messages.EmploySearcher.Experiment buildPartial() {
+        core.messages.EmploySearcher.Experiment result = new core.messages.EmploySearcher.Experiment(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.programName_ = programName_;
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          argument_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              argument_);
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.argument_ = argument_;
+        if (environmentBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+            environment_ = java.util.Collections.unmodifiableList(environment_);
+            bitField0_ = (bitField0_ & ~0x00000004);
+          }
+          result.environment_ = environment_;
+        } else {
+          result.environment_ = environmentBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof core.messages.EmploySearcher.Experiment) {
+          return mergeFrom((core.messages.EmploySearcher.Experiment)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(core.messages.EmploySearcher.Experiment other) {
+        if (other == core.messages.EmploySearcher.Experiment.getDefaultInstance()) return this;
+        if (other.hasProgramName()) {
+          bitField0_ |= 0x00000001;
+          programName_ = other.programName_;
+          onChanged();
+        }
+        if (!other.argument_.isEmpty()) {
+          if (argument_.isEmpty()) {
+            argument_ = other.argument_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            ensureArgumentIsMutable();
+            argument_.addAll(other.argument_);
+          }
+          onChanged();
+        }
+        if (environmentBuilder_ == null) {
+          if (!other.environment_.isEmpty()) {
+            if (environment_.isEmpty()) {
+              environment_ = other.environment_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+            } else {
+              ensureEnvironmentIsMutable();
+              environment_.addAll(other.environment_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.environment_.isEmpty()) {
+            if (environmentBuilder_.isEmpty()) {
+              environmentBuilder_.dispose();
+              environmentBuilder_ = null;
+              environment_ = other.environment_;
+              bitField0_ = (bitField0_ & ~0x00000004);
+              environmentBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getEnvironmentFieldBuilder() : null;
+            } else {
+              environmentBuilder_.addAllMessages(other.environment_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasProgramName()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getEnvironmentCount(); i++) {
+          if (!getEnvironment(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        core.messages.EmploySearcher.Experiment parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (core.messages.EmploySearcher.Experiment) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required string program_name = 1;
+      private java.lang.Object programName_ = "";
+      /**
+       * <code>required string program_name = 1;</code>
+       *
+       * <pre>
+       *Name of the executable that will conduct this experiment
+       * </pre>
+       */
+      public boolean hasProgramName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required string program_name = 1;</code>
+       *
+       * <pre>
+       *Name of the executable that will conduct this experiment
+       * </pre>
+       */
+      public java.lang.String getProgramName() {
+        java.lang.Object ref = programName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          programName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string program_name = 1;</code>
+       *
+       * <pre>
+       *Name of the executable that will conduct this experiment
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getProgramNameBytes() {
+        java.lang.Object ref = programName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          programName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string program_name = 1;</code>
+       *
+       * <pre>
+       *Name of the executable that will conduct this experiment
+       * </pre>
+       */
+      public Builder setProgramName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        programName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string program_name = 1;</code>
+       *
+       * <pre>
+       *Name of the executable that will conduct this experiment
+       * </pre>
+       */
+      public Builder clearProgramName() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        programName_ = getDefaultInstance().getProgramName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string program_name = 1;</code>
+       *
+       * <pre>
+       *Name of the executable that will conduct this experiment
+       * </pre>
+       */
+      public Builder setProgramNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        programName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated string argument = 2;
+      private com.google.protobuf.LazyStringList argument_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureArgumentIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          argument_ = new com.google.protobuf.LazyStringArrayList(argument_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      /**
+       * <code>repeated string argument = 2;</code>
+       *
+       * <pre>
+       *The arguments to pass to the experiment program
+       * </pre>
+       */
+      public java.util.List<java.lang.String>
+          getArgumentList() {
+        return java.util.Collections.unmodifiableList(argument_);
+      }
+      /**
+       * <code>repeated string argument = 2;</code>
+       *
+       * <pre>
+       *The arguments to pass to the experiment program
+       * </pre>
+       */
+      public int getArgumentCount() {
+        return argument_.size();
+      }
+      /**
+       * <code>repeated string argument = 2;</code>
+       *
+       * <pre>
+       *The arguments to pass to the experiment program
+       * </pre>
+       */
+      public java.lang.String getArgument(int index) {
+        return argument_.get(index);
+      }
+      /**
+       * <code>repeated string argument = 2;</code>
+       *
+       * <pre>
+       *The arguments to pass to the experiment program
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getArgumentBytes(int index) {
+        return argument_.getByteString(index);
+      }
+      /**
+       * <code>repeated string argument = 2;</code>
+       *
+       * <pre>
+       *The arguments to pass to the experiment program
+       * </pre>
+       */
+      public Builder setArgument(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureArgumentIsMutable();
+        argument_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string argument = 2;</code>
+       *
+       * <pre>
+       *The arguments to pass to the experiment program
+       * </pre>
+       */
+      public Builder addArgument(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureArgumentIsMutable();
+        argument_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string argument = 2;</code>
+       *
+       * <pre>
+       *The arguments to pass to the experiment program
+       * </pre>
+       */
+      public Builder addAllArgument(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureArgumentIsMutable();
+        super.addAll(values, argument_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string argument = 2;</code>
+       *
+       * <pre>
+       *The arguments to pass to the experiment program
+       * </pre>
+       */
+      public Builder clearArgument() {
+        argument_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string argument = 2;</code>
+       *
+       * <pre>
+       *The arguments to pass to the experiment program
+       * </pre>
+       */
+      public Builder addArgumentBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureArgumentIsMutable();
+        argument_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // repeated .search.Experiment.Env_Variable environment = 3;
+      private java.util.List<core.messages.EmploySearcher.Experiment.Env_Variable> environment_ =
+        java.util.Collections.emptyList();
+      private void ensureEnvironmentIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          environment_ = new java.util.ArrayList<core.messages.EmploySearcher.Experiment.Env_Variable>(environment_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          core.messages.EmploySearcher.Experiment.Env_Variable, core.messages.EmploySearcher.Experiment.Env_Variable.Builder, core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder> environmentBuilder_;
+
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public java.util.List<core.messages.EmploySearcher.Experiment.Env_Variable> getEnvironmentList() {
+        if (environmentBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(environment_);
+        } else {
+          return environmentBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public int getEnvironmentCount() {
+        if (environmentBuilder_ == null) {
+          return environment_.size();
+        } else {
+          return environmentBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public core.messages.EmploySearcher.Experiment.Env_Variable getEnvironment(int index) {
+        if (environmentBuilder_ == null) {
+          return environment_.get(index);
+        } else {
+          return environmentBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public Builder setEnvironment(
+          int index, core.messages.EmploySearcher.Experiment.Env_Variable value) {
+        if (environmentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEnvironmentIsMutable();
+          environment_.set(index, value);
+          onChanged();
+        } else {
+          environmentBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public Builder setEnvironment(
+          int index, core.messages.EmploySearcher.Experiment.Env_Variable.Builder builderForValue) {
+        if (environmentBuilder_ == null) {
+          ensureEnvironmentIsMutable();
+          environment_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          environmentBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public Builder addEnvironment(core.messages.EmploySearcher.Experiment.Env_Variable value) {
+        if (environmentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEnvironmentIsMutable();
+          environment_.add(value);
+          onChanged();
+        } else {
+          environmentBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public Builder addEnvironment(
+          int index, core.messages.EmploySearcher.Experiment.Env_Variable value) {
+        if (environmentBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEnvironmentIsMutable();
+          environment_.add(index, value);
+          onChanged();
+        } else {
+          environmentBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public Builder addEnvironment(
+          core.messages.EmploySearcher.Experiment.Env_Variable.Builder builderForValue) {
+        if (environmentBuilder_ == null) {
+          ensureEnvironmentIsMutable();
+          environment_.add(builderForValue.build());
+          onChanged();
+        } else {
+          environmentBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public Builder addEnvironment(
+          int index, core.messages.EmploySearcher.Experiment.Env_Variable.Builder builderForValue) {
+        if (environmentBuilder_ == null) {
+          ensureEnvironmentIsMutable();
+          environment_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          environmentBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public Builder addAllEnvironment(
+          java.lang.Iterable<? extends core.messages.EmploySearcher.Experiment.Env_Variable> values) {
+        if (environmentBuilder_ == null) {
+          ensureEnvironmentIsMutable();
+          super.addAll(values, environment_);
+          onChanged();
+        } else {
+          environmentBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public Builder clearEnvironment() {
+        if (environmentBuilder_ == null) {
+          environment_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          environmentBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public Builder removeEnvironment(int index) {
+        if (environmentBuilder_ == null) {
+          ensureEnvironmentIsMutable();
+          environment_.remove(index);
+          onChanged();
+        } else {
+          environmentBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public core.messages.EmploySearcher.Experiment.Env_Variable.Builder getEnvironmentBuilder(
+          int index) {
+        return getEnvironmentFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder getEnvironmentOrBuilder(
+          int index) {
+        if (environmentBuilder_ == null) {
+          return environment_.get(index);  } else {
+          return environmentBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public java.util.List<? extends core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder> 
+           getEnvironmentOrBuilderList() {
+        if (environmentBuilder_ != null) {
+          return environmentBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(environment_);
+        }
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public core.messages.EmploySearcher.Experiment.Env_Variable.Builder addEnvironmentBuilder() {
+        return getEnvironmentFieldBuilder().addBuilder(
+            core.messages.EmploySearcher.Experiment.Env_Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public core.messages.EmploySearcher.Experiment.Env_Variable.Builder addEnvironmentBuilder(
+          int index) {
+        return getEnvironmentFieldBuilder().addBuilder(
+            index, core.messages.EmploySearcher.Experiment.Env_Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .search.Experiment.Env_Variable environment = 3;</code>
+       *
+       * <pre>
+       *Any additional variables that will need to linked against 
+       *to enable experiment program execution.
+       * </pre>
+       */
+      public java.util.List<core.messages.EmploySearcher.Experiment.Env_Variable.Builder> 
+           getEnvironmentBuilderList() {
+        return getEnvironmentFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          core.messages.EmploySearcher.Experiment.Env_Variable, core.messages.EmploySearcher.Experiment.Env_Variable.Builder, core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder> 
+          getEnvironmentFieldBuilder() {
+        if (environmentBuilder_ == null) {
+          environmentBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              core.messages.EmploySearcher.Experiment.Env_Variable, core.messages.EmploySearcher.Experiment.Env_Variable.Builder, core.messages.EmploySearcher.Experiment.Env_VariableOrBuilder>(
+                  environment_,
+                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  getParentForChildren(),
+                  isClean());
+          environment_ = null;
+        }
+        return environmentBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:search.Experiment)
+    }
+
+    static {
+      defaultInstance = new Experiment(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:search.Experiment)
+  }
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_search_Contract_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_search_Contract_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_search_Response_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_search_Response_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_search_Experiment_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_search_Experiment_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_search_Experiment_Env_Variable_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_search_Experiment_Env_Variable_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -809,10 +3547,16 @@ public final class EmploySearcher {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\016contract.proto\022\006search\"K\n\010Contract\022\030\n\020" +
+      "\n\016contract.proto\022\006search\"f\n\010Contract\022\030\n\020" +
       "dispatch_address\030\001 \002(\t\022\025\n\rdispatch_port\030" +
-      "\002 \002(\005\022\016\n\006secret\030\003 \001(\003B\037\n\rcore.messagesB\016" +
-      "EmploySearcher"
+      "\002 \002(\005\022\016\n\006secret\030\003 \001(\003\022\031\n\016num_replicates\030" +
+      "\004 \001(\005:\0011\"1\n\010Response\022\025\n\rsearcher_port\030\001 " +
+      "\002(\005\022\016\n\006secret\030\002 \001(\003\"\226\001\n\nExperiment\022\024\n\014pr" +
+      "ogram_name\030\001 \002(\t\022\020\n\010argument\030\002 \003(\t\0224\n\013en" +
+      "vironment\030\003 \003(\0132\037.search.Experiment.Env_" +
+      "Variable\032*\n\014Env_Variable\022\013\n\003key\030\001 \002(\t\022\r\n" +
+      "\005value\030\002 \002(\tB\037\n\rcore.messagesB\016EmploySea" +
+      "rcher"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -824,7 +3568,25 @@ public final class EmploySearcher {
           internal_static_search_Contract_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Contract_descriptor,
-              new java.lang.String[] { "DispatchAddress", "DispatchPort", "Secret", });
+              new java.lang.String[] { "DispatchAddress", "DispatchPort", "Secret", "NumReplicates", });
+          internal_static_search_Response_descriptor =
+            getDescriptor().getMessageTypes().get(1);
+          internal_static_search_Response_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_search_Response_descriptor,
+              new java.lang.String[] { "SearcherPort", "Secret", });
+          internal_static_search_Experiment_descriptor =
+            getDescriptor().getMessageTypes().get(2);
+          internal_static_search_Experiment_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_search_Experiment_descriptor,
+              new java.lang.String[] { "ProgramName", "Argument", "Environment", });
+          internal_static_search_Experiment_Env_Variable_descriptor =
+            internal_static_search_Experiment_descriptor.getNestedTypes().get(0);
+          internal_static_search_Experiment_Env_Variable_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_search_Experiment_Env_Variable_descriptor,
+              new java.lang.String[] { "Key", "Value", });
           return null;
         }
       };

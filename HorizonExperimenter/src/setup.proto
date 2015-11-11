@@ -29,6 +29,9 @@ message Experiment{
 	
 	//These are the machines that are to be run on.
 	repeated Machine machines = 9;
+	
+	//If you care, set the port that the Dispatcher will listen for Searcher conns
+	
 }
 
 message Env_Variable{
@@ -39,6 +42,7 @@ message Env_Variable{
 message Machine{
 	required string name = 1;
 	optional int32 replicates = 2 [default = 1];
+	optional string username = 3;
 }
 
 message Parameter{
