@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -22,14 +24,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.zeromq.ZMQ;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.TextFormat;
 
 import core.io.Arg;
 import core.io.ProgramParameter;
 import core.io.Results;
 import core.messages.DispatchMessages;
+import core.messages.EmploySearcher;
 import core.messages.DispatchMessages.Machine;
 import core.messages.EmploySearcher.Contract;
+import core.messages.EmploySearcher.Response;
 
 public class Dispatcher {
 	private DispatchMessages.Experiment inputExp;
@@ -71,6 +76,7 @@ public class Dispatcher {
 			public boolean process(String value,
 					Map<ProgramParameter, Object> values) {
 				boolean error = true;
+				//TODO get this working...
 //				try {
 //					DispatchMessages.Experiment e = DispatchMessages.Experiment.parseFrom(new FileInputStream(new File(value)));
 //					values.put(this, e);
@@ -92,7 +98,6 @@ public class Dispatcher {
 		}
 
 		public void run(){
-			System.out.println("running...");
 			ZMQ.Context context = ZMQ.context(numListeningThreads);
 			ZMQ.Socket main = context.socket(ZMQ.REP);
 			int port;
@@ -107,13 +112,32 @@ public class Dispatcher {
 			portCond.signal();
 			portLock.unlock();
 			
+			new Timer("Killer", false).schedule(
+					new TimerTask(){
+						@Override
+						public void run() {
+							System.out.println("Kill...");
+							System.exit(0);
+						}
+					}, 
+					15000
+			);
+			
 			//Dispatcher is ready and waiting for messages from Searcher
-			System.out.println("Waiting to receive... "+port);
-			String msg = new String(main.recv());
-			System.out.println(msg);
-			System.out.println("Running forever...");
-			for(;;){
-				
+			//First message should be the Contract Response:
+			boolean ready = false;
+			try {
+				Response r = EmploySearcher.Response.parseFrom(main.recv());
+				if(r.hasSecret() && r.getSecret() != remoteInfo.get(machine).secret)
+					throw new InvalidProtocolBufferException("Incorrect secret");
+				ready = true;
+			} catch (InvalidProtocolBufferException e) {
+				System.err.println("Cannot use: "+machine.getName()+", incorrect response.");
+				e.printStackTrace();
+			}
+			System.out.println("Now we're going to enter the comms loop");
+			for(;ready;){
+				//TODO Need to start passing out
 			}
 		}
 	}
@@ -153,7 +177,6 @@ public class Dispatcher {
 			portLock.unlock();
 
 			if(success){
-				System.out.println("Making the contract...");
 				//Make up the search contract for this machine:
 				Contract c = Contract.newBuilder()
 						.setDispatchAddress(localIPv4)
@@ -164,29 +187,25 @@ public class Dispatcher {
 
 				//Signal the remote machine to start its Searcher
 				String user = m.hasUsername() ? m.getUsername() : defaultUser;
-				new Thread(new Runnable(){
-					@Override
-					public void run() {
-						try {
-							Searcher.main(new String[]{"-c", c.toString()});
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-					}
-				}).start();
-//				ProcessBuilder builder = new ProcessBuilder("ssh", user+"@"+m.getName(), "\"searchparty.jar -c "+c.toByteString()+"\"");
-//				try {
-//					builder.start();
-//				} catch (IOException e) {
-//					System.err.println("Cannot start Searcher process on "+m.getName()+": ");
-//					e.printStackTrace();
-//				}
-				//An error check will happen in the thread that handles the Searcher communications
+				ProcessBuilder builder = new ProcessBuilder("ssh", user+"@"+m.getName(),
+								"java -jar "+exp.getSearchPartyPath()+File.separator+"searchparty.jar -c \""+c.toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")+"\"");
+				builder.redirectError();
+				try {
+					Process p = builder.start();
+					Scanner output = new Scanner(p.getInputStream());
+					while(output.hasNext())
+						System.out.println("SENDER: "+output.next());
+					p.waitFor();
+					output.close();
+				} catch (IOException e) {
+					System.err.println("Cannot start Searcher process on "+m.getName()+": ");
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-		System.out.println("Completed the dispatcher...");
 	}
 
 	private class SearcherInfo {
@@ -201,10 +220,8 @@ public class Dispatcher {
 	public static void main(String[] args){
 		//Takes the setup message and results message.
 		Map<ProgramParameter, Object> cli = ProgramParameter.getValues(args, params, params);
-		Dispatcher d = new Dispatcher((DispatchMessages.Experiment)cli.get(params.get(0)), 
+		new Dispatcher((DispatchMessages.Experiment)cli.get(params.get(0)), 
 				(Results.Result)cli.get(params.get(1)));
-
-
 	}
 
 

@@ -6,4 +6,4 @@ for jar in `ls libs`; do
 done
 CLASSPATH=$CLASSPATH:/usr/share/java/sqlite-jdbc-3.8.11.2.jar:/usr/share/java/protobuf-java-2.5.0.jar:/usr/local/share/java/zmq.jar
 
-java -cp $CLASSPATH core.party.Dispatcher -i TestSetup.proto -o not_yet_done
+java -cp $CLASSPATH core.party.Dispatcher -i TestSetup.prototxt -o not_yet_done

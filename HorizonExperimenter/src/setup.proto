@@ -31,7 +31,10 @@ message Experiment{
 	repeated Machine machines = 9;
 	
 	//If you care, set the port that the Dispatcher will listen for Searcher conns
-	
+	optional string libzmq_path = 10 [default = "/usr/local/lib"];
+	optional string libprotobuf_path = 11 [default = "/usr/lib"];
+	optional string libsqlite_path = 12 [default = "/usr/lib"];
+	required string search_party_path = 13;
 }
 
 message Env_Variable{

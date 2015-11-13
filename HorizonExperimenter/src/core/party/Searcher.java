@@ -6,6 +6,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,11 +54,11 @@ public class Searcher {
 			}
 		});
 	}
-	
+
 	private ZMQ.Context context;
 	private ZMQ.Socket basecomms;
-//	private List<Experiment> incomplete;
-//	private List<Experiment> complete;
+	//	private List<Experiment> incomplete;
+	//	private List<Experiment> complete;
 	private int numIOThreads = 4;
 	private int localPort;
 
@@ -69,14 +71,15 @@ public class Searcher {
 
 	private class DispatcherTask implements Runnable{
 		private Contract msg;
-		
+
 		public DispatcherTask(Contract msg) {
 			this.msg = msg;
 		}
-		
+
 		@Override
 		public void run() {
 			//Need to set up the communications with the Dispatcher.
+			System.out.println("Pushing out a message...");
 			try(ZMQ.Context ctx = ZMQ.context(1)){
 				basecomms = ctx.socket(ZMQ.REQ);
 				try {
@@ -85,18 +88,30 @@ public class Searcher {
 					localPort = basecomms.bindToRandomPort("tcp://127.0.0.1");
 				}
 				basecomms.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getDispatchPort());
-				
+
 				//Let the Searcher know that all is well...
 				basecomms.send(EmploySearcher.Response.newBuilder()
-								.setSearcherPort(localPort)
-								.setSecret(msg.getSecret())
-								.build().toByteArray(), ZMQ.DONTWAIT);
-				
+						.setSearcherPort(localPort)
+						.setSecret(msg.getSecret())
+						.build().toByteArray(), ZMQ.NOBLOCK);
+
 				//Now loop on Experiment type messages
 				//Need to setup the executor service to run the experiments locally:
 				ExecutorService exec = Executors.newFixedThreadPool(msg.getNumReplicates());
+				System.out.println("Running the service loop now...");
+				new Timer("Killer", false).schedule(
+						new TimerTask(){
+							@Override
+							public void run() {
+								System.out.println("Kill...");
+								System.exit(0);
+							}
+						}, 
+						10000
+				);
 				for(;;){
 					byte[] msg = basecomms.recv();
+					System.out.println("SEARCHER RECVD!");
 					try {
 						EmploySearcher.Experiment exp = EmploySearcher.Experiment.parseFrom(msg);
 						//TODO Need to track experiments that failed.
@@ -109,13 +124,13 @@ public class Searcher {
 			}
 		}
 	}
-	
+
 	private class ExperimentTask implements Callable<Integer>{
 		private EmploySearcher.Experiment exp;
 		private ExperimentTask(EmploySearcher.Experiment exp){
 			this.exp = exp;
 		}
-		
+
 		@Override
 		public Integer call() {
 			//Get the command set
@@ -125,12 +140,12 @@ public class Searcher {
 			for(String arg : exp.getArgumentList())
 				command[pos++] = arg;
 			ProcessBuilder builder = new ProcessBuilder(command);
-			
+
 			//Set up the environment for this process
 			Map<String, String> env = builder.environment();
 			for(Env_Variable var : exp.getEnvironmentList())
 				env.put(var.getKey(), var.getValue());
-			
+
 			Process proc = null;
 			int retVal = -1;
 			try {

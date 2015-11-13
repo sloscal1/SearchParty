@@ -281,6 +281,78 @@ public final class DispatchMessages {
      */
     core.messages.DispatchMessages.MachineOrBuilder getMachinesOrBuilder(
         int index);
+
+    // optional string libzmq_path = 10 [default = "/usr/local/lib"];
+    /**
+     * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+     *
+     * <pre>
+     *If you care, set the port that the Dispatcher will listen for Searcher conns
+     * </pre>
+     */
+    boolean hasLibzmqPath();
+    /**
+     * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+     *
+     * <pre>
+     *If you care, set the port that the Dispatcher will listen for Searcher conns
+     * </pre>
+     */
+    java.lang.String getLibzmqPath();
+    /**
+     * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+     *
+     * <pre>
+     *If you care, set the port that the Dispatcher will listen for Searcher conns
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getLibzmqPathBytes();
+
+    // optional string libprotobuf_path = 11 [default = "/usr/lib"];
+    /**
+     * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+     */
+    boolean hasLibprotobufPath();
+    /**
+     * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+     */
+    java.lang.String getLibprotobufPath();
+    /**
+     * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+     */
+    com.google.protobuf.ByteString
+        getLibprotobufPathBytes();
+
+    // optional string libsqlite_path = 12 [default = "/usr/lib"];
+    /**
+     * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+     */
+    boolean hasLibsqlitePath();
+    /**
+     * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+     */
+    java.lang.String getLibsqlitePath();
+    /**
+     * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+     */
+    com.google.protobuf.ByteString
+        getLibsqlitePathBytes();
+
+    // required string search_party_path = 13;
+    /**
+     * <code>required string search_party_path = 13;</code>
+     */
+    boolean hasSearchPartyPath();
+    /**
+     * <code>required string search_party_path = 13;</code>
+     */
+    java.lang.String getSearchPartyPath();
+    /**
+     * <code>required string search_party_path = 13;</code>
+     */
+    com.google.protobuf.ByteString
+        getSearchPartyPathBytes();
   }
   /**
    * Protobuf type {@code search.Experiment}
@@ -385,6 +457,26 @@ public final class DispatchMessages {
                 mutable_bitField0_ |= 0x00000100;
               }
               machines_.add(input.readMessage(core.messages.DispatchMessages.Machine.PARSER, extensionRegistry));
+              break;
+            }
+            case 82: {
+              bitField0_ |= 0x00000040;
+              libzmqPath_ = input.readBytes();
+              break;
+            }
+            case 90: {
+              bitField0_ |= 0x00000080;
+              libprotobufPath_ = input.readBytes();
+              break;
+            }
+            case 98: {
+              bitField0_ |= 0x00000100;
+              libsqlitePath_ = input.readBytes();
+              break;
+            }
+            case 106: {
+              bitField0_ |= 0x00000200;
+              searchPartyPath_ = input.readBytes();
               break;
             }
           }
@@ -908,6 +1000,190 @@ public final class DispatchMessages {
       return machines_.get(index);
     }
 
+    // optional string libzmq_path = 10 [default = "/usr/local/lib"];
+    public static final int LIBZMQ_PATH_FIELD_NUMBER = 10;
+    private java.lang.Object libzmqPath_;
+    /**
+     * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+     *
+     * <pre>
+     *If you care, set the port that the Dispatcher will listen for Searcher conns
+     * </pre>
+     */
+    public boolean hasLibzmqPath() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+     *
+     * <pre>
+     *If you care, set the port that the Dispatcher will listen for Searcher conns
+     * </pre>
+     */
+    public java.lang.String getLibzmqPath() {
+      java.lang.Object ref = libzmqPath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          libzmqPath_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+     *
+     * <pre>
+     *If you care, set the port that the Dispatcher will listen for Searcher conns
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getLibzmqPathBytes() {
+      java.lang.Object ref = libzmqPath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        libzmqPath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string libprotobuf_path = 11 [default = "/usr/lib"];
+    public static final int LIBPROTOBUF_PATH_FIELD_NUMBER = 11;
+    private java.lang.Object libprotobufPath_;
+    /**
+     * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+     */
+    public boolean hasLibprotobufPath() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+     */
+    public java.lang.String getLibprotobufPath() {
+      java.lang.Object ref = libprotobufPath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          libprotobufPath_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+     */
+    public com.google.protobuf.ByteString
+        getLibprotobufPathBytes() {
+      java.lang.Object ref = libprotobufPath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        libprotobufPath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string libsqlite_path = 12 [default = "/usr/lib"];
+    public static final int LIBSQLITE_PATH_FIELD_NUMBER = 12;
+    private java.lang.Object libsqlitePath_;
+    /**
+     * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+     */
+    public boolean hasLibsqlitePath() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+     */
+    public java.lang.String getLibsqlitePath() {
+      java.lang.Object ref = libsqlitePath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          libsqlitePath_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+     */
+    public com.google.protobuf.ByteString
+        getLibsqlitePathBytes() {
+      java.lang.Object ref = libsqlitePath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        libsqlitePath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string search_party_path = 13;
+    public static final int SEARCH_PARTY_PATH_FIELD_NUMBER = 13;
+    private java.lang.Object searchPartyPath_;
+    /**
+     * <code>required string search_party_path = 13;</code>
+     */
+    public boolean hasSearchPartyPath() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>required string search_party_path = 13;</code>
+     */
+    public java.lang.String getSearchPartyPath() {
+      java.lang.Object ref = searchPartyPath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          searchPartyPath_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string search_party_path = 13;</code>
+     */
+    public com.google.protobuf.ByteString
+        getSearchPartyPathBytes() {
+      java.lang.Object ref = searchPartyPath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        searchPartyPath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       experimentName_ = "";
       params_ = java.util.Collections.emptyList();
@@ -918,6 +1194,10 @@ public final class DispatchMessages {
       executableCommand_ = "";
       environment_ = java.util.Collections.emptyList();
       machines_ = java.util.Collections.emptyList();
+      libzmqPath_ = "/usr/local/lib";
+      libprotobufPath_ = "/usr/lib";
+      libsqlitePath_ = "/usr/lib";
+      searchPartyPath_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -929,6 +1209,10 @@ public final class DispatchMessages {
         return false;
       }
       if (!hasGitBranch()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasSearchPartyPath()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -984,6 +1268,18 @@ public final class DispatchMessages {
       for (int i = 0; i < machines_.size(); i++) {
         output.writeMessage(9, machines_.get(i));
       }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBytes(10, getLibzmqPathBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(11, getLibprotobufPathBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBytes(12, getLibsqlitePathBytes());
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeBytes(13, getSearchPartyPathBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1028,6 +1324,22 @@ public final class DispatchMessages {
       for (int i = 0; i < machines_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, machines_.get(i));
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(10, getLibzmqPathBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(11, getLibprotobufPathBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(12, getLibsqlitePathBytes());
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(13, getSearchPartyPathBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1178,6 +1490,14 @@ public final class DispatchMessages {
         } else {
           machinesBuilder_.clear();
         }
+        libzmqPath_ = "/usr/local/lib";
+        bitField0_ = (bitField0_ & ~0x00000200);
+        libprotobufPath_ = "/usr/lib";
+        bitField0_ = (bitField0_ & ~0x00000400);
+        libsqlitePath_ = "/usr/lib";
+        bitField0_ = (bitField0_ & ~0x00000800);
+        searchPartyPath_ = "";
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
 
@@ -1257,6 +1577,22 @@ public final class DispatchMessages {
         } else {
           result.machines_ = machinesBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.libzmqPath_ = libzmqPath_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.libprotobufPath_ = libprotobufPath_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.libsqlitePath_ = libsqlitePath_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.searchPartyPath_ = searchPartyPath_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1381,6 +1717,26 @@ public final class DispatchMessages {
             }
           }
         }
+        if (other.hasLibzmqPath()) {
+          bitField0_ |= 0x00000200;
+          libzmqPath_ = other.libzmqPath_;
+          onChanged();
+        }
+        if (other.hasLibprotobufPath()) {
+          bitField0_ |= 0x00000400;
+          libprotobufPath_ = other.libprotobufPath_;
+          onChanged();
+        }
+        if (other.hasLibsqlitePath()) {
+          bitField0_ |= 0x00000800;
+          libsqlitePath_ = other.libsqlitePath_;
+          onChanged();
+        }
+        if (other.hasSearchPartyPath()) {
+          bitField0_ |= 0x00001000;
+          searchPartyPath_ = other.searchPartyPath_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1391,6 +1747,10 @@ public final class DispatchMessages {
           return false;
         }
         if (!hasGitBranch()) {
+          
+          return false;
+        }
+        if (!hasSearchPartyPath()) {
           
           return false;
         }
@@ -2872,6 +3232,326 @@ public final class DispatchMessages {
           machines_ = null;
         }
         return machinesBuilder_;
+      }
+
+      // optional string libzmq_path = 10 [default = "/usr/local/lib"];
+      private java.lang.Object libzmqPath_ = "/usr/local/lib";
+      /**
+       * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+       *
+       * <pre>
+       *If you care, set the port that the Dispatcher will listen for Searcher conns
+       * </pre>
+       */
+      public boolean hasLibzmqPath() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+       *
+       * <pre>
+       *If you care, set the port that the Dispatcher will listen for Searcher conns
+       * </pre>
+       */
+      public java.lang.String getLibzmqPath() {
+        java.lang.Object ref = libzmqPath_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          libzmqPath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+       *
+       * <pre>
+       *If you care, set the port that the Dispatcher will listen for Searcher conns
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getLibzmqPathBytes() {
+        java.lang.Object ref = libzmqPath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          libzmqPath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+       *
+       * <pre>
+       *If you care, set the port that the Dispatcher will listen for Searcher conns
+       * </pre>
+       */
+      public Builder setLibzmqPath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        libzmqPath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+       *
+       * <pre>
+       *If you care, set the port that the Dispatcher will listen for Searcher conns
+       * </pre>
+       */
+      public Builder clearLibzmqPath() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        libzmqPath_ = getDefaultInstance().getLibzmqPath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
+       *
+       * <pre>
+       *If you care, set the port that the Dispatcher will listen for Searcher conns
+       * </pre>
+       */
+      public Builder setLibzmqPathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        libzmqPath_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string libprotobuf_path = 11 [default = "/usr/lib"];
+      private java.lang.Object libprotobufPath_ = "/usr/lib";
+      /**
+       * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+       */
+      public boolean hasLibprotobufPath() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+       */
+      public java.lang.String getLibprotobufPath() {
+        java.lang.Object ref = libprotobufPath_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          libprotobufPath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+       */
+      public com.google.protobuf.ByteString
+          getLibprotobufPathBytes() {
+        java.lang.Object ref = libprotobufPath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          libprotobufPath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+       */
+      public Builder setLibprotobufPath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        libprotobufPath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+       */
+      public Builder clearLibprotobufPath() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        libprotobufPath_ = getDefaultInstance().getLibprotobufPath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
+       */
+      public Builder setLibprotobufPathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        libprotobufPath_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string libsqlite_path = 12 [default = "/usr/lib"];
+      private java.lang.Object libsqlitePath_ = "/usr/lib";
+      /**
+       * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+       */
+      public boolean hasLibsqlitePath() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+       */
+      public java.lang.String getLibsqlitePath() {
+        java.lang.Object ref = libsqlitePath_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          libsqlitePath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+       */
+      public com.google.protobuf.ByteString
+          getLibsqlitePathBytes() {
+        java.lang.Object ref = libsqlitePath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          libsqlitePath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+       */
+      public Builder setLibsqlitePath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000800;
+        libsqlitePath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+       */
+      public Builder clearLibsqlitePath() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        libsqlitePath_ = getDefaultInstance().getLibsqlitePath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
+       */
+      public Builder setLibsqlitePathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000800;
+        libsqlitePath_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required string search_party_path = 13;
+      private java.lang.Object searchPartyPath_ = "";
+      /**
+       * <code>required string search_party_path = 13;</code>
+       */
+      public boolean hasSearchPartyPath() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>required string search_party_path = 13;</code>
+       */
+      public java.lang.String getSearchPartyPath() {
+        java.lang.Object ref = searchPartyPath_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          searchPartyPath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string search_party_path = 13;</code>
+       */
+      public com.google.protobuf.ByteString
+          getSearchPartyPathBytes() {
+        java.lang.Object ref = searchPartyPath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          searchPartyPath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string search_party_path = 13;</code>
+       */
+      public Builder setSearchPartyPath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00001000;
+        searchPartyPath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string search_party_path = 13;</code>
+       */
+      public Builder clearSearchPartyPath() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        searchPartyPath_ = getDefaultInstance().getSearchPartyPath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string search_party_path = 13;</code>
+       */
+      public Builder setSearchPartyPathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00001000;
+        searchPartyPath_ = value;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:search.Experiment)
@@ -5183,22 +5863,25 @@ public final class DispatchMessages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013setup.proto\022\006search\"\376\001\n\nExperiment\022\027\n\017" +
+      "\n\013setup.proto\022\006search\"\204\003\n\nExperiment\022\027\n\017" +
       "experiment_name\030\001 \001(\t\022!\n\006params\030\002 \003(\0132\021." +
       "search.Parameter\022\024\n\014continuation\030\003 \001(\t\022\017" +
       "\n\007git_uri\030\004 \002(\t\022\022\n\ngit_branch\030\005 \002(\t\022\017\n\007g" +
       "it_tag\030\006 \001(\t\022\032\n\022executable_command\030\007 \001(\t" +
       "\022)\n\013environment\030\010 \003(\0132\024.search.Env_Varia" +
-      "ble\022!\n\010machines\030\t \003(\0132\017.search.Machine\"+" +
-      "\n\014Env_Variable\022\014\n\004name\030\001 \002(\t\022\r\n\005value\030\002 " +
-      "\002(\t\"@\n\007Machine\022\014\n\004name\030\001 \002(\t\022\025\n\nreplicat" +
-      "es\030\002 \001(\005:\0011\022\020\n\010username\030\003 \001(\t\"\301\001\n\tParame",
-      "ter\022\022\n\nparam_name\030\001 \002(\t\022\021\n\tmin_value\030\002 \002" +
-      "(\001\022\021\n\tmax_value\030\003 \002(\001\022\024\n\014growth_value\030\004 " +
-      "\001(\001\0228\n\007pattern\030\005 \001(\0162\037.search.Parameter." +
-      "GrowthPattern:\006LINEAR\"*\n\rGrowthPattern\022\n" +
-      "\n\006LINEAR\020\000\022\r\n\tGEOMETRIC\020\001B!\n\rcore.messag" +
-      "esB\020DispatchMessages"
+      "ble\022!\n\010machines\030\t \003(\0132\017.search.Machine\022#" +
+      "\n\013libzmq_path\030\n \001(\t:\016/usr/local/lib\022\"\n\020l" +
+      "ibprotobuf_path\030\013 \001(\t:\010/usr/lib\022 \n\016libsq" +
+      "lite_path\030\014 \001(\t:\010/usr/lib\022\031\n\021search_part",
+      "y_path\030\r \002(\t\"+\n\014Env_Variable\022\014\n\004name\030\001 \002" +
+      "(\t\022\r\n\005value\030\002 \002(\t\"@\n\007Machine\022\014\n\004name\030\001 \002" +
+      "(\t\022\025\n\nreplicates\030\002 \001(\005:\0011\022\020\n\010username\030\003 " +
+      "\001(\t\"\301\001\n\tParameter\022\022\n\nparam_name\030\001 \002(\t\022\021\n" +
+      "\tmin_value\030\002 \002(\001\022\021\n\tmax_value\030\003 \002(\001\022\024\n\014g" +
+      "rowth_value\030\004 \001(\001\0228\n\007pattern\030\005 \001(\0162\037.sea" +
+      "rch.Parameter.GrowthPattern:\006LINEAR\"*\n\rG" +
+      "rowthPattern\022\n\n\006LINEAR\020\000\022\r\n\tGEOMETRIC\020\001B" +
+      "!\n\rcore.messagesB\020DispatchMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5210,7 +5893,7 @@ public final class DispatchMessages {
           internal_static_search_Experiment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Experiment_descriptor,
-              new java.lang.String[] { "ExperimentName", "Params", "Continuation", "GitUri", "GitBranch", "GitTag", "ExecutableCommand", "Environment", "Machines", });
+              new java.lang.String[] { "ExperimentName", "Params", "Continuation", "GitUri", "GitBranch", "GitTag", "ExecutableCommand", "Environment", "Machines", "LibzmqPath", "LibprotobufPath", "LibsqlitePath", "SearchPartyPath", });
           internal_static_search_Env_Variable_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_search_Env_Variable_fieldAccessorTable = new
