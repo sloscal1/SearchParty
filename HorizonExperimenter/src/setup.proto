@@ -26,7 +26,7 @@ message Experiment{
 	optional string executable_command = 7;
 	//The required variables to be set before the executable_command can be run
 	repeated Env_Variable environment = 8;
-	
+
 	//These are the machines that are to be run on.
 	repeated Machine machines = 9;
 	

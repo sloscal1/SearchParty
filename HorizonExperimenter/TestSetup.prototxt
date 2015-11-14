@@ -1,9 +1,0 @@
-git_uri : "unset"
-git_branch : "master"	
-machines {
-	name : "localhost"
-}
-libzmq_path : "/usr/local/lib"
-libprotobuf_path : "/usr/local/lib"
-libsqlite_path : "/usr/lib/x86_64-linux-gnu"
-search_party_path : "/home/sloscal1/jars"

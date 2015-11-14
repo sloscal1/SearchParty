@@ -1,13 +1,11 @@
 package core.party;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,10 +29,13 @@ import core.io.Arg;
 import core.io.ProgramParameter;
 import core.io.Results;
 import core.messages.DispatchMessages;
-import core.messages.EmploySearcher;
 import core.messages.DispatchMessages.Machine;
+import core.messages.EmploySearcher;
 import core.messages.EmploySearcher.Contract;
+import core.messages.EmploySearcher.Experiment;
 import core.messages.EmploySearcher.Response;
+import core.messages.ExperimentResults;
+import core.messages.ExperimentResults.ResultMessage;
 
 public class Dispatcher {
 	private DispatchMessages.Experiment inputExp;
@@ -120,7 +121,7 @@ public class Dispatcher {
 							System.exit(0);
 						}
 					}, 
-					15000
+					35000
 			);
 			
 			//Dispatcher is ready and waiting for messages from Searcher
@@ -128,17 +129,35 @@ public class Dispatcher {
 			boolean ready = false;
 			try {
 				Response r = EmploySearcher.Response.parseFrom(main.recv());
+				
 				if(r.hasSecret() && r.getSecret() != remoteInfo.get(machine).secret)
 					throw new InvalidProtocolBufferException("Incorrect secret");
+				main.connect("tcp://"+machine.getName()+":"+r.getSearcherPort());
 				ready = true;
 			} catch (InvalidProtocolBufferException e) {
 				System.err.println("Cannot use: "+machine.getName()+", incorrect response.");
 				e.printStackTrace();
 			}
+			
+			//The rest of the messages should be about sending messages to the 
 			System.out.println("Now we're going to enter the comms loop");
-			for(;ready;){
-				//TODO Need to start passing out
-			}
+//			for(;ready;){
+				//TODO this experiment comes from the generated experiment list somewhere
+				Experiment exp = Experiment.newBuilder()
+									.setProgramName("java -cp bin drivers.SampleExperiment")
+									.addArgument("--episodes=25")
+									.build();
+				//Need to keep sending experiments for each replicate on that machine:
+				main.send(exp.toByteArray(), ZMQ.NOBLOCK);
+				byte[] msg = main.recv();
+				try {
+					ResultMessage rm = ExperimentResults.ResultMessage.parseFrom(msg);
+					System.out.println(rm);
+				} catch (InvalidProtocolBufferException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+//			}
 		}
 	}
 
@@ -193,8 +212,8 @@ public class Dispatcher {
 				try {
 					Process p = builder.start();
 					Scanner output = new Scanner(p.getInputStream());
-					while(output.hasNext())
-						System.out.println("SENDER: "+output.next());
+					while(output.hasNextLine())
+						System.out.println("SENDER: "+output.nextLine());
 					p.waitFor();
 					output.close();
 				} catch (IOException e) {

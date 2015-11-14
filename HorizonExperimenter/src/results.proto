@@ -1,8 +1,29 @@
-package core.io;
+//This is a generic results reader that could be used to send results back and forth without requiring
+//any protocol buffere work on the experimenter's part. That said, I believe this mechanism to be a little
+//too error prone to be that useful, and am in favor of an experimenter designing their own thing.
+
+package search;
+
+option java_package = "core.messages";
+option java_outer_classname = "ExperimentResults";
+
+message ResultMessage{
+	repeated Result reported_value = 1;
+}
 
 message Result{
-	required int64 randseed = 1;
-	required int32 episode = 2;
-	required double v_error = 3;
-	repeated double model_theta = 4 [packed=true];
+	//The name of the result
+	required string name = 1;
+	//The value of the reported result, will be parsed according to the given type
+	required string value = 2;
+	//The data type of the result (for storage in DB), string will be attempted to be parsed as numeric
+	optional Type type = 3 [default = string];
+	enum Type{
+		int32 = 0;
+		float32 = 1;
+		float64 = 2;
+		string = 3;
+		bool = 4;
+		int64 = 5;
+	}
 }

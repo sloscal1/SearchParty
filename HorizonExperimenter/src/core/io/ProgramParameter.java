@@ -100,6 +100,7 @@ public abstract class ProgramParameter {
 			for(ProgramParameter key : requiredFlags)
 				System.err.println("Error: Required flag: --"+key.getLongName()+" (-"+key.getShortChar()+") is not specified.");
 		}
+		//TODO how to handle the non-flagged things?
 		return error? null : retVals;
 	}
 }
