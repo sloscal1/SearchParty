@@ -282,6 +282,51 @@ public final class DispatchMessages {
     core.messages.DispatchMessages.MachineOrBuilder getMachinesOrBuilder(
         int index);
 
+    // repeated .search.Profile profiles = 14;
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    java.util.List<core.messages.DispatchMessages.Profile> 
+        getProfilesList();
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    core.messages.DispatchMessages.Profile getProfiles(int index);
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    int getProfilesCount();
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    java.util.List<? extends core.messages.DispatchMessages.ProfileOrBuilder> 
+        getProfilesOrBuilderList();
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    core.messages.DispatchMessages.ProfileOrBuilder getProfilesOrBuilder(
+        int index);
+
     // optional string libzmq_path = 10 [default = "/usr/local/lib"];
     /**
      * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
@@ -479,6 +524,14 @@ public final class DispatchMessages {
               searchPartyPath_ = input.readBytes();
               break;
             }
+            case 114: {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+                profiles_ = new java.util.ArrayList<core.messages.DispatchMessages.Profile>();
+                mutable_bitField0_ |= 0x00000200;
+              }
+              profiles_.add(input.readMessage(core.messages.DispatchMessages.Profile.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -495,6 +548,9 @@ public final class DispatchMessages {
         }
         if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
           machines_ = java.util.Collections.unmodifiableList(machines_);
+        }
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+          profiles_ = java.util.Collections.unmodifiableList(profiles_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -1000,6 +1056,62 @@ public final class DispatchMessages {
       return machines_.get(index);
     }
 
+    // repeated .search.Profile profiles = 14;
+    public static final int PROFILES_FIELD_NUMBER = 14;
+    private java.util.List<core.messages.DispatchMessages.Profile> profiles_;
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    public java.util.List<core.messages.DispatchMessages.Profile> getProfilesList() {
+      return profiles_;
+    }
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    public java.util.List<? extends core.messages.DispatchMessages.ProfileOrBuilder> 
+        getProfilesOrBuilderList() {
+      return profiles_;
+    }
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    public int getProfilesCount() {
+      return profiles_.size();
+    }
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    public core.messages.DispatchMessages.Profile getProfiles(int index) {
+      return profiles_.get(index);
+    }
+    /**
+     * <code>repeated .search.Profile profiles = 14;</code>
+     *
+     * <pre>
+     *These are the profiles to be used
+     * </pre>
+     */
+    public core.messages.DispatchMessages.ProfileOrBuilder getProfilesOrBuilder(
+        int index) {
+      return profiles_.get(index);
+    }
+
     // optional string libzmq_path = 10 [default = "/usr/local/lib"];
     public static final int LIBZMQ_PATH_FIELD_NUMBER = 10;
     private java.lang.Object libzmqPath_;
@@ -1194,6 +1306,7 @@ public final class DispatchMessages {
       executableCommand_ = "";
       environment_ = java.util.Collections.emptyList();
       machines_ = java.util.Collections.emptyList();
+      profiles_ = java.util.Collections.emptyList();
       libzmqPath_ = "/usr/local/lib";
       libprotobufPath_ = "/usr/lib";
       libsqlitePath_ = "/usr/lib";
@@ -1230,6 +1343,12 @@ public final class DispatchMessages {
       }
       for (int i = 0; i < getMachinesCount(); i++) {
         if (!getMachines(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getProfilesCount(); i++) {
+        if (!getProfiles(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -1279,6 +1398,9 @@ public final class DispatchMessages {
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeBytes(13, getSearchPartyPathBytes());
+      }
+      for (int i = 0; i < profiles_.size(); i++) {
+        output.writeMessage(14, profiles_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1340,6 +1462,10 @@ public final class DispatchMessages {
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(13, getSearchPartyPathBytes());
+      }
+      for (int i = 0; i < profiles_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(14, profiles_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1452,6 +1578,7 @@ public final class DispatchMessages {
           getParamsFieldBuilder();
           getEnvironmentFieldBuilder();
           getMachinesFieldBuilder();
+          getProfilesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1490,14 +1617,20 @@ public final class DispatchMessages {
         } else {
           machinesBuilder_.clear();
         }
+        if (profilesBuilder_ == null) {
+          profiles_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+        } else {
+          profilesBuilder_.clear();
+        }
         libzmqPath_ = "/usr/local/lib";
-        bitField0_ = (bitField0_ & ~0x00000200);
-        libprotobufPath_ = "/usr/lib";
         bitField0_ = (bitField0_ & ~0x00000400);
-        libsqlitePath_ = "/usr/lib";
+        libprotobufPath_ = "/usr/lib";
         bitField0_ = (bitField0_ & ~0x00000800);
-        searchPartyPath_ = "";
+        libsqlitePath_ = "/usr/lib";
         bitField0_ = (bitField0_ & ~0x00001000);
+        searchPartyPath_ = "";
+        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
 
@@ -1577,19 +1710,28 @@ public final class DispatchMessages {
         } else {
           result.machines_ = machinesBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+        if (profilesBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200)) {
+            profiles_ = java.util.Collections.unmodifiableList(profiles_);
+            bitField0_ = (bitField0_ & ~0x00000200);
+          }
+          result.profiles_ = profiles_;
+        } else {
+          result.profiles_ = profilesBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000040;
         }
         result.libzmqPath_ = libzmqPath_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
           to_bitField0_ |= 0x00000080;
         }
         result.libprotobufPath_ = libprotobufPath_;
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00000100;
         }
         result.libsqlitePath_ = libsqlitePath_;
-        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
           to_bitField0_ |= 0x00000200;
         }
         result.searchPartyPath_ = searchPartyPath_;
@@ -1717,23 +1859,49 @@ public final class DispatchMessages {
             }
           }
         }
+        if (profilesBuilder_ == null) {
+          if (!other.profiles_.isEmpty()) {
+            if (profiles_.isEmpty()) {
+              profiles_ = other.profiles_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+            } else {
+              ensureProfilesIsMutable();
+              profiles_.addAll(other.profiles_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.profiles_.isEmpty()) {
+            if (profilesBuilder_.isEmpty()) {
+              profilesBuilder_.dispose();
+              profilesBuilder_ = null;
+              profiles_ = other.profiles_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+              profilesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getProfilesFieldBuilder() : null;
+            } else {
+              profilesBuilder_.addAllMessages(other.profiles_);
+            }
+          }
+        }
         if (other.hasLibzmqPath()) {
-          bitField0_ |= 0x00000200;
+          bitField0_ |= 0x00000400;
           libzmqPath_ = other.libzmqPath_;
           onChanged();
         }
         if (other.hasLibprotobufPath()) {
-          bitField0_ |= 0x00000400;
+          bitField0_ |= 0x00000800;
           libprotobufPath_ = other.libprotobufPath_;
           onChanged();
         }
         if (other.hasLibsqlitePath()) {
-          bitField0_ |= 0x00000800;
+          bitField0_ |= 0x00001000;
           libsqlitePath_ = other.libsqlitePath_;
           onChanged();
         }
         if (other.hasSearchPartyPath()) {
-          bitField0_ |= 0x00001000;
+          bitField0_ |= 0x00002000;
           searchPartyPath_ = other.searchPartyPath_;
           onChanged();
         }
@@ -1768,6 +1936,12 @@ public final class DispatchMessages {
         }
         for (int i = 0; i < getMachinesCount(); i++) {
           if (!getMachines(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getProfilesCount(); i++) {
+          if (!getProfiles(i).isInitialized()) {
             
             return false;
           }
@@ -3234,6 +3408,318 @@ public final class DispatchMessages {
         return machinesBuilder_;
       }
 
+      // repeated .search.Profile profiles = 14;
+      private java.util.List<core.messages.DispatchMessages.Profile> profiles_ =
+        java.util.Collections.emptyList();
+      private void ensureProfilesIsMutable() {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+          profiles_ = new java.util.ArrayList<core.messages.DispatchMessages.Profile>(profiles_);
+          bitField0_ |= 0x00000200;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          core.messages.DispatchMessages.Profile, core.messages.DispatchMessages.Profile.Builder, core.messages.DispatchMessages.ProfileOrBuilder> profilesBuilder_;
+
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public java.util.List<core.messages.DispatchMessages.Profile> getProfilesList() {
+        if (profilesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(profiles_);
+        } else {
+          return profilesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public int getProfilesCount() {
+        if (profilesBuilder_ == null) {
+          return profiles_.size();
+        } else {
+          return profilesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public core.messages.DispatchMessages.Profile getProfiles(int index) {
+        if (profilesBuilder_ == null) {
+          return profiles_.get(index);
+        } else {
+          return profilesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public Builder setProfiles(
+          int index, core.messages.DispatchMessages.Profile value) {
+        if (profilesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProfilesIsMutable();
+          profiles_.set(index, value);
+          onChanged();
+        } else {
+          profilesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public Builder setProfiles(
+          int index, core.messages.DispatchMessages.Profile.Builder builderForValue) {
+        if (profilesBuilder_ == null) {
+          ensureProfilesIsMutable();
+          profiles_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          profilesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public Builder addProfiles(core.messages.DispatchMessages.Profile value) {
+        if (profilesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProfilesIsMutable();
+          profiles_.add(value);
+          onChanged();
+        } else {
+          profilesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public Builder addProfiles(
+          int index, core.messages.DispatchMessages.Profile value) {
+        if (profilesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProfilesIsMutable();
+          profiles_.add(index, value);
+          onChanged();
+        } else {
+          profilesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public Builder addProfiles(
+          core.messages.DispatchMessages.Profile.Builder builderForValue) {
+        if (profilesBuilder_ == null) {
+          ensureProfilesIsMutable();
+          profiles_.add(builderForValue.build());
+          onChanged();
+        } else {
+          profilesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public Builder addProfiles(
+          int index, core.messages.DispatchMessages.Profile.Builder builderForValue) {
+        if (profilesBuilder_ == null) {
+          ensureProfilesIsMutable();
+          profiles_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          profilesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public Builder addAllProfiles(
+          java.lang.Iterable<? extends core.messages.DispatchMessages.Profile> values) {
+        if (profilesBuilder_ == null) {
+          ensureProfilesIsMutable();
+          super.addAll(values, profiles_);
+          onChanged();
+        } else {
+          profilesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public Builder clearProfiles() {
+        if (profilesBuilder_ == null) {
+          profiles_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+          onChanged();
+        } else {
+          profilesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public Builder removeProfiles(int index) {
+        if (profilesBuilder_ == null) {
+          ensureProfilesIsMutable();
+          profiles_.remove(index);
+          onChanged();
+        } else {
+          profilesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public core.messages.DispatchMessages.Profile.Builder getProfilesBuilder(
+          int index) {
+        return getProfilesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public core.messages.DispatchMessages.ProfileOrBuilder getProfilesOrBuilder(
+          int index) {
+        if (profilesBuilder_ == null) {
+          return profiles_.get(index);  } else {
+          return profilesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public java.util.List<? extends core.messages.DispatchMessages.ProfileOrBuilder> 
+           getProfilesOrBuilderList() {
+        if (profilesBuilder_ != null) {
+          return profilesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(profiles_);
+        }
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public core.messages.DispatchMessages.Profile.Builder addProfilesBuilder() {
+        return getProfilesFieldBuilder().addBuilder(
+            core.messages.DispatchMessages.Profile.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public core.messages.DispatchMessages.Profile.Builder addProfilesBuilder(
+          int index) {
+        return getProfilesFieldBuilder().addBuilder(
+            index, core.messages.DispatchMessages.Profile.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .search.Profile profiles = 14;</code>
+       *
+       * <pre>
+       *These are the profiles to be used
+       * </pre>
+       */
+      public java.util.List<core.messages.DispatchMessages.Profile.Builder> 
+           getProfilesBuilderList() {
+        return getProfilesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          core.messages.DispatchMessages.Profile, core.messages.DispatchMessages.Profile.Builder, core.messages.DispatchMessages.ProfileOrBuilder> 
+          getProfilesFieldBuilder() {
+        if (profilesBuilder_ == null) {
+          profilesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              core.messages.DispatchMessages.Profile, core.messages.DispatchMessages.Profile.Builder, core.messages.DispatchMessages.ProfileOrBuilder>(
+                  profiles_,
+                  ((bitField0_ & 0x00000200) == 0x00000200),
+                  getParentForChildren(),
+                  isClean());
+          profiles_ = null;
+        }
+        return profilesBuilder_;
+      }
+
       // optional string libzmq_path = 10 [default = "/usr/local/lib"];
       private java.lang.Object libzmqPath_ = "/usr/local/lib";
       /**
@@ -3244,7 +3730,7 @@ public final class DispatchMessages {
        * </pre>
        */
       public boolean hasLibzmqPath() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
        * <code>optional string libzmq_path = 10 [default = "/usr/local/lib"];</code>
@@ -3296,7 +3782,7 @@ public final class DispatchMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000200;
+  bitField0_ |= 0x00000400;
         libzmqPath_ = value;
         onChanged();
         return this;
@@ -3309,7 +3795,7 @@ public final class DispatchMessages {
        * </pre>
        */
       public Builder clearLibzmqPath() {
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000400);
         libzmqPath_ = getDefaultInstance().getLibzmqPath();
         onChanged();
         return this;
@@ -3326,7 +3812,7 @@ public final class DispatchMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000200;
+  bitField0_ |= 0x00000400;
         libzmqPath_ = value;
         onChanged();
         return this;
@@ -3338,7 +3824,7 @@ public final class DispatchMessages {
        * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
        */
       public boolean hasLibprotobufPath() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
        * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
@@ -3378,7 +3864,7 @@ public final class DispatchMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000400;
+  bitField0_ |= 0x00000800;
         libprotobufPath_ = value;
         onChanged();
         return this;
@@ -3387,7 +3873,7 @@ public final class DispatchMessages {
        * <code>optional string libprotobuf_path = 11 [default = "/usr/lib"];</code>
        */
       public Builder clearLibprotobufPath() {
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000800);
         libprotobufPath_ = getDefaultInstance().getLibprotobufPath();
         onChanged();
         return this;
@@ -3400,7 +3886,7 @@ public final class DispatchMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000400;
+  bitField0_ |= 0x00000800;
         libprotobufPath_ = value;
         onChanged();
         return this;
@@ -3412,7 +3898,7 @@ public final class DispatchMessages {
        * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
        */
       public boolean hasLibsqlitePath() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
        * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
@@ -3452,7 +3938,7 @@ public final class DispatchMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000800;
+  bitField0_ |= 0x00001000;
         libsqlitePath_ = value;
         onChanged();
         return this;
@@ -3461,7 +3947,7 @@ public final class DispatchMessages {
        * <code>optional string libsqlite_path = 12 [default = "/usr/lib"];</code>
        */
       public Builder clearLibsqlitePath() {
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00001000);
         libsqlitePath_ = getDefaultInstance().getLibsqlitePath();
         onChanged();
         return this;
@@ -3474,7 +3960,7 @@ public final class DispatchMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000800;
+  bitField0_ |= 0x00001000;
         libsqlitePath_ = value;
         onChanged();
         return this;
@@ -3486,7 +3972,7 @@ public final class DispatchMessages {
        * <code>required string search_party_path = 13;</code>
        */
       public boolean hasSearchPartyPath() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
+        return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       /**
        * <code>required string search_party_path = 13;</code>
@@ -3526,7 +4012,7 @@ public final class DispatchMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00002000;
         searchPartyPath_ = value;
         onChanged();
         return this;
@@ -3535,7 +4021,7 @@ public final class DispatchMessages {
        * <code>required string search_party_path = 13;</code>
        */
       public Builder clearSearchPartyPath() {
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         searchPartyPath_ = getDefaultInstance().getSearchPartyPath();
         onChanged();
         return this;
@@ -3548,7 +4034,7 @@ public final class DispatchMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00002000;
         searchPartyPath_ = value;
         onChanged();
         return this;
@@ -4250,6 +4736,61 @@ public final class DispatchMessages {
      */
     com.google.protobuf.ByteString
         getUsernameBytes();
+
+    // repeated .search.Env_Variable env_variables = 4;
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    java.util.List<core.messages.DispatchMessages.Env_Variable> 
+        getEnvVariablesList();
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    core.messages.DispatchMessages.Env_Variable getEnvVariables(int index);
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    int getEnvVariablesCount();
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    java.util.List<? extends core.messages.DispatchMessages.Env_VariableOrBuilder> 
+        getEnvVariablesOrBuilderList();
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    core.messages.DispatchMessages.Env_VariableOrBuilder getEnvVariablesOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code search.Machine}
@@ -4317,6 +4858,14 @@ public final class DispatchMessages {
               username_ = input.readBytes();
               break;
             }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                envVariables_ = new java.util.ArrayList<core.messages.DispatchMessages.Env_Variable>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              envVariables_.add(input.readMessage(core.messages.DispatchMessages.Env_Variable.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -4325,6 +4874,9 @@ public final class DispatchMessages {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          envVariables_ = java.util.Collections.unmodifiableList(envVariables_);
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -4459,10 +5011,77 @@ public final class DispatchMessages {
       }
     }
 
+    // repeated .search.Env_Variable env_variables = 4;
+    public static final int ENV_VARIABLES_FIELD_NUMBER = 4;
+    private java.util.List<core.messages.DispatchMessages.Env_Variable> envVariables_;
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    public java.util.List<core.messages.DispatchMessages.Env_Variable> getEnvVariablesList() {
+      return envVariables_;
+    }
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    public java.util.List<? extends core.messages.DispatchMessages.Env_VariableOrBuilder> 
+        getEnvVariablesOrBuilderList() {
+      return envVariables_;
+    }
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    public int getEnvVariablesCount() {
+      return envVariables_.size();
+    }
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    public core.messages.DispatchMessages.Env_Variable getEnvVariables(int index) {
+      return envVariables_.get(index);
+    }
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 4;</code>
+     *
+     * <pre>
+     *One of the following:
+     *A list of environment variables that should be set to properly run the
+     *experiment on this machine, these will override values set in the profile
+     * </pre>
+     */
+    public core.messages.DispatchMessages.Env_VariableOrBuilder getEnvVariablesOrBuilder(
+        int index) {
+      return envVariables_.get(index);
+    }
+
     private void initFields() {
       name_ = "";
       replicates_ = 1;
       username_ = "";
+      envVariables_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -4472,6 +5091,12 @@ public final class DispatchMessages {
       if (!hasName()) {
         memoizedIsInitialized = 0;
         return false;
+      }
+      for (int i = 0; i < getEnvVariablesCount(); i++) {
+        if (!getEnvVariables(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       memoizedIsInitialized = 1;
       return true;
@@ -4488,6 +5113,9 @@ public final class DispatchMessages {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getUsernameBytes());
+      }
+      for (int i = 0; i < envVariables_.size(); i++) {
+        output.writeMessage(4, envVariables_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -4509,6 +5137,10 @@ public final class DispatchMessages {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, getUsernameBytes());
+      }
+      for (int i = 0; i < envVariables_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, envVariables_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4618,6 +5250,7 @@ public final class DispatchMessages {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getEnvVariablesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -4632,6 +5265,12 @@ public final class DispatchMessages {
         bitField0_ = (bitField0_ & ~0x00000002);
         username_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
+        if (envVariablesBuilder_ == null) {
+          envVariables_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          envVariablesBuilder_.clear();
+        }
         return this;
       }
 
@@ -4672,6 +5311,15 @@ public final class DispatchMessages {
           to_bitField0_ |= 0x00000004;
         }
         result.username_ = username_;
+        if (envVariablesBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            envVariables_ = java.util.Collections.unmodifiableList(envVariables_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.envVariables_ = envVariables_;
+        } else {
+          result.envVariables_ = envVariablesBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4701,6 +5349,32 @@ public final class DispatchMessages {
           username_ = other.username_;
           onChanged();
         }
+        if (envVariablesBuilder_ == null) {
+          if (!other.envVariables_.isEmpty()) {
+            if (envVariables_.isEmpty()) {
+              envVariables_ = other.envVariables_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureEnvVariablesIsMutable();
+              envVariables_.addAll(other.envVariables_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.envVariables_.isEmpty()) {
+            if (envVariablesBuilder_.isEmpty()) {
+              envVariablesBuilder_.dispose();
+              envVariablesBuilder_ = null;
+              envVariables_ = other.envVariables_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              envVariablesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getEnvVariablesFieldBuilder() : null;
+            } else {
+              envVariablesBuilder_.addAllMessages(other.envVariables_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -4709,6 +5383,12 @@ public final class DispatchMessages {
         if (!hasName()) {
           
           return false;
+        }
+        for (int i = 0; i < getEnvVariablesCount(); i++) {
+          if (!getEnvVariables(i).isInitialized()) {
+            
+            return false;
+          }
         }
         return true;
       }
@@ -4913,6 +5593,354 @@ public final class DispatchMessages {
         return this;
       }
 
+      // repeated .search.Env_Variable env_variables = 4;
+      private java.util.List<core.messages.DispatchMessages.Env_Variable> envVariables_ =
+        java.util.Collections.emptyList();
+      private void ensureEnvVariablesIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          envVariables_ = new java.util.ArrayList<core.messages.DispatchMessages.Env_Variable>(envVariables_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          core.messages.DispatchMessages.Env_Variable, core.messages.DispatchMessages.Env_Variable.Builder, core.messages.DispatchMessages.Env_VariableOrBuilder> envVariablesBuilder_;
+
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public java.util.List<core.messages.DispatchMessages.Env_Variable> getEnvVariablesList() {
+        if (envVariablesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(envVariables_);
+        } else {
+          return envVariablesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public int getEnvVariablesCount() {
+        if (envVariablesBuilder_ == null) {
+          return envVariables_.size();
+        } else {
+          return envVariablesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public core.messages.DispatchMessages.Env_Variable getEnvVariables(int index) {
+        if (envVariablesBuilder_ == null) {
+          return envVariables_.get(index);
+        } else {
+          return envVariablesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public Builder setEnvVariables(
+          int index, core.messages.DispatchMessages.Env_Variable value) {
+        if (envVariablesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEnvVariablesIsMutable();
+          envVariables_.set(index, value);
+          onChanged();
+        } else {
+          envVariablesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public Builder setEnvVariables(
+          int index, core.messages.DispatchMessages.Env_Variable.Builder builderForValue) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          envVariables_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          envVariablesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public Builder addEnvVariables(core.messages.DispatchMessages.Env_Variable value) {
+        if (envVariablesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEnvVariablesIsMutable();
+          envVariables_.add(value);
+          onChanged();
+        } else {
+          envVariablesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public Builder addEnvVariables(
+          int index, core.messages.DispatchMessages.Env_Variable value) {
+        if (envVariablesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEnvVariablesIsMutable();
+          envVariables_.add(index, value);
+          onChanged();
+        } else {
+          envVariablesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public Builder addEnvVariables(
+          core.messages.DispatchMessages.Env_Variable.Builder builderForValue) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          envVariables_.add(builderForValue.build());
+          onChanged();
+        } else {
+          envVariablesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public Builder addEnvVariables(
+          int index, core.messages.DispatchMessages.Env_Variable.Builder builderForValue) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          envVariables_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          envVariablesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public Builder addAllEnvVariables(
+          java.lang.Iterable<? extends core.messages.DispatchMessages.Env_Variable> values) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          super.addAll(values, envVariables_);
+          onChanged();
+        } else {
+          envVariablesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public Builder clearEnvVariables() {
+        if (envVariablesBuilder_ == null) {
+          envVariables_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          envVariablesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public Builder removeEnvVariables(int index) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          envVariables_.remove(index);
+          onChanged();
+        } else {
+          envVariablesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public core.messages.DispatchMessages.Env_Variable.Builder getEnvVariablesBuilder(
+          int index) {
+        return getEnvVariablesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public core.messages.DispatchMessages.Env_VariableOrBuilder getEnvVariablesOrBuilder(
+          int index) {
+        if (envVariablesBuilder_ == null) {
+          return envVariables_.get(index);  } else {
+          return envVariablesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public java.util.List<? extends core.messages.DispatchMessages.Env_VariableOrBuilder> 
+           getEnvVariablesOrBuilderList() {
+        if (envVariablesBuilder_ != null) {
+          return envVariablesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(envVariables_);
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public core.messages.DispatchMessages.Env_Variable.Builder addEnvVariablesBuilder() {
+        return getEnvVariablesFieldBuilder().addBuilder(
+            core.messages.DispatchMessages.Env_Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public core.messages.DispatchMessages.Env_Variable.Builder addEnvVariablesBuilder(
+          int index) {
+        return getEnvVariablesFieldBuilder().addBuilder(
+            index, core.messages.DispatchMessages.Env_Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 4;</code>
+       *
+       * <pre>
+       *One of the following:
+       *A list of environment variables that should be set to properly run the
+       *experiment on this machine, these will override values set in the profile
+       * </pre>
+       */
+      public java.util.List<core.messages.DispatchMessages.Env_Variable.Builder> 
+           getEnvVariablesBuilderList() {
+        return getEnvVariablesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          core.messages.DispatchMessages.Env_Variable, core.messages.DispatchMessages.Env_Variable.Builder, core.messages.DispatchMessages.Env_VariableOrBuilder> 
+          getEnvVariablesFieldBuilder() {
+        if (envVariablesBuilder_ == null) {
+          envVariablesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              core.messages.DispatchMessages.Env_Variable, core.messages.DispatchMessages.Env_Variable.Builder, core.messages.DispatchMessages.Env_VariableOrBuilder>(
+                  envVariables_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          envVariables_ = null;
+        }
+        return envVariablesBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:search.Machine)
     }
 
@@ -4922,6 +5950,1170 @@ public final class DispatchMessages {
     }
 
     // @@protoc_insertion_point(class_scope:search.Machine)
+  }
+
+  public interface ProfileOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .search.Env_Variable env_variables = 1;
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    java.util.List<core.messages.DispatchMessages.Env_Variable> 
+        getEnvVariablesList();
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    core.messages.DispatchMessages.Env_Variable getEnvVariables(int index);
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    int getEnvVariablesCount();
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    java.util.List<? extends core.messages.DispatchMessages.Env_VariableOrBuilder> 
+        getEnvVariablesOrBuilderList();
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    core.messages.DispatchMessages.Env_VariableOrBuilder getEnvVariablesOrBuilder(
+        int index);
+
+    // repeated string applicable_machines = 2;
+    /**
+     * <code>repeated string applicable_machines = 2;</code>
+     *
+     * <pre>
+     *The machine names where these variables should be set. If no names are
+     *listed, then the settings are applied to all machines
+     * </pre>
+     */
+    java.util.List<java.lang.String>
+    getApplicableMachinesList();
+    /**
+     * <code>repeated string applicable_machines = 2;</code>
+     *
+     * <pre>
+     *The machine names where these variables should be set. If no names are
+     *listed, then the settings are applied to all machines
+     * </pre>
+     */
+    int getApplicableMachinesCount();
+    /**
+     * <code>repeated string applicable_machines = 2;</code>
+     *
+     * <pre>
+     *The machine names where these variables should be set. If no names are
+     *listed, then the settings are applied to all machines
+     * </pre>
+     */
+    java.lang.String getApplicableMachines(int index);
+    /**
+     * <code>repeated string applicable_machines = 2;</code>
+     *
+     * <pre>
+     *The machine names where these variables should be set. If no names are
+     *listed, then the settings are applied to all machines
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getApplicableMachinesBytes(int index);
+
+    // required .search.Profile.OS os = 3 [default = LINUX];
+    /**
+     * <code>required .search.Profile.OS os = 3 [default = LINUX];</code>
+     */
+    boolean hasOs();
+    /**
+     * <code>required .search.Profile.OS os = 3 [default = LINUX];</code>
+     */
+    core.messages.DispatchMessages.Profile.OS getOs();
+  }
+  /**
+   * Protobuf type {@code search.Profile}
+   */
+  public static final class Profile extends
+      com.google.protobuf.GeneratedMessage
+      implements ProfileOrBuilder {
+    // Use Profile.newBuilder() to construct.
+    private Profile(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private Profile(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final Profile defaultInstance;
+    public static Profile getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public Profile getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Profile(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                envVariables_ = new java.util.ArrayList<core.messages.DispatchMessages.Env_Variable>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              envVariables_.add(input.readMessage(core.messages.DispatchMessages.Env_Variable.PARSER, extensionRegistry));
+              break;
+            }
+            case 18: {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                applicableMachines_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000002;
+              }
+              applicableMachines_.add(input.readBytes());
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+              core.messages.DispatchMessages.Profile.OS value = core.messages.DispatchMessages.Profile.OS.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(3, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                os_ = value;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          envVariables_ = java.util.Collections.unmodifiableList(envVariables_);
+        }
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          applicableMachines_ = new com.google.protobuf.UnmodifiableLazyStringList(applicableMachines_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return core.messages.DispatchMessages.internal_static_search_Profile_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return core.messages.DispatchMessages.internal_static_search_Profile_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              core.messages.DispatchMessages.Profile.class, core.messages.DispatchMessages.Profile.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Profile> PARSER =
+        new com.google.protobuf.AbstractParser<Profile>() {
+      public Profile parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Profile(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Profile> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code search.Profile.OS}
+     */
+    public enum OS
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>LINUX = 0;</code>
+       *
+       * <pre>
+       *Variables are set with $ and path sep is :
+       * </pre>
+       */
+      LINUX(0, 0),
+      /**
+       * <code>MAC = 1;</code>
+       */
+      MAC(1, 1),
+      /**
+       * <code>WINDOWS = 2;</code>
+       *
+       * <pre>
+       *Variables are set with % % and path sep is ;
+       * </pre>
+       */
+      WINDOWS(2, 2),
+      ;
+
+      /**
+       * <code>LINUX = 0;</code>
+       *
+       * <pre>
+       *Variables are set with $ and path sep is :
+       * </pre>
+       */
+      public static final int LINUX_VALUE = 0;
+      /**
+       * <code>MAC = 1;</code>
+       */
+      public static final int MAC_VALUE = 1;
+      /**
+       * <code>WINDOWS = 2;</code>
+       *
+       * <pre>
+       *Variables are set with % % and path sep is ;
+       * </pre>
+       */
+      public static final int WINDOWS_VALUE = 2;
+
+
+      public final int getNumber() { return value; }
+
+      public static OS valueOf(int value) {
+        switch (value) {
+          case 0: return LINUX;
+          case 1: return MAC;
+          case 2: return WINDOWS;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<OS>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<OS>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<OS>() {
+              public OS findValueByNumber(int number) {
+                return OS.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return core.messages.DispatchMessages.Profile.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final OS[] VALUES = values();
+
+      public static OS valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private OS(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:search.Profile.OS)
+    }
+
+    private int bitField0_;
+    // repeated .search.Env_Variable env_variables = 1;
+    public static final int ENV_VARIABLES_FIELD_NUMBER = 1;
+    private java.util.List<core.messages.DispatchMessages.Env_Variable> envVariables_;
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    public java.util.List<core.messages.DispatchMessages.Env_Variable> getEnvVariablesList() {
+      return envVariables_;
+    }
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    public java.util.List<? extends core.messages.DispatchMessages.Env_VariableOrBuilder> 
+        getEnvVariablesOrBuilderList() {
+      return envVariables_;
+    }
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    public int getEnvVariablesCount() {
+      return envVariables_.size();
+    }
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    public core.messages.DispatchMessages.Env_Variable getEnvVariables(int index) {
+      return envVariables_.get(index);
+    }
+    /**
+     * <code>repeated .search.Env_Variable env_variables = 1;</code>
+     */
+    public core.messages.DispatchMessages.Env_VariableOrBuilder getEnvVariablesOrBuilder(
+        int index) {
+      return envVariables_.get(index);
+    }
+
+    // repeated string applicable_machines = 2;
+    public static final int APPLICABLE_MACHINES_FIELD_NUMBER = 2;
+    private com.google.protobuf.LazyStringList applicableMachines_;
+    /**
+     * <code>repeated string applicable_machines = 2;</code>
+     *
+     * <pre>
+     *The machine names where these variables should be set. If no names are
+     *listed, then the settings are applied to all machines
+     * </pre>
+     */
+    public java.util.List<java.lang.String>
+        getApplicableMachinesList() {
+      return applicableMachines_;
+    }
+    /**
+     * <code>repeated string applicable_machines = 2;</code>
+     *
+     * <pre>
+     *The machine names where these variables should be set. If no names are
+     *listed, then the settings are applied to all machines
+     * </pre>
+     */
+    public int getApplicableMachinesCount() {
+      return applicableMachines_.size();
+    }
+    /**
+     * <code>repeated string applicable_machines = 2;</code>
+     *
+     * <pre>
+     *The machine names where these variables should be set. If no names are
+     *listed, then the settings are applied to all machines
+     * </pre>
+     */
+    public java.lang.String getApplicableMachines(int index) {
+      return applicableMachines_.get(index);
+    }
+    /**
+     * <code>repeated string applicable_machines = 2;</code>
+     *
+     * <pre>
+     *The machine names where these variables should be set. If no names are
+     *listed, then the settings are applied to all machines
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getApplicableMachinesBytes(int index) {
+      return applicableMachines_.getByteString(index);
+    }
+
+    // required .search.Profile.OS os = 3 [default = LINUX];
+    public static final int OS_FIELD_NUMBER = 3;
+    private core.messages.DispatchMessages.Profile.OS os_;
+    /**
+     * <code>required .search.Profile.OS os = 3 [default = LINUX];</code>
+     */
+    public boolean hasOs() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .search.Profile.OS os = 3 [default = LINUX];</code>
+     */
+    public core.messages.DispatchMessages.Profile.OS getOs() {
+      return os_;
+    }
+
+    private void initFields() {
+      envVariables_ = java.util.Collections.emptyList();
+      applicableMachines_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      os_ = core.messages.DispatchMessages.Profile.OS.LINUX;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasOs()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      for (int i = 0; i < getEnvVariablesCount(); i++) {
+        if (!getEnvVariables(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < envVariables_.size(); i++) {
+        output.writeMessage(1, envVariables_.get(i));
+      }
+      for (int i = 0; i < applicableMachines_.size(); i++) {
+        output.writeBytes(2, applicableMachines_.getByteString(i));
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(3, os_.getNumber());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < envVariables_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, envVariables_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < applicableMachines_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(applicableMachines_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getApplicableMachinesList().size();
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(3, os_.getNumber());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static core.messages.DispatchMessages.Profile parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static core.messages.DispatchMessages.Profile parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static core.messages.DispatchMessages.Profile parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static core.messages.DispatchMessages.Profile parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static core.messages.DispatchMessages.Profile parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static core.messages.DispatchMessages.Profile parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static core.messages.DispatchMessages.Profile parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static core.messages.DispatchMessages.Profile parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static core.messages.DispatchMessages.Profile parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static core.messages.DispatchMessages.Profile parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(core.messages.DispatchMessages.Profile prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code search.Profile}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements core.messages.DispatchMessages.ProfileOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return core.messages.DispatchMessages.internal_static_search_Profile_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return core.messages.DispatchMessages.internal_static_search_Profile_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                core.messages.DispatchMessages.Profile.class, core.messages.DispatchMessages.Profile.Builder.class);
+      }
+
+      // Construct using core.messages.DispatchMessages.Profile.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getEnvVariablesFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (envVariablesBuilder_ == null) {
+          envVariables_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          envVariablesBuilder_.clear();
+        }
+        applicableMachines_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        os_ = core.messages.DispatchMessages.Profile.OS.LINUX;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return core.messages.DispatchMessages.internal_static_search_Profile_descriptor;
+      }
+
+      public core.messages.DispatchMessages.Profile getDefaultInstanceForType() {
+        return core.messages.DispatchMessages.Profile.getDefaultInstance();
+      }
+
+      public core.messages.DispatchMessages.Profile build() {
+        core.messages.DispatchMessages.Profile result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public core.messages.DispatchMessages.Profile buildPartial() {
+        core.messages.DispatchMessages.Profile result = new core.messages.DispatchMessages.Profile(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (envVariablesBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            envVariables_ = java.util.Collections.unmodifiableList(envVariables_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.envVariables_ = envVariables_;
+        } else {
+          result.envVariables_ = envVariablesBuilder_.build();
+        }
+        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+          applicableMachines_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              applicableMachines_);
+          bitField0_ = (bitField0_ & ~0x00000002);
+        }
+        result.applicableMachines_ = applicableMachines_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.os_ = os_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof core.messages.DispatchMessages.Profile) {
+          return mergeFrom((core.messages.DispatchMessages.Profile)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(core.messages.DispatchMessages.Profile other) {
+        if (other == core.messages.DispatchMessages.Profile.getDefaultInstance()) return this;
+        if (envVariablesBuilder_ == null) {
+          if (!other.envVariables_.isEmpty()) {
+            if (envVariables_.isEmpty()) {
+              envVariables_ = other.envVariables_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureEnvVariablesIsMutable();
+              envVariables_.addAll(other.envVariables_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.envVariables_.isEmpty()) {
+            if (envVariablesBuilder_.isEmpty()) {
+              envVariablesBuilder_.dispose();
+              envVariablesBuilder_ = null;
+              envVariables_ = other.envVariables_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              envVariablesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getEnvVariablesFieldBuilder() : null;
+            } else {
+              envVariablesBuilder_.addAllMessages(other.envVariables_);
+            }
+          }
+        }
+        if (!other.applicableMachines_.isEmpty()) {
+          if (applicableMachines_.isEmpty()) {
+            applicableMachines_ = other.applicableMachines_;
+            bitField0_ = (bitField0_ & ~0x00000002);
+          } else {
+            ensureApplicableMachinesIsMutable();
+            applicableMachines_.addAll(other.applicableMachines_);
+          }
+          onChanged();
+        }
+        if (other.hasOs()) {
+          setOs(other.getOs());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasOs()) {
+          
+          return false;
+        }
+        for (int i = 0; i < getEnvVariablesCount(); i++) {
+          if (!getEnvVariables(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        core.messages.DispatchMessages.Profile parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (core.messages.DispatchMessages.Profile) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .search.Env_Variable env_variables = 1;
+      private java.util.List<core.messages.DispatchMessages.Env_Variable> envVariables_ =
+        java.util.Collections.emptyList();
+      private void ensureEnvVariablesIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          envVariables_ = new java.util.ArrayList<core.messages.DispatchMessages.Env_Variable>(envVariables_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          core.messages.DispatchMessages.Env_Variable, core.messages.DispatchMessages.Env_Variable.Builder, core.messages.DispatchMessages.Env_VariableOrBuilder> envVariablesBuilder_;
+
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public java.util.List<core.messages.DispatchMessages.Env_Variable> getEnvVariablesList() {
+        if (envVariablesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(envVariables_);
+        } else {
+          return envVariablesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public int getEnvVariablesCount() {
+        if (envVariablesBuilder_ == null) {
+          return envVariables_.size();
+        } else {
+          return envVariablesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public core.messages.DispatchMessages.Env_Variable getEnvVariables(int index) {
+        if (envVariablesBuilder_ == null) {
+          return envVariables_.get(index);
+        } else {
+          return envVariablesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public Builder setEnvVariables(
+          int index, core.messages.DispatchMessages.Env_Variable value) {
+        if (envVariablesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEnvVariablesIsMutable();
+          envVariables_.set(index, value);
+          onChanged();
+        } else {
+          envVariablesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public Builder setEnvVariables(
+          int index, core.messages.DispatchMessages.Env_Variable.Builder builderForValue) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          envVariables_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          envVariablesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public Builder addEnvVariables(core.messages.DispatchMessages.Env_Variable value) {
+        if (envVariablesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEnvVariablesIsMutable();
+          envVariables_.add(value);
+          onChanged();
+        } else {
+          envVariablesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public Builder addEnvVariables(
+          int index, core.messages.DispatchMessages.Env_Variable value) {
+        if (envVariablesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureEnvVariablesIsMutable();
+          envVariables_.add(index, value);
+          onChanged();
+        } else {
+          envVariablesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public Builder addEnvVariables(
+          core.messages.DispatchMessages.Env_Variable.Builder builderForValue) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          envVariables_.add(builderForValue.build());
+          onChanged();
+        } else {
+          envVariablesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public Builder addEnvVariables(
+          int index, core.messages.DispatchMessages.Env_Variable.Builder builderForValue) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          envVariables_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          envVariablesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public Builder addAllEnvVariables(
+          java.lang.Iterable<? extends core.messages.DispatchMessages.Env_Variable> values) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          super.addAll(values, envVariables_);
+          onChanged();
+        } else {
+          envVariablesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public Builder clearEnvVariables() {
+        if (envVariablesBuilder_ == null) {
+          envVariables_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          envVariablesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public Builder removeEnvVariables(int index) {
+        if (envVariablesBuilder_ == null) {
+          ensureEnvVariablesIsMutable();
+          envVariables_.remove(index);
+          onChanged();
+        } else {
+          envVariablesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public core.messages.DispatchMessages.Env_Variable.Builder getEnvVariablesBuilder(
+          int index) {
+        return getEnvVariablesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public core.messages.DispatchMessages.Env_VariableOrBuilder getEnvVariablesOrBuilder(
+          int index) {
+        if (envVariablesBuilder_ == null) {
+          return envVariables_.get(index);  } else {
+          return envVariablesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public java.util.List<? extends core.messages.DispatchMessages.Env_VariableOrBuilder> 
+           getEnvVariablesOrBuilderList() {
+        if (envVariablesBuilder_ != null) {
+          return envVariablesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(envVariables_);
+        }
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public core.messages.DispatchMessages.Env_Variable.Builder addEnvVariablesBuilder() {
+        return getEnvVariablesFieldBuilder().addBuilder(
+            core.messages.DispatchMessages.Env_Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public core.messages.DispatchMessages.Env_Variable.Builder addEnvVariablesBuilder(
+          int index) {
+        return getEnvVariablesFieldBuilder().addBuilder(
+            index, core.messages.DispatchMessages.Env_Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .search.Env_Variable env_variables = 1;</code>
+       */
+      public java.util.List<core.messages.DispatchMessages.Env_Variable.Builder> 
+           getEnvVariablesBuilderList() {
+        return getEnvVariablesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          core.messages.DispatchMessages.Env_Variable, core.messages.DispatchMessages.Env_Variable.Builder, core.messages.DispatchMessages.Env_VariableOrBuilder> 
+          getEnvVariablesFieldBuilder() {
+        if (envVariablesBuilder_ == null) {
+          envVariablesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              core.messages.DispatchMessages.Env_Variable, core.messages.DispatchMessages.Env_Variable.Builder, core.messages.DispatchMessages.Env_VariableOrBuilder>(
+                  envVariables_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          envVariables_ = null;
+        }
+        return envVariablesBuilder_;
+      }
+
+      // repeated string applicable_machines = 2;
+      private com.google.protobuf.LazyStringList applicableMachines_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureApplicableMachinesIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          applicableMachines_ = new com.google.protobuf.LazyStringArrayList(applicableMachines_);
+          bitField0_ |= 0x00000002;
+         }
+      }
+      /**
+       * <code>repeated string applicable_machines = 2;</code>
+       *
+       * <pre>
+       *The machine names where these variables should be set. If no names are
+       *listed, then the settings are applied to all machines
+       * </pre>
+       */
+      public java.util.List<java.lang.String>
+          getApplicableMachinesList() {
+        return java.util.Collections.unmodifiableList(applicableMachines_);
+      }
+      /**
+       * <code>repeated string applicable_machines = 2;</code>
+       *
+       * <pre>
+       *The machine names where these variables should be set. If no names are
+       *listed, then the settings are applied to all machines
+       * </pre>
+       */
+      public int getApplicableMachinesCount() {
+        return applicableMachines_.size();
+      }
+      /**
+       * <code>repeated string applicable_machines = 2;</code>
+       *
+       * <pre>
+       *The machine names where these variables should be set. If no names are
+       *listed, then the settings are applied to all machines
+       * </pre>
+       */
+      public java.lang.String getApplicableMachines(int index) {
+        return applicableMachines_.get(index);
+      }
+      /**
+       * <code>repeated string applicable_machines = 2;</code>
+       *
+       * <pre>
+       *The machine names where these variables should be set. If no names are
+       *listed, then the settings are applied to all machines
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getApplicableMachinesBytes(int index) {
+        return applicableMachines_.getByteString(index);
+      }
+      /**
+       * <code>repeated string applicable_machines = 2;</code>
+       *
+       * <pre>
+       *The machine names where these variables should be set. If no names are
+       *listed, then the settings are applied to all machines
+       * </pre>
+       */
+      public Builder setApplicableMachines(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureApplicableMachinesIsMutable();
+        applicableMachines_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string applicable_machines = 2;</code>
+       *
+       * <pre>
+       *The machine names where these variables should be set. If no names are
+       *listed, then the settings are applied to all machines
+       * </pre>
+       */
+      public Builder addApplicableMachines(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureApplicableMachinesIsMutable();
+        applicableMachines_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string applicable_machines = 2;</code>
+       *
+       * <pre>
+       *The machine names where these variables should be set. If no names are
+       *listed, then the settings are applied to all machines
+       * </pre>
+       */
+      public Builder addAllApplicableMachines(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureApplicableMachinesIsMutable();
+        super.addAll(values, applicableMachines_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string applicable_machines = 2;</code>
+       *
+       * <pre>
+       *The machine names where these variables should be set. If no names are
+       *listed, then the settings are applied to all machines
+       * </pre>
+       */
+      public Builder clearApplicableMachines() {
+        applicableMachines_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string applicable_machines = 2;</code>
+       *
+       * <pre>
+       *The machine names where these variables should be set. If no names are
+       *listed, then the settings are applied to all machines
+       * </pre>
+       */
+      public Builder addApplicableMachinesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureApplicableMachinesIsMutable();
+        applicableMachines_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // required .search.Profile.OS os = 3 [default = LINUX];
+      private core.messages.DispatchMessages.Profile.OS os_ = core.messages.DispatchMessages.Profile.OS.LINUX;
+      /**
+       * <code>required .search.Profile.OS os = 3 [default = LINUX];</code>
+       */
+      public boolean hasOs() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required .search.Profile.OS os = 3 [default = LINUX];</code>
+       */
+      public core.messages.DispatchMessages.Profile.OS getOs() {
+        return os_;
+      }
+      /**
+       * <code>required .search.Profile.OS os = 3 [default = LINUX];</code>
+       */
+      public Builder setOs(core.messages.DispatchMessages.Profile.OS value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000004;
+        os_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .search.Profile.OS os = 3 [default = LINUX];</code>
+       */
+      public Builder clearOs() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        os_ = core.messages.DispatchMessages.Profile.OS.LINUX;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:search.Profile)
+    }
+
+    static {
+      defaultInstance = new Profile(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:search.Profile)
   }
 
   public interface ParameterOrBuilder
@@ -5850,6 +8042,11 @@ public final class DispatchMessages {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_search_Machine_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_search_Profile_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_search_Profile_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_search_Parameter_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -5863,25 +8060,31 @@ public final class DispatchMessages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013setup.proto\022\006search\"\204\003\n\nExperiment\022\027\n\017" +
+      "\n\013setup.proto\022\006search\"\247\003\n\nExperiment\022\027\n\017" +
       "experiment_name\030\001 \001(\t\022!\n\006params\030\002 \003(\0132\021." +
       "search.Parameter\022\024\n\014continuation\030\003 \001(\t\022\017" +
       "\n\007git_uri\030\004 \002(\t\022\022\n\ngit_branch\030\005 \002(\t\022\017\n\007g" +
       "it_tag\030\006 \001(\t\022\032\n\022executable_command\030\007 \001(\t" +
       "\022)\n\013environment\030\010 \003(\0132\024.search.Env_Varia" +
-      "ble\022!\n\010machines\030\t \003(\0132\017.search.Machine\022#" +
-      "\n\013libzmq_path\030\n \001(\t:\016/usr/local/lib\022\"\n\020l" +
-      "ibprotobuf_path\030\013 \001(\t:\010/usr/lib\022 \n\016libsq" +
-      "lite_path\030\014 \001(\t:\010/usr/lib\022\031\n\021search_part",
-      "y_path\030\r \002(\t\"+\n\014Env_Variable\022\014\n\004name\030\001 \002" +
-      "(\t\022\r\n\005value\030\002 \002(\t\"@\n\007Machine\022\014\n\004name\030\001 \002" +
-      "(\t\022\025\n\nreplicates\030\002 \001(\005:\0011\022\020\n\010username\030\003 " +
-      "\001(\t\"\301\001\n\tParameter\022\022\n\nparam_name\030\001 \002(\t\022\021\n" +
-      "\tmin_value\030\002 \002(\001\022\021\n\tmax_value\030\003 \002(\001\022\024\n\014g" +
-      "rowth_value\030\004 \001(\001\0228\n\007pattern\030\005 \001(\0162\037.sea" +
-      "rch.Parameter.GrowthPattern:\006LINEAR\"*\n\rG" +
-      "rowthPattern\022\n\n\006LINEAR\020\000\022\r\n\tGEOMETRIC\020\001B" +
-      "!\n\rcore.messagesB\020DispatchMessages"
+      "ble\022!\n\010machines\030\t \003(\0132\017.search.Machine\022!" +
+      "\n\010profiles\030\016 \003(\0132\017.search.Profile\022#\n\013lib" +
+      "zmq_path\030\n \001(\t:\016/usr/local/lib\022\"\n\020libpro" +
+      "tobuf_path\030\013 \001(\t:\010/usr/lib\022 \n\016libsqlite_",
+      "path\030\014 \001(\t:\010/usr/lib\022\031\n\021search_party_pat" +
+      "h\030\r \002(\t\"+\n\014Env_Variable\022\014\n\004name\030\001 \002(\t\022\r\n" +
+      "\005value\030\002 \002(\t\"m\n\007Machine\022\014\n\004name\030\001 \002(\t\022\025\n" +
+      "\nreplicates\030\002 \001(\005:\0011\022\020\n\010username\030\003 \001(\t\022+" +
+      "\n\renv_variables\030\004 \003(\0132\024.search.Env_Varia" +
+      "ble\"\241\001\n\007Profile\022+\n\renv_variables\030\001 \003(\0132\024" +
+      ".search.Env_Variable\022\033\n\023applicable_machi" +
+      "nes\030\002 \003(\t\022%\n\002os\030\003 \002(\0162\022.search.Profile.O" +
+      "S:\005LINUX\"%\n\002OS\022\t\n\005LINUX\020\000\022\007\n\003MAC\020\001\022\013\n\007WI" +
+      "NDOWS\020\002\"\301\001\n\tParameter\022\022\n\nparam_name\030\001 \002(",
+      "\t\022\021\n\tmin_value\030\002 \002(\001\022\021\n\tmax_value\030\003 \002(\001\022" +
+      "\024\n\014growth_value\030\004 \001(\001\0228\n\007pattern\030\005 \001(\0162\037" +
+      ".search.Parameter.GrowthPattern:\006LINEAR\"" +
+      "*\n\rGrowthPattern\022\n\n\006LINEAR\020\000\022\r\n\tGEOMETRI" +
+      "C\020\001B!\n\rcore.messagesB\020DispatchMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5893,7 +8096,7 @@ public final class DispatchMessages {
           internal_static_search_Experiment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Experiment_descriptor,
-              new java.lang.String[] { "ExperimentName", "Params", "Continuation", "GitUri", "GitBranch", "GitTag", "ExecutableCommand", "Environment", "Machines", "LibzmqPath", "LibprotobufPath", "LibsqlitePath", "SearchPartyPath", });
+              new java.lang.String[] { "ExperimentName", "Params", "Continuation", "GitUri", "GitBranch", "GitTag", "ExecutableCommand", "Environment", "Machines", "Profiles", "LibzmqPath", "LibprotobufPath", "LibsqlitePath", "SearchPartyPath", });
           internal_static_search_Env_Variable_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_search_Env_Variable_fieldAccessorTable = new
@@ -5905,9 +8108,15 @@ public final class DispatchMessages {
           internal_static_search_Machine_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Machine_descriptor,
-              new java.lang.String[] { "Name", "Replicates", "Username", });
-          internal_static_search_Parameter_descriptor =
+              new java.lang.String[] { "Name", "Replicates", "Username", "EnvVariables", });
+          internal_static_search_Profile_descriptor =
             getDescriptor().getMessageTypes().get(3);
+          internal_static_search_Profile_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_search_Profile_descriptor,
+              new java.lang.String[] { "EnvVariables", "ApplicableMachines", "Os", });
+          internal_static_search_Parameter_descriptor =
+            getDescriptor().getMessageTypes().get(4);
           internal_static_search_Parameter_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Parameter_descriptor,

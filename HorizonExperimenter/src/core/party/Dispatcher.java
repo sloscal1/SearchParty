@@ -134,6 +134,7 @@ public class Dispatcher {
 					throw new InvalidProtocolBufferException("Incorrect secret");
 				main.connect("tcp://"+machine.getName()+":"+r.getSearcherPort());
 				ready = true;
+				main.send(inputExp.toByteArray(), ZMQ.NOBLOCK);
 			} catch (InvalidProtocolBufferException e) {
 				System.err.println("Cannot use: "+machine.getName()+", incorrect response.");
 				e.printStackTrace();
@@ -144,7 +145,7 @@ public class Dispatcher {
 //			for(;ready;){
 				//TODO this experiment comes from the generated experiment list somewhere
 				Experiment exp = Experiment.newBuilder()
-									.setProgramName("java -cp bin drivers.SampleExperiment")
+									.setProgramName(inputExp.getExecutableCommand())
 									.addArgument("--episodes=25")
 									.build();
 				//Need to keep sending experiments for each replicate on that machine:

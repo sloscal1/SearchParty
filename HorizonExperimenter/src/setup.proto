@@ -24,11 +24,11 @@ message Experiment{
 	
 	//The path from the git_uri to the executable
 	optional string executable_command = 7;
-	//The required variables to be set before the executable_command can be run
-	repeated Env_Variable environment = 8;
 
 	//These are the machines that are to be run on.
 	repeated Machine machines = 9;
+	//These are the profiles to be used
+	repeated Profile profiles = 8;
 	
 	//If you care, set the port that the Dispatcher will listen for Searcher conns
 	optional string libzmq_path = 10 [default = "/usr/local/lib"];
@@ -37,8 +37,11 @@ message Experiment{
 	required string search_party_path = 13;
 }
 
+//Key-Value pairs for things like LD_LIBRARY_PATH=/usr/local/lib etc.
 message Env_Variable{
-	required string name = 1;
+	//The system variable name
+	required string key = 1;
+	//The system variable value
 	required string value = 2;
 }
 
@@ -46,6 +49,23 @@ message Machine{
 	required string name = 1;
 	optional int32 replicates = 2 [default = 1];
 	optional string username = 3;
+	//One of the following:
+	//A list of environment variables that should be set to properly run the
+	//experiment on this machine, these will override values set in the profile
+	repeated Env_Variable env_variables = 4;
+}
+
+message Profile{
+	repeated Env_Variable env_variables = 1;
+	//The machine names where these variables should be set. If no names are
+	//listed, then the settings are applied to all machines
+	repeated string applicable_machines = 2;
+	required OS os = 3 [default = LINUX];
+	enum OS{
+		LINUX = 0; //Variables are set with $ and path sep is :
+		MAC = 1; 
+		WINDOWS = 2; //Variables are set with % % and path sep is ;
+	}
 }
 
 message Parameter{
@@ -59,3 +79,4 @@ message Parameter{
 		GEOMETRIC = 1;
 	}	
 }
+

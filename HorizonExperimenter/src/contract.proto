@@ -29,21 +29,13 @@ message Response{
 	optional int64 secret = 2;
 }
 
-//Encapsulates the needed information to start up a task.
+//Encapsulates the specific parameter settings of this experiment
 message Experiment{
-	//Name of the executable that will conduct this experiment
-	required string program_name = 1;
 	//The arguments to pass to the experiment program
-	repeated string argument = 2;
-	//Any additional variables that will need to linked against 
-	//to enable experiment program execution.
-	repeated Env_Variable environment = 3;
-	
-	//Key-Value pairs for things like LD_LIBRARY_PATH=/usr/local/lib etc.
-	message Env_Variable{
-		//The system variable name
-		required string key = 1;
-		//The system variable value
-		required string value = 2;
-	}
+	repeated Argument argument = 1;
+}
+
+message Argument{
+	required formal_name = 1;
+	required value = 2;
 }

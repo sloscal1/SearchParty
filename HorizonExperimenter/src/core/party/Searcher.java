@@ -21,6 +21,7 @@ import com.google.protobuf.TextFormat.ParseException;
 
 import core.io.Arg;
 import core.io.ProgramParameter;
+import core.messages.DispatchMessages;
 import core.messages.EmploySearcher;
 import core.messages.EmploySearcher.Contract;
 import core.messages.EmploySearcher.Experiment.Env_Variable;
@@ -102,6 +103,9 @@ public class Searcher {
 				//Now loop on Experiment type messages
 				//Need to setup the executor service to run the experiments locally:	
 				ExecutorService exec = Executors.newFixedThreadPool(msg.getNumReplicates());
+				//The next message must be the setup file:
+				DispatchMessages.Experiment allValues = DispatchMessages.Experiment.parseFrom(basecomms.recv());
+				//TODO Parse out the profile variables and machine specific environment variables...
 				System.out.println("Running the service loop now...");
 				new Timer("Killer", false).schedule(
 						new TimerTask(){
@@ -125,6 +129,9 @@ public class Searcher {
 						System.err.println("Unknown message was received. Ignoring...");
 					}
 				}
+			} catch (InvalidProtocolBufferException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 	}
