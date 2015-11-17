@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -29,7 +30,6 @@ import core.messages.DispatchMessages.Machine;
 import core.messages.EmploySearcher;
 import core.messages.EmploySearcher.Experiment;
 import core.messages.ExperimentResults;
-import core.messages.ExperimentResults.Result;
 import core.messages.ExperimentResults.ResultMessage;
 
 public class Dispatcher {
@@ -41,7 +41,8 @@ public class Dispatcher {
 	private int readyPorts = 0;
 	private Lock portLock = new ReentrantLock();
 	private Condition portReady = portLock.newCondition();
-	private String localIPv4;
+	private String localIPv4; 
+	private Semaphore activeMachines;
 
 	public static List<ProgramParameter> params = new ArrayList<ProgramParameter>();
 	static{
@@ -97,6 +98,7 @@ public class Dispatcher {
 	public Dispatcher(DispatchMessages.Experiment exp, Results.Result res){
 		this.inputExp = exp;
 		this.databaseSetup = res;
+		this.activeMachines = new Semaphore(exp.getMachinesCount());
 
 		try {
 			localIPv4 = InetAddress.getLocalHost().getHostAddress();
@@ -117,9 +119,7 @@ public class Dispatcher {
 				portReady.signal();
 				portLock.unlock();
 				//TODO need an experiment generating function...
-				System.out.println("Waiting for an EXP message:");
-				String msg = new String(experiments.recv());
-				System.out.println("Got an Exp message: "+msg);
+				experiments.recv();
 				experiments.send(Experiment.newBuilder()
 						.addArgument(core.messages.EmploySearcher.Argument.newBuilder()
 								.setFormalName("--episodes")
@@ -134,11 +134,18 @@ public class Dispatcher {
 										.setFormalName("--lambda")
 										.setValue("0.005").build())
 										.build().toByteArray(), ZMQ.NOBLOCK);
-				//TODO 
-				experiments.recv();
-				experiments.send(Experiment.newBuilder()
-						.setTerminal(true).build().toByteArray(), ZMQ.NOBLOCK);
-				//Should close experiemnts...
+				//Let all the remaining experiments know there are no more experiments...
+				experiments.setReceiveTimeOut(2000);
+				for(;activeMachines.availablePermits() != 0;){
+					byte[] msg = experiments.recv();
+					if(msg != null){
+						System.out.println("Sending a term exp");
+						experiments.send(Experiment.newBuilder()
+								.setTerminal(true).build().toByteArray(), ZMQ.NOBLOCK);
+					}
+				}
+				System.out.println("All machines know we're out of experiments...");
+				experiments.close();
 			}
 		}).start();
 
@@ -148,14 +155,17 @@ public class Dispatcher {
 				ZMQ.Socket results = cxt.socket(ZMQ.PULL);
 				portLock.lock();
 				resultPort = results.bindToRandomPort("tcp://"+localIPv4);
+				results.setReceiveTimeOut(2000);
 				++readyPorts;
 				portReady.signal();
 				portLock.unlock();
-				for(boolean term = false;!term;){
+				for(;activeMachines.availablePermits() != 0;){
 					try {
-						ResultMessage res = ExperimentResults.ResultMessage.parseFrom(results.recv());
-						for(Result r : res.getReportedValueList())
-							term |= "TERM_".equals(r.getName()) && "TRUE".equals(r.getValue());
+						byte[] msg = results.recv();
+						if(res != null){
+							ResultMessage res = ExperimentResults.ResultMessage.parseFrom(msg);
+//							System.out.println("");
+						}
 						//TODO push this information to the database
 					} catch (InvalidProtocolBufferException e) {
 						// TODO Auto-generated catch block
@@ -207,6 +217,14 @@ public class Dispatcher {
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					} finally{
+						try {
+							activeMachines.acquire();
+							System.out.println("Acquired.. "+activeMachines.availablePermits());
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}).start();
