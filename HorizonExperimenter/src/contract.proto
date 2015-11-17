@@ -12,30 +12,22 @@ message Contract{
 	//e.g., 127.0.0.1, localhost, etc.
 	required string dispatch_address = 1;
 	//The port that the dispatcher will be listening to.
-	required int32 dispatch_port = 2;
+	required int32 experiment_port = 2;
 	//The secret to share in the communications (should be unique per contract)
-	optional int64 secret = 3;
+	optional int32 reply_port = 3;
 	//The number of replicates that this machine will run with
 	optional int32 num_replicates = 4 [default = 1];
-}
-
-//This is the response format of the message that is
-//sent back from the Searcher to establish the connection with
-//the Dispatcher
-message Response{
-	//The port where the searcher will listen to messages from the dispatcher.
-	required int32 searcher_port = 1;
-	//The response secret to confirm the correct Searcher is responding.
-	optional int64 secret = 2;
 }
 
 //Encapsulates the specific parameter settings of this experiment
 message Experiment{
 	//The arguments to pass to the experiment program
 	repeated Argument argument = 1;
+	//True when there are no further experiments
+	optional bool terminal = 2 [default = false];
 }
 
 message Argument{
-	required formal_name = 1;
-	required value = 2;
+	required string formal_name = 1;
+	required string value = 2;
 }

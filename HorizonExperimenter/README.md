@@ -38,7 +38,19 @@ Key ExperimentName ExperimentDate Git_Repository Branch Tag ExperimentEntryPoint
 From there, each Key maps to one or more experiments
 Key_from_master_table, Experiment_table_Name, Parameter_table_Name, String_Exp Description
 
-Each Experiment_table_Name simple has all the output, runs are in the rows, each category of results are in the columns 
+Each Experiment_table_Name simple has all the output, runs are in the rows, each category of results are in the columns
+
+#Internal Organization
+There is a single Dispatcher, and the dispatcher spawns multiple Searchers, one for each machine. The flow is:
+Start Dispatcher
+Dispatcher: setup REP socket that all Searchers will know where to request experiments
+Dispatcher: setup PULL socket that all Searchers will know where to send results
+Dispatcher: Spawn Searcher(s) (should this come with the first request??? probably)
+Searcher: setup PUSH socket for results publishing
+Searcher: publish results to whichever 
+Searcher: poll for experiments as replicates are freed (what for a little while and if no experiments quit)
+
+
 
 #Structuring an Experiment 
 The experiment file that you work with will need to take in command line arguments to set up the various parameters for the

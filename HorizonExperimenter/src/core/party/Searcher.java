@@ -4,14 +4,20 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.zeromq.ZMQ;
 
@@ -22,9 +28,14 @@ import com.google.protobuf.TextFormat.ParseException;
 import core.io.Arg;
 import core.io.ProgramParameter;
 import core.messages.DispatchMessages;
+import core.messages.DispatchMessages.Env_Variable;
+import core.messages.DispatchMessages.Experiment;
+import core.messages.DispatchMessages.Machine;
+import core.messages.DispatchMessages.Profile;
 import core.messages.EmploySearcher;
+import core.messages.EmploySearcher.Argument;
 import core.messages.EmploySearcher.Contract;
-import core.messages.EmploySearcher.Experiment.Env_Variable;
+import core.messages.ExperimentResults;
 import core.messages.ExperimentResults.ResultMessage;
 
 /**
@@ -40,6 +51,24 @@ import core.messages.ExperimentResults.ResultMessage;
 public class Searcher {
 	public static List<ProgramParameter> allParams = new ArrayList<>();
 	static{
+		allParams.add(new ProgramParameter("input-setup", Arg.REQUIRED, 'i'){
+			@Override
+			public boolean process(String value,
+					Map<ProgramParameter, Object> values) {
+				boolean error = false;
+				try {
+					DispatchMessages.Experiment.Builder builder = DispatchMessages.Experiment.newBuilder();
+					TextFormat.merge(value, builder);
+					DispatchMessages.Experiment exp = builder.build();
+					values.put(this, exp);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				return error;
+			}
+		});
 		allParams.add(new ProgramParameter("contract-proto", Arg.REQUIRED, 'c'){
 			@Override
 			public boolean process(String value, Map<ProgramParameter, Object> values) {
@@ -60,86 +89,132 @@ public class Searcher {
 
 	private ZMQ.Context context;
 	private ZMQ.Socket basecomms;
-	//	private List<Experiment> incomplete;
+	private BlockingQueue<EmploySearcher.Experiment> incomplete;
+	private BlockingQueue<ExperimentResults.ResultMessage> results = new LinkedBlockingQueue<ExperimentResults.ResultMessage>();
 	//	private List<Experiment> complete;
 	private int numIOThreads = 4;
-	private int localPort;
+	private Experiment allValues;
+	private Map<String, String> envVars = new HashMap<>();
 
 	/**
 	 * Receives the address:port of the Dispatcher.
+	 * @throws UnknownHostException 
 	 */
-	public Searcher(Contract msg){
-		new Thread(new DispatcherTask(msg)).start();
-	}
-
-	private class DispatcherTask implements Runnable{
-		private Contract msg;
-
-		public DispatcherTask(Contract msg) {
-			this.msg = msg;
+	public Searcher(Experiment exp, Contract msg) throws UnknownHostException{
+		allValues = exp;
+		incomplete = new ArrayBlockingQueue<EmploySearcher.Experiment>(msg.getNumReplicates());
+		String localName = InetAddress.getLocalHost().getHostName();
+		if(localName.contains("/"))
+			localName = localName.substring(0, localName.indexOf('/'));
+		System.out.println("localname is: "+localName);
+		//See if there is a profile that corresponds to this machine:
+		boolean profileFound = false;
+		for(int i = 0; !profileFound && i < allValues.getProfilesCount(); ++i){
+			Profile p = allValues.getProfiles(i);
+			if(p.getApplicableMachinesList().contains(localName)){
+				for(Env_Variable env : p.getEnvVariablesList())
+					envVars.put(env.getKey(), env.getValue());
+				profileFound = true;
+			}
 		}
-
-		@Override
-		public void run() {
-			//Need to set up the communications with the Dispatcher.
-			System.out.println("Pushing out a message...");
-			try(ZMQ.Context ctx = ZMQ.context(1)){
-				basecomms = ctx.socket(ZMQ.REQ);
-				try {
-					localPort = basecomms.bindToRandomPort("tcp://"+InetAddress.getLocalHost().getHostAddress());
-				} catch (UnknownHostException e) {
-					localPort = basecomms.bindToRandomPort("tcp://127.0.0.1");
+		//See if there are any overrides:
+		boolean machineFound = false;
+		for(int i = 0; !machineFound && i < allValues.getMachinesCount(); ++i){
+			Machine m = allValues.getMachines(i);
+			if(localName.equals(m.getName())){
+				for(Env_Variable env : m.getEnvVariablesList())
+					envVars.put(env.getKey(), env.getValue());
+				machineFound = true;
+			}
+		}
+		System.out.println(envVars);
+		final ZMQ.Context cxt = ZMQ.context(1);
+		//This thread receives results from the local experiment processes and passes them along to the Dispatcher
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				ZMQ.Socket results = cxt.socket(ZMQ.PUSH);
+				results.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getReplyPort());
+				boolean term = false;
+				for(;!term;){
+					try {
+						System.out.println("Connected and waiting on results...");
+						ResultMessage rm = Searcher.this.results.take();
+						if(rm != null)
+							results.send(rm.toByteArray(), ZMQ.NOBLOCK);
+						else
+							term = true;
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				basecomms.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getDispatchPort());
-				//TODO Need to get the git information as well...
-				//Make a temp file too.
+			}
+		}).start();
 
-				//Let the Searcher know that all is well...
-				basecomms.send(EmploySearcher.Response.newBuilder()
-						.setSearcherPort(localPort)
-						.setSecret(msg.getSecret())
-						.build().toByteArray(), ZMQ.NOBLOCK);
-
+		//This thread gets experiments as they become available
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				ZMQ.Socket experiments = cxt.socket(ZMQ.REQ);
+				experiments.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getExperimentPort());
 				//Now loop on Experiment type messages
 				//Need to setup the executor service to run the experiments locally:	
 				ExecutorService exec = Executors.newFixedThreadPool(msg.getNumReplicates());
-				//The next message must be the setup file:
-				DispatchMessages.Experiment allValues = DispatchMessages.Experiment.parseFrom(basecomms.recv());
-				//TODO Parse out the profile variables and machine specific environment variables...
-				System.out.println("Running the service loop now...");
-				new Timer("Killer", false).schedule(
-						new TimerTask(){
-							@Override
-							public void run() {
-								System.out.println("Kill...");
-								System.exit(0);
-							}
-						}, 
-						30000
-						);
-				for(;;){
-					byte[] msg = basecomms.recv();
-					System.out.println("SEARCHER RECVD!");
+				List<Future<Integer>> results = new ArrayList<>();
+				EmploySearcher.Experiment sentinal = EmploySearcher.Experiment.newBuilder().buildPartial();
+				for(;!exec.isShutdown();){
 					try {
-						EmploySearcher.Experiment exp = EmploySearcher.Experiment.parseFrom(msg);
-						//TODO Need to track experiments that failed.
-						//TODO Need to set up some sockets or something to receive results.
-						exec.submit(new ExperimentTask(exp));
+						System.out.println("Connected and waiting on some experiments...");
+						incomplete.put(sentinal); //Block until we have a thread that's ready for a task...
+						incomplete.take(); //Take the dummy sentinal off
+						if(!exec.isShutdown()){
+							System.out.println("Sending gimme...");
+							experiments.send("gimme");
+							System.out.println("Waiting on gimme...");
+							byte[] msg = experiments.recv(); //Get the new task
+							EmploySearcher.Experiment exp = EmploySearcher.Experiment.parseFrom(msg);
+							if(!exp.getTerminal() || exp.getArgumentCount() != 0){
+								incomplete.put(exp);
+								results.add(exec.submit(new ExperimentTask(exp)));
+							}
+							if(exp.getTerminal())
+								exec.shutdown();
+						}
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					} catch (InvalidProtocolBufferException e) {
-						System.err.println("Unknown message was received. Ignoring...");
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
-			} catch (InvalidProtocolBufferException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				//Wait for all the tasks to complete...
+				for(Future<Integer> f : results)
+					try {
+						f.get();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+				try {
+					Thread.sleep(1000); //Give it a few seconds before ending the results thread...
+					Searcher.this.results.put(ExperimentResults.ResultMessage.newBuilder().buildPartial());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		}
+		}).start();
 	}
 
 	private class ExperimentTask implements Callable<Integer>{
 		private EmploySearcher.Experiment exp;
 		boolean keepGoing = true; //Out here to allow anonymous inner class to work with it.
-		
+
 		private ExperimentTask(EmploySearcher.Experiment exp){
 			this.exp = exp;
 		}
@@ -150,22 +225,21 @@ public class Searcher {
 			//Set up the comms channel for this experiment:
 			//TODO pull this out to have fixed sockets declared all at once?
 			ZMQ.Context context = ZMQ.context(1);
-			System.out.println("got a context...");
-			ZMQ.Socket local = context.socket(ZMQ.REQ); //TODO Maybe poll?
-			System.out.println("got a socket...");
+			ZMQ.Socket local = context.socket(ZMQ.PULL); //TODO Maybe poll?
 			local.setReceiveTimeOut(10000); //TODO make this an variable somewhere
-			System.out.println("set the timeout");
 			int listeningPort = local.bindToRandomPort("tcp://"+InetAddress.getLocalHost().getHostAddress());
-			System.out.println("bount to port: "+listeningPort);
 			new  Thread(){
 				public void run() {
 					System.out.println("Hanging out for the results of the test class...");
 					for(;keepGoing;){
 						byte[] msg = local.recv();
 						try {
-							ResultMessage rm = ResultMessage.parseFrom(msg);
-							System.out.println(rm);
+							if(msg != null)
+								results.put(ResultMessage.parseFrom(msg));
 						} catch (InvalidProtocolBufferException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -173,21 +247,24 @@ public class Searcher {
 					System.out.println("Out of the execution loop.");
 				};
 			}.start();
-			
+
 			System.out.println("Working through parameters...");
-			//Get the command set
-			String[] command = new String[exp.getArgumentCount()+2];
-			command[0] = exp.getProgramName();
-			int pos = 1;
-			for(String arg : exp.getArgumentList())
-				command[pos++] = arg;
+			//TODO This should be changes in the prototxt, shouldn't have hard-code split on Java
+			String[] parts = allValues.getExecutableCommand().split("\\s+");
+			String[] command = new String[exp.getArgumentCount()*2+parts.length+1];
+			for(int i = 0; i < parts.length; ++i)
+				command[i] = parts[i];
+			int pos = parts.length;
+			for(Argument arg : exp.getArgumentList()){
+				command[pos++] = arg.getFormalName();
+				command[pos++] = arg.getValue();
+			}
 			command[command.length-1] = "--searcher-port="+listeningPort; //TODO undocumented requirement!
 			ProcessBuilder builder = new ProcessBuilder(command);
-			builder.redirectError();
+			builder.redirectErrorStream(true);
 			//Set up the environment for this process
-			Map<String, String> env = builder.environment();
-			for(Env_Variable var : exp.getEnvironmentList())
-				env.put(var.getKey(), var.getValue());
+			for(Entry<String, String> var : envVars.entrySet())
+				builder.environment().put(var.getKey(), var.getValue());
 
 			System.out.println("Running command: "+builder.command());
 
@@ -201,6 +278,7 @@ public class Searcher {
 				}
 				retVal = proc.waitFor();
 				scan.close();
+				incomplete.remove(exp);
 				keepGoing = false;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -216,6 +294,6 @@ public class Searcher {
 	public static void main(String[] args) throws Exception{
 		Map<ProgramParameter, Object> vals = ProgramParameter.getValues(args, allParams, allParams);
 		if(vals != null)
-			new Searcher((Contract)vals.get(allParams.get(0)));
+			new Searcher((Experiment)vals.get(allParams.get(0)), (Contract)vals.get(allParams.get(1)));
 	}
 }
