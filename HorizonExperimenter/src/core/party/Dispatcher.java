@@ -110,7 +110,6 @@ public class Dispatcher {
 		new Thread(new Runnable(){
 			@Override
 			public void run() {
-
 				ZMQ.Socket experiments = cxt.socket(ZMQ.REP);
 				portLock.lock();
 				expPort = experiments.bindToRandomPort("tcp://"+localIPv4);
@@ -128,7 +127,18 @@ public class Dispatcher {
 								.build().toByteArray(), ZMQ.NOBLOCK);
 				experiments.recv();
 				experiments.send(Experiment.newBuilder()
-								.setTerminal(true).build().toByteArray(), ZMQ.NOBLOCK);
+						.addArgument(core.messages.EmploySearcher.Argument.newBuilder()
+								.setFormalName("--episodes")
+								.setValue("5").build())
+								.addArgument(core.messages.EmploySearcher.Argument.newBuilder()
+										.setFormalName("--lambda")
+										.setValue("0.005").build())
+										.build().toByteArray(), ZMQ.NOBLOCK);
+				//TODO 
+				experiments.recv();
+				experiments.send(Experiment.newBuilder()
+						.setTerminal(true).build().toByteArray(), ZMQ.NOBLOCK);
+				//Should close experiemnts...
 			}
 		}).start();
 
@@ -143,11 +153,9 @@ public class Dispatcher {
 				portLock.unlock();
 				for(boolean term = false;!term;){
 					try {
-						System.out.println("Waiting for a results message:");
 						ResultMessage res = ExperimentResults.ResultMessage.parseFrom(results.recv());
 						for(Result r : res.getReportedValueList())
 							term |= "TERM_".equals(r.getName()) && "TRUE".equals(r.getValue());
-						System.out.println("RCVD: RES ");
 						//TODO push this information to the database
 					} catch (InvalidProtocolBufferException e) {
 						// TODO Auto-generated catch block
@@ -171,32 +179,37 @@ public class Dispatcher {
 				System.exit(1);
 			}
 		portLock.unlock();
-		
+
 		for(Machine m : machines){
-			//Signal the remote machine to start its Searcher
-			String user = m.hasUsername() ? m.getUsername() : defaultUser;
-			ProcessBuilder builder = new ProcessBuilder("ssh", user+"@"+m.getName(),
-					"java -jar "+exp.getSearchPartyPath()+File.separator+"searchparty.jar --searcher -i \""+inputExp.toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")
-					+ "\" -c \""+EmploySearcher.Contract.newBuilder().setDispatchAddress(localIPv4)
-								.setExperimentPort(expPort)
-								.setReplyPort(resultPort)
-								.build().toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")+"\"");
-			builder.redirectErrorStream(true);
-			try {
-				Process p = builder.start();
-				Scanner output = new Scanner(p.getInputStream());
-				while(output.hasNextLine())
-					System.out.println("SENDER: "+output.nextLine());
-				p.waitFor();
-				output.close();
-				System.out.println("The Searcher: "+m.getName()+" terminated.");
-			} catch (IOException e) {
-				System.err.println("Cannot start Searcher process on "+m.getName()+": ");
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			new Thread(new Runnable(){
+				public void run() {
+					System.out.println("Machine: "+m);
+					//Signal the remote machine to start its Searcher
+					String user = m.hasUsername() ? m.getUsername() : defaultUser;
+					ProcessBuilder builder = new ProcessBuilder("ssh", user+"@"+m.getName(),
+							"java -jar "+exp.getSearchPartyPath()+File.separator+"searchparty.jar --searcher -i \""+inputExp.toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")
+							+ "\" -c \""+EmploySearcher.Contract.newBuilder().setDispatchAddress(localIPv4)
+							.setExperimentPort(expPort)
+							.setReplyPort(resultPort)
+							.build().toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")+"\"");
+					builder.redirectErrorStream(true);
+					try {
+						Process p = builder.start();
+						Scanner output = new Scanner(p.getInputStream());
+						while(output.hasNextLine())
+							System.out.println("SENDER: "+Thread.currentThread().getId()+" "+output.nextLine());
+						p.waitFor();
+						output.close();
+						System.out.println("The Searcher: "+m.getName()+" terminated.");
+					} catch (IOException e) {
+						System.err.println("Cannot start Searcher process on "+m.getName()+": ");
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}).start();
 		}
 	}
 

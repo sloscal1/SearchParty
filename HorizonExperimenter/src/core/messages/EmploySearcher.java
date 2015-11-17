@@ -76,24 +76,6 @@ public final class EmploySearcher {
      * </pre>
      */
     int getReplyPort();
-
-    // optional int32 num_replicates = 4 [default = 1];
-    /**
-     * <code>optional int32 num_replicates = 4 [default = 1];</code>
-     *
-     * <pre>
-     *The number of replicates that this machine will run with
-     * </pre>
-     */
-    boolean hasNumReplicates();
-    /**
-     * <code>optional int32 num_replicates = 4 [default = 1];</code>
-     *
-     * <pre>
-     *The number of replicates that this machine will run with
-     * </pre>
-     */
-    int getNumReplicates();
   }
   /**
    * Protobuf type {@code search.Contract}
@@ -166,11 +148,6 @@ public final class EmploySearcher {
             case 24: {
               bitField0_ |= 0x00000004;
               replyPort_ = input.readInt32();
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000008;
-              numReplicates_ = input.readInt32();
               break;
             }
           }
@@ -319,35 +296,10 @@ public final class EmploySearcher {
       return replyPort_;
     }
 
-    // optional int32 num_replicates = 4 [default = 1];
-    public static final int NUM_REPLICATES_FIELD_NUMBER = 4;
-    private int numReplicates_;
-    /**
-     * <code>optional int32 num_replicates = 4 [default = 1];</code>
-     *
-     * <pre>
-     *The number of replicates that this machine will run with
-     * </pre>
-     */
-    public boolean hasNumReplicates() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional int32 num_replicates = 4 [default = 1];</code>
-     *
-     * <pre>
-     *The number of replicates that this machine will run with
-     * </pre>
-     */
-    public int getNumReplicates() {
-      return numReplicates_;
-    }
-
     private void initFields() {
       dispatchAddress_ = "";
       experimentPort_ = 0;
       replyPort_ = 0;
-      numReplicates_ = 1;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -378,9 +330,6 @@ public final class EmploySearcher {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(3, replyPort_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(4, numReplicates_);
-      }
       getUnknownFields().writeTo(output);
     }
 
@@ -401,10 +350,6 @@ public final class EmploySearcher {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(3, replyPort_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, numReplicates_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -535,8 +480,6 @@ public final class EmploySearcher {
         bitField0_ = (bitField0_ & ~0x00000002);
         replyPort_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
-        numReplicates_ = 1;
-        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -577,10 +520,6 @@ public final class EmploySearcher {
           to_bitField0_ |= 0x00000004;
         }
         result.replyPort_ = replyPort_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.numReplicates_ = numReplicates_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -607,9 +546,6 @@ public final class EmploySearcher {
         }
         if (other.hasReplyPort()) {
           setReplyPort(other.getReplyPort());
-        }
-        if (other.hasNumReplicates()) {
-          setNumReplicates(other.getNumReplicates());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -844,55 +780,6 @@ public final class EmploySearcher {
       public Builder clearReplyPort() {
         bitField0_ = (bitField0_ & ~0x00000004);
         replyPort_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 num_replicates = 4 [default = 1];
-      private int numReplicates_ = 1;
-      /**
-       * <code>optional int32 num_replicates = 4 [default = 1];</code>
-       *
-       * <pre>
-       *The number of replicates that this machine will run with
-       * </pre>
-       */
-      public boolean hasNumReplicates() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional int32 num_replicates = 4 [default = 1];</code>
-       *
-       * <pre>
-       *The number of replicates that this machine will run with
-       * </pre>
-       */
-      public int getNumReplicates() {
-        return numReplicates_;
-      }
-      /**
-       * <code>optional int32 num_replicates = 4 [default = 1];</code>
-       *
-       * <pre>
-       *The number of replicates that this machine will run with
-       * </pre>
-       */
-      public Builder setNumReplicates(int value) {
-        bitField0_ |= 0x00000008;
-        numReplicates_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 num_replicates = 4 [default = 1];</code>
-       *
-       * <pre>
-       *The number of replicates that this machine will run with
-       * </pre>
-       */
-      public Builder clearNumReplicates() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        numReplicates_ = 1;
         onChanged();
         return this;
       }
@@ -2497,14 +2384,13 @@ public final class EmploySearcher {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\016contract.proto\022\006search\"l\n\010Contract\022\030\n\020" +
+      "\n\016contract.proto\022\006search\"Q\n\010Contract\022\030\n\020" +
       "dispatch_address\030\001 \002(\t\022\027\n\017experiment_por" +
-      "t\030\002 \002(\005\022\022\n\nreply_port\030\003 \001(\005\022\031\n\016num_repli" +
-      "cates\030\004 \001(\005:\0011\"I\n\nExperiment\022\"\n\010argument" +
-      "\030\001 \003(\0132\020.search.Argument\022\027\n\010terminal\030\002 \001" +
-      "(\010:\005false\".\n\010Argument\022\023\n\013formal_name\030\001 \002" +
-      "(\t\022\r\n\005value\030\002 \002(\tB\037\n\rcore.messagesB\016Empl" +
-      "oySearcher"
+      "t\030\002 \002(\005\022\022\n\nreply_port\030\003 \001(\005\"I\n\nExperimen" +
+      "t\022\"\n\010argument\030\001 \003(\0132\020.search.Argument\022\027\n" +
+      "\010terminal\030\002 \001(\010:\005false\".\n\010Argument\022\023\n\013fo" +
+      "rmal_name\030\001 \002(\t\022\r\n\005value\030\002 \002(\tB\037\n\rcore.m" +
+      "essagesB\016EmploySearcher"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2516,7 +2402,7 @@ public final class EmploySearcher {
           internal_static_search_Contract_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Contract_descriptor,
-              new java.lang.String[] { "DispatchAddress", "ExperimentPort", "ReplyPort", "NumReplicates", });
+              new java.lang.String[] { "DispatchAddress", "ExperimentPort", "ReplyPort", });
           internal_static_search_Experiment_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_search_Experiment_fieldAccessorTable = new

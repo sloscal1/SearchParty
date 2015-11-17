@@ -47,7 +47,8 @@ message Env_Variable{
 
 message Machine{
 	required string name = 1;
-	optional int32 replicates = 2 [default = 1];
+	//The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
+	optional int32 replicates = 2;
 	optional string username = 3;
 	//One of the following:
 	//A list of environment variables that should be set to properly run the
@@ -62,6 +63,8 @@ message Profile{
 	//listed, then the settings are applied to all machines
 	repeated string applicable_machines = 2;
 	optional OS os = 3 [default = LINUX];
+	optional int32 replicates = 4 [default = 1];
+	optional string username = 5;
 }
 
 enum OS{

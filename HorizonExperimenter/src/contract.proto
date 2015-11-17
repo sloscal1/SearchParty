@@ -15,8 +15,6 @@ message Contract{
 	required int32 experiment_port = 2;
 	//The secret to share in the communications (should be unique per contract)
 	optional int32 reply_port = 3;
-	//The number of replicates that this machine will run with
-	optional int32 num_replicates = 4 [default = 1];
 }
 
 //Encapsulates the specific parameter settings of this experiment

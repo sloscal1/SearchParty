@@ -4437,13 +4437,21 @@ public final class DispatchMessages {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // optional int32 replicates = 2 [default = 1];
+    // optional int32 replicates = 2;
     /**
-     * <code>optional int32 replicates = 2 [default = 1];</code>
+     * <code>optional int32 replicates = 2;</code>
+     *
+     * <pre>
+     *The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
+     * </pre>
      */
     boolean hasReplicates();
     /**
-     * <code>optional int32 replicates = 2 [default = 1];</code>
+     * <code>optional int32 replicates = 2;</code>
+     *
+     * <pre>
+     *The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
+     * </pre>
      */
     int getReplicates();
 
@@ -4698,17 +4706,25 @@ public final class DispatchMessages {
       }
     }
 
-    // optional int32 replicates = 2 [default = 1];
+    // optional int32 replicates = 2;
     public static final int REPLICATES_FIELD_NUMBER = 2;
     private int replicates_;
     /**
-     * <code>optional int32 replicates = 2 [default = 1];</code>
+     * <code>optional int32 replicates = 2;</code>
+     *
+     * <pre>
+     *The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
+     * </pre>
      */
     public boolean hasReplicates() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional int32 replicates = 2 [default = 1];</code>
+     * <code>optional int32 replicates = 2;</code>
+     *
+     * <pre>
+     *The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
+     * </pre>
      */
     public int getReplicates() {
       return replicates_;
@@ -4841,7 +4857,7 @@ public final class DispatchMessages {
 
     private void initFields() {
       name_ = "";
-      replicates_ = 1;
+      replicates_ = 0;
       username_ = "";
       envVariables_ = java.util.Collections.emptyList();
       os_ = core.messages.DispatchMessages.OS.LINUX;
@@ -5031,7 +5047,7 @@ public final class DispatchMessages {
         super.clear();
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        replicates_ = 1;
+        replicates_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
         username_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -5265,22 +5281,34 @@ public final class DispatchMessages {
         return this;
       }
 
-      // optional int32 replicates = 2 [default = 1];
-      private int replicates_ = 1;
+      // optional int32 replicates = 2;
+      private int replicates_ ;
       /**
-       * <code>optional int32 replicates = 2 [default = 1];</code>
+       * <code>optional int32 replicates = 2;</code>
+       *
+       * <pre>
+       *The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
+       * </pre>
        */
       public boolean hasReplicates() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional int32 replicates = 2 [default = 1];</code>
+       * <code>optional int32 replicates = 2;</code>
+       *
+       * <pre>
+       *The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
+       * </pre>
        */
       public int getReplicates() {
         return replicates_;
       }
       /**
-       * <code>optional int32 replicates = 2 [default = 1];</code>
+       * <code>optional int32 replicates = 2;</code>
+       *
+       * <pre>
+       *The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
+       * </pre>
        */
       public Builder setReplicates(int value) {
         bitField0_ |= 0x00000002;
@@ -5289,11 +5317,15 @@ public final class DispatchMessages {
         return this;
       }
       /**
-       * <code>optional int32 replicates = 2 [default = 1];</code>
+       * <code>optional int32 replicates = 2;</code>
+       *
+       * <pre>
+       *The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
+       * </pre>
        */
       public Builder clearReplicates() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        replicates_ = 1;
+        replicates_ = 0;
         onChanged();
         return this;
       }
@@ -5844,6 +5876,31 @@ public final class DispatchMessages {
      * <code>optional .search.OS os = 3 [default = LINUX];</code>
      */
     core.messages.DispatchMessages.OS getOs();
+
+    // optional int32 replicates = 4 [default = 1];
+    /**
+     * <code>optional int32 replicates = 4 [default = 1];</code>
+     */
+    boolean hasReplicates();
+    /**
+     * <code>optional int32 replicates = 4 [default = 1];</code>
+     */
+    int getReplicates();
+
+    // optional string username = 5;
+    /**
+     * <code>optional string username = 5;</code>
+     */
+    boolean hasUsername();
+    /**
+     * <code>optional string username = 5;</code>
+     */
+    java.lang.String getUsername();
+    /**
+     * <code>optional string username = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getUsernameBytes();
   }
   /**
    * Protobuf type {@code search.Profile}
@@ -5921,6 +5978,16 @@ public final class DispatchMessages {
                 bitField0_ |= 0x00000001;
                 os_ = value;
               }
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000002;
+              replicates_ = input.readInt32();
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000004;
+              username_ = input.readBytes();
               break;
             }
           }
@@ -6071,10 +6138,71 @@ public final class DispatchMessages {
       return os_;
     }
 
+    // optional int32 replicates = 4 [default = 1];
+    public static final int REPLICATES_FIELD_NUMBER = 4;
+    private int replicates_;
+    /**
+     * <code>optional int32 replicates = 4 [default = 1];</code>
+     */
+    public boolean hasReplicates() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional int32 replicates = 4 [default = 1];</code>
+     */
+    public int getReplicates() {
+      return replicates_;
+    }
+
+    // optional string username = 5;
+    public static final int USERNAME_FIELD_NUMBER = 5;
+    private java.lang.Object username_;
+    /**
+     * <code>optional string username = 5;</code>
+     */
+    public boolean hasUsername() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string username = 5;</code>
+     */
+    public java.lang.String getUsername() {
+      java.lang.Object ref = username_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          username_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string username = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUsernameBytes() {
+      java.lang.Object ref = username_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        username_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       envVariables_ = java.util.Collections.emptyList();
       applicableMachines_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       os_ = core.messages.DispatchMessages.OS.LINUX;
+      replicates_ = 1;
+      username_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6103,6 +6231,12 @@ public final class DispatchMessages {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeEnum(3, os_.getNumber());
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(4, replicates_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(5, getUsernameBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -6128,6 +6262,14 @@ public final class DispatchMessages {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(3, os_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, replicates_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getUsernameBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -6256,6 +6398,10 @@ public final class DispatchMessages {
         bitField0_ = (bitField0_ & ~0x00000002);
         os_ = core.messages.DispatchMessages.OS.LINUX;
         bitField0_ = (bitField0_ & ~0x00000004);
+        replicates_ = 1;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        username_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -6303,6 +6449,14 @@ public final class DispatchMessages {
           to_bitField0_ |= 0x00000001;
         }
         result.os_ = os_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.replicates_ = replicates_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.username_ = username_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -6357,6 +6511,14 @@ public final class DispatchMessages {
         }
         if (other.hasOs()) {
           setOs(other.getOs());
+        }
+        if (other.hasReplicates()) {
+          setReplicates(other.getReplicates());
+        }
+        if (other.hasUsername()) {
+          bitField0_ |= 0x00000010;
+          username_ = other.username_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -6801,6 +6963,113 @@ public final class DispatchMessages {
       public Builder clearOs() {
         bitField0_ = (bitField0_ & ~0x00000004);
         os_ = core.messages.DispatchMessages.OS.LINUX;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 replicates = 4 [default = 1];
+      private int replicates_ = 1;
+      /**
+       * <code>optional int32 replicates = 4 [default = 1];</code>
+       */
+      public boolean hasReplicates() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional int32 replicates = 4 [default = 1];</code>
+       */
+      public int getReplicates() {
+        return replicates_;
+      }
+      /**
+       * <code>optional int32 replicates = 4 [default = 1];</code>
+       */
+      public Builder setReplicates(int value) {
+        bitField0_ |= 0x00000008;
+        replicates_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 replicates = 4 [default = 1];</code>
+       */
+      public Builder clearReplicates() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        replicates_ = 1;
+        onChanged();
+        return this;
+      }
+
+      // optional string username = 5;
+      private java.lang.Object username_ = "";
+      /**
+       * <code>optional string username = 5;</code>
+       */
+      public boolean hasUsername() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional string username = 5;</code>
+       */
+      public java.lang.String getUsername() {
+        java.lang.Object ref = username_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          username_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string username = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUsernameBytes() {
+        java.lang.Object ref = username_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          username_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string username = 5;</code>
+       */
+      public Builder setUsername(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        username_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string username = 5;</code>
+       */
+      public Builder clearUsername() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        username_ = getDefaultInstance().getUsername();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string username = 5;</code>
+       */
+      public Builder setUsernameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        username_ = value;
         onChanged();
         return this;
       }
@@ -7771,20 +8040,21 @@ public final class DispatchMessages {
       "uf_path\030\013 \001(\t:\010/usr/lib\022 \n\016libsqlite_pat" +
       "h\030\014 \001(\t:\010/usr/lib\022\031\n\021search_party_path\030\r",
       " \002(\t\"*\n\014Env_Variable\022\013\n\003key\030\001 \002(\t\022\r\n\005val" +
-      "ue\030\002 \002(\t\"\214\001\n\007Machine\022\014\n\004name\030\001 \002(\t\022\025\n\nre" +
-      "plicates\030\002 \001(\005:\0011\022\020\n\010username\030\003 \001(\t\022+\n\re" +
-      "nv_variables\030\004 \003(\0132\024.search.Env_Variable" +
-      "\022\035\n\002os\030\005 \001(\0162\n.search.OS:\005LINUX\"r\n\007Profi" +
-      "le\022+\n\renv_variables\030\001 \003(\0132\024.search.Env_V" +
-      "ariable\022\033\n\023applicable_machines\030\002 \003(\t\022\035\n\002" +
-      "os\030\003 \001(\0162\n.search.OS:\005LINUX\"\301\001\n\tParamete" +
-      "r\022\022\n\nparam_name\030\001 \002(\t\022\021\n\tmin_value\030\002 \002(\001" +
-      "\022\021\n\tmax_value\030\003 \002(\001\022\024\n\014growth_value\030\004 \001(",
-      "\001\0228\n\007pattern\030\005 \001(\0162\037.search.Parameter.Gr" +
-      "owthPattern:\006LINEAR\"*\n\rGrowthPattern\022\n\n\006" +
-      "LINEAR\020\000\022\r\n\tGEOMETRIC\020\001*%\n\002OS\022\t\n\005LINUX\020\000" +
-      "\022\007\n\003MAC\020\001\022\013\n\007WINDOWS\020\002B!\n\rcore.messagesB" +
-      "\020DispatchMessages"
+      "ue\030\002 \002(\t\"\211\001\n\007Machine\022\014\n\004name\030\001 \002(\t\022\022\n\nre" +
+      "plicates\030\002 \001(\005\022\020\n\010username\030\003 \001(\t\022+\n\renv_" +
+      "variables\030\004 \003(\0132\024.search.Env_Variable\022\035\n" +
+      "\002os\030\005 \001(\0162\n.search.OS:\005LINUX\"\233\001\n\007Profile" +
+      "\022+\n\renv_variables\030\001 \003(\0132\024.search.Env_Var" +
+      "iable\022\033\n\023applicable_machines\030\002 \003(\t\022\035\n\002os" +
+      "\030\003 \001(\0162\n.search.OS:\005LINUX\022\025\n\nreplicates\030" +
+      "\004 \001(\005:\0011\022\020\n\010username\030\005 \001(\t\"\301\001\n\tParameter" +
+      "\022\022\n\nparam_name\030\001 \002(\t\022\021\n\tmin_value\030\002 \002(\001\022",
+      "\021\n\tmax_value\030\003 \002(\001\022\024\n\014growth_value\030\004 \001(\001" +
+      "\0228\n\007pattern\030\005 \001(\0162\037.search.Parameter.Gro" +
+      "wthPattern:\006LINEAR\"*\n\rGrowthPattern\022\n\n\006L" +
+      "INEAR\020\000\022\r\n\tGEOMETRIC\020\001*%\n\002OS\022\t\n\005LINUX\020\000\022" +
+      "\007\n\003MAC\020\001\022\013\n\007WINDOWS\020\002B!\n\rcore.messagesB\020" +
+      "DispatchMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -7814,7 +8084,7 @@ public final class DispatchMessages {
           internal_static_search_Profile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Profile_descriptor,
-              new java.lang.String[] { "EnvVariables", "ApplicableMachines", "Os", });
+              new java.lang.String[] { "EnvVariables", "ApplicableMachines", "Os", "Replicates", "Username", });
           internal_static_search_Parameter_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_search_Parameter_fieldAccessorTable = new
