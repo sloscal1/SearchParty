@@ -17,7 +17,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.zeromq.ZMQ;
 
@@ -36,6 +35,7 @@ import core.messages.EmploySearcher;
 import core.messages.EmploySearcher.Argument;
 import core.messages.EmploySearcher.Contract;
 import core.messages.ExperimentResults;
+import core.messages.ExperimentResults.Result;
 import core.messages.ExperimentResults.ResultMessage;
 
 /**
@@ -87,12 +87,9 @@ public class Searcher {
 		});
 	}
 
-	private ZMQ.Context context;
-	private ZMQ.Socket basecomms;
 	private BlockingQueue<EmploySearcher.Experiment> incomplete;
 	private BlockingQueue<ExperimentResults.ResultMessage> results = new LinkedBlockingQueue<ExperimentResults.ResultMessage>();
 	//	private List<Experiment> complete;
-	private int numIOThreads = 4;
 	private Experiment allValues;
 	private Map<String, String> envVars = new HashMap<>();
 
@@ -127,7 +124,6 @@ public class Searcher {
 				machineFound = true;
 			}
 		}
-		System.out.println(envVars);
 		final ZMQ.Context cxt = ZMQ.context(1);
 		//This thread receives results from the local experiment processes and passes them along to the Dispatcher
 		new Thread(new Runnable(){
@@ -135,20 +131,21 @@ public class Searcher {
 			public void run() {
 				ZMQ.Socket results = cxt.socket(ZMQ.PUSH);
 				results.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getReplyPort());
-				boolean term = false;
-				for(;!term;){
+				for(boolean term = false; !term;){
 					try {
 						System.out.println("Connected and waiting on results...");
 						ResultMessage rm = Searcher.this.results.take();
-						if(rm != null)
-							results.send(rm.toByteArray(), ZMQ.NOBLOCK);
-						else
-							term = true;
+						results.send(rm.toByteArray(), ZMQ.NOBLOCK);
+						for(Result r : rm.getReportedValueList())
+							term |= "TERM_".equals(r.getName()) && "TRUE".equals(r.getValue());
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
+				System.out.println("Finished sending results...");
+				results.close();
+				cxt.term();
 			}
 		}).start();
 
@@ -157,6 +154,7 @@ public class Searcher {
 			@Override
 			public void run() {
 				ZMQ.Socket experiments = cxt.socket(ZMQ.REQ);
+				experiments.setReceiveTimeOut(1000);
 				experiments.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getExperimentPort());
 				//Now loop on Experiment type messages
 				//Need to setup the executor service to run the experiments locally:	
@@ -168,18 +166,18 @@ public class Searcher {
 						System.out.println("Connected and waiting on some experiments...");
 						incomplete.put(sentinal); //Block until we have a thread that's ready for a task...
 						incomplete.take(); //Take the dummy sentinal off
-						if(!exec.isShutdown()){
-							System.out.println("Sending gimme...");
-							experiments.send("gimme");
-							System.out.println("Waiting on gimme...");
-							byte[] msg = experiments.recv(); //Get the new task
+						experiments.send("gimme");
+						byte[] msg = experiments.recv(); //Get the new task
+						if(msg != null){
 							EmploySearcher.Experiment exp = EmploySearcher.Experiment.parseFrom(msg);
 							if(!exp.getTerminal() || exp.getArgumentCount() != 0){
 								incomplete.put(exp);
 								results.add(exec.submit(new ExperimentTask(exp)));
 							}
-							if(exp.getTerminal())
+							if(exp.getTerminal()){
+								System.out.println("Shutting down...");
 								exec.shutdown();
+							}
 						}
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
@@ -202,11 +200,16 @@ public class Searcher {
 					}	
 				try {
 					Thread.sleep(1000); //Give it a few seconds before ending the results thread...
-					Searcher.this.results.put(ExperimentResults.ResultMessage.newBuilder().buildPartial());
+					Searcher.this.results.put(ExperimentResults.ResultMessage.newBuilder().addReportedValue(
+							Result.newBuilder()
+							.setName("TERM_")
+							.setValue("TRUE").build()).build());
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				System.out.println("Exp listener done");
+				experiments.close();
 			}
 		}).start();
 	}
@@ -221,7 +224,6 @@ public class Searcher {
 
 		@Override
 		public Integer call() throws UnknownHostException {
-			System.out.println("Running the task...");
 			//Set up the comms channel for this experiment:
 			//TODO pull this out to have fixed sockets declared all at once?
 			ZMQ.Context context = ZMQ.context(1);
@@ -230,7 +232,6 @@ public class Searcher {
 			int listeningPort = local.bindToRandomPort("tcp://"+InetAddress.getLocalHost().getHostAddress());
 			new  Thread(){
 				public void run() {
-					System.out.println("Hanging out for the results of the test class...");
 					for(;keepGoing;){
 						byte[] msg = local.recv();
 						try {
@@ -248,8 +249,7 @@ public class Searcher {
 				};
 			}.start();
 
-			System.out.println("Working through parameters...");
-			//TODO This should be changes in the prototxt, shouldn't have hard-code split on Java
+			//TODO This should be changed in the prototxt, shouldn't have hard-code split on Java
 			String[] parts = allValues.getExecutableCommand().split("\\s+");
 			String[] command = new String[exp.getArgumentCount()*2+parts.length+1];
 			for(int i = 0; i < parts.length; ++i)
@@ -287,6 +287,7 @@ public class Searcher {
 				proc.destroyForcibly();
 				e.printStackTrace();
 			}
+			System.out.println("Finished call...");
 			return retVal;
 		}
 	}

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -26,10 +25,11 @@ import core.io.Arg;
 import core.io.ProgramParameter;
 import core.io.Results;
 import core.messages.DispatchMessages;
-import core.messages.EmploySearcher;
 import core.messages.DispatchMessages.Machine;
+import core.messages.EmploySearcher;
 import core.messages.EmploySearcher.Experiment;
 import core.messages.ExperimentResults;
+import core.messages.ExperimentResults.Result;
 import core.messages.ExperimentResults.ResultMessage;
 
 public class Dispatcher {
@@ -141,18 +141,20 @@ public class Dispatcher {
 				++readyPorts;
 				portReady.signal();
 				portLock.unlock();
-				for(;;){
+				for(boolean term = false;!term;){
 					try {
 						System.out.println("Waiting for a results message:");
 						ResultMessage res = ExperimentResults.ResultMessage.parseFrom(results.recv());
-						System.out.println("RCVD: RES "+res.toString());
+						for(Result r : res.getReportedValueList())
+							term |= "TERM_".equals(r.getName()) && "TRUE".equals(r.getValue());
+						System.out.println("RCVD: RES ");
 						//TODO push this information to the database
 					} catch (InvalidProtocolBufferException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
-
+				System.out.println("Terminated receiver...");
 			}
 		}).start();
 
