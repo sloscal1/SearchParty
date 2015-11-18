@@ -14,9 +14,9 @@ One of the main points of this work is to ensure experimental repeatability, and
 are supported for algorithm development.
 
 Here's the gameplan:
-# An algorithm designer isolates all parameters and lists them in a file.
-# Probably use Google's protobuf to write a configuration message about what parameters and how to alter them.
-# The algorithm must take in each of the listed parameters as a command line argument.
+* An algorithm designer isolates all parameters and lists them in a file.
+* Probably use Google's protobuf to write a configuration message about what parameters and how to alter them.
+* The algorithm must take in each of the listed parameters as a command line argument.
 
 This code will go through, log into each machine, ensure that the endpoint is running, do a quick test.
 Then the code will fire up the results data base, and do a few checks on that as well.
