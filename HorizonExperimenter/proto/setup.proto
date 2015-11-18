@@ -1,11 +1,10 @@
 package search;
 
 option java_package = "core.messages";
-option java_outer_classname = "DispatchMessages";
+option java_outer_classname = "DispatcherCentricMessages";
 
-//This is where you describe your experiment format
-
-message Experiment{
+//The overall setup of the experiments to be run in this usage of SearchParty
+message Setup{
 	optional string experiment_name = 1;
 	repeated Parameter params = 2;
 	//This is set to an experiment primary key in the data base
@@ -26,19 +25,15 @@ message Experiment{
 	optional string executable_command = 7;
 
 	//These are the machines that are to be run on.
-	repeated Machine machines = 9;
+	repeated Machine exp_machine = 9;
 	//These are the profiles to be used
-	repeated Profile profiles = 8;
+	repeated Profile profile = 8;
 	
-	//If you care, set the port that the Dispatcher will listen for Searcher conns
-	optional string libzmq_path = 10 [default = "/usr/local/lib"];
-	optional string libprotobuf_path = 11 [default = "/usr/lib"];
-	optional string libsqlite_path = 12 [default = "/usr/lib"];
-	required string search_party_path = 13;
+	required Machine disp_machine = 10;
 }
 
 //Key-Value pairs for things like LD_LIBRARY_PATH=/usr/local/lib etc.
-message Env_Variable{
+message EnvVariable{
 	//The system variable name
 	required string key = 1;
 	//The system variable value
@@ -53,12 +48,12 @@ message Machine{
 	//One of the following:
 	//A list of environment variables that should be set to properly run the
 	//experiment on this machine, these will override values set in the profile
-	repeated Env_Variable env_variables = 4;
+	repeated EnvVariable env_variable = 4;
 	optional OS os = 5 [default = LINUX];
 }
 
 message Profile{
-	repeated Env_Variable env_variables = 1;
+	repeated EnvVariable env_variables = 1;
 	//The machine names where these variables should be set. If no names are
 	//listed, then the settings are applied to all machines
 	repeated string applicable_machines = 2;
@@ -82,6 +77,6 @@ message Parameter{
 	enum GrowthPattern{
 		LINEAR = 0;
 		GEOMETRIC = 1;
-	}	
+	}
 }
 

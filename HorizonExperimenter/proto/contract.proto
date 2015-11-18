@@ -1,7 +1,7 @@
 package search;
 
 option java_package = "core.messages";
-option java_outer_classname = "EmploySearcher";
+option java_outer_classname = "SearcherCentricMessages";
 
 //This message comes with the startup of a new core.party.Searcher to
 //let that object know where the dispatcher is, and any other
@@ -18,7 +18,7 @@ message Contract{
 }
 
 //Encapsulates the specific parameter settings of this experiment
-message Experiment{
+message RunSettings{
 	//The arguments to pass to the experiment program
 	repeated Argument argument = 1;
 	//True when there are no further experiments
