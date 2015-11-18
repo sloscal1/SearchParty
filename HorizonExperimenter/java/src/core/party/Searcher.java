@@ -1,10 +1,25 @@
+/*
+Copyright 2015 Steven Loscalzo
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. 
+*/
+
 package core.party;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,15 +43,11 @@ import com.google.protobuf.TextFormat.ParseException;
 
 import core.io.Arg;
 import core.io.ProgramParameter;
-import core.messages.DispatchMessages;
-import core.messages.DispatchMessages.Env_Variable;
-import core.messages.DispatchMessages.Experiment;
-import core.messages.DispatchMessages.Machine;
-import core.messages.DispatchMessages.Profile;
-import core.messages.EmploySearcher;
-import core.messages.EmploySearcher.Contract;
+import core.messages.DispatcherCentricMessages.Setup;
 import core.messages.ExperimentResults;
 import core.messages.ExperimentResults.ResultMessage;
+import core.messages.SearcherCentricMessages.Contract;
+import core.messages.SearcherCentricMessages.RunSettings;
 
 /**
  * This an instance of this class runs on a machine that is to
@@ -57,9 +68,9 @@ public class Searcher {
 					Map<ProgramParameter, Object> values) {
 				boolean error = false;
 				try {
-					DispatchMessages.Experiment.Builder builder = DispatchMessages.Experiment.newBuilder();
+					Setup.Builder builder = Setup.newBuilder();
 					TextFormat.merge(value, builder);
-					DispatchMessages.Experiment exp = builder.build();
+					Setup exp = builder.build();
 					values.put(this, exp);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -74,9 +85,9 @@ public class Searcher {
 			public boolean process(String value, Map<ProgramParameter, Object> values) {
 				boolean error = false;
 				try {
-					EmploySearcher.Contract.Builder builder = EmploySearcher.Contract.newBuilder();
+					Contract.Builder builder = Contract.newBuilder();
 					TextFormat.merge(value, builder);
-					EmploySearcher.Contract contract = builder.build();
+					Contract contract = builder.build();
 					values.put(this,contract);
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
@@ -88,23 +99,21 @@ public class Searcher {
 	}
 
 	/** The list of jobs that have been submitted to processes on this machine */
-	private BlockingQueue<EmploySearcher.Experiment> incomplete;
+	private BlockingQueue<RunSettings> incomplete;
 	/** The results that have been received by processes running on this machine */
 	private BlockingQueue<ExperimentResults.ResultMessage> results = new LinkedBlockingQueue<ExperimentResults.ResultMessage>();
-	/** The setup information to get experiments running on this machine */
-	private Experiment allValues;
 	/** The machine particular setup information from this machine */
-	private MachineState machine;
+	private MachineState machineState;
 	
 	/**
 	 * Receives the address:port of the Dispatcher.
 	 * @throws UnknownHostException 
 	 */
-	public Searcher(Experiment exp, Contract msg) throws UnknownHostException{
-		machine = new MachineState(exp);
-		incomplete = new ArrayBlockingQueue<EmploySearcher.Experiment>(machine.numReplicates);
+	public Searcher(Setup exp, Contract msg) throws UnknownHostException{
+		machineState = new MachineState(exp);
+		System.out.println(InetAddress.getLocalHost().getHostName()+": "+machineState.getNumReplicates());
+		incomplete = new ArrayBlockingQueue<RunSettings>(machineState.getNumReplicates());
 		final ZMQ.Context cxt = ZMQ.context(1);
-		
 		//This thread receives results from the local experiment processes and passes them along to the Dispatcher
 		new Thread(new ResultHandler(cxt, msg)).start();
 
@@ -119,10 +128,10 @@ public class Searcher {
 	 *
 	 */
 	private class ExperimentTask implements Callable<Integer>{
-		private EmploySearcher.Experiment exp;
+		private RunSettings exp;
 		boolean keepGoing = true; //Out here to allow anonymous inner class to work with it.
 
-		private ExperimentTask(EmploySearcher.Experiment exp){
+		private ExperimentTask(RunSettings exp){
 			this.exp = exp;
 		}
 
@@ -133,9 +142,8 @@ public class Searcher {
 			ZMQ.Socket local = context.socket(ZMQ.PULL); 
 			local.setReceiveTimeOut(10000);
 			int listeningPort = local.bindToRandomPort("tcp://"+InetAddress.getLocalHost().getHostAddress());
-			
 			//Build up the command that we're going to run on this machine
-			String[] parts = allValues.getExecutableCommand().split("\\s+");
+			String[] parts = machineState.getExecutableCommand().split("\\s+");
 			String[] command = new String[exp.getArgumentCount()*2+parts.length+1];
 			//Break the executable name in case there is a helper application needed to run the experiment
 			for(int i = 0; i < parts.length; ++i)
@@ -147,11 +155,10 @@ public class Searcher {
 			}
 			//Finally, add the undocumented required argument TODO make it clear that the program has to get this!
 			command[command.length-1] = "--searcher-port="+listeningPort;
-			
 			//Create the process builder
 			final ProcessBuilder builder = new ProcessBuilder(command);
 			builder.redirectErrorStream(true);
-			for(Entry<String, String> var : machine.envVariables.entrySet())
+			for(Entry<String, String> var : machineState.getEnvironmentVariables().entrySet())
 				builder.environment().put(var.getKey(), var.getValue());
 			
 			//Start up a thread to unambiguously get the results from this experiment.
@@ -176,6 +183,7 @@ public class Searcher {
 			Process proc = null;
 			int retVal = -1;
 			try {
+				System.out.println(builder.command());
 				proc = builder.start();
 				Scanner scan = new Scanner(proc.getInputStream());
 				while(scan.hasNextLine())
@@ -221,9 +229,9 @@ public class Searcher {
 			experiments.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getExperimentPort());
 			//Now loop on Experiment type messages
 			//Need to setup the executor service to run the experiments locally:
-			ExecutorService exec = Executors.newFixedThreadPool(machine.numReplicates);
+			ExecutorService exec = Executors.newFixedThreadPool(machineState.getNumReplicates());
 			List<Future<Integer>> results = new ArrayList<>();
-			EmploySearcher.Experiment sentinal = EmploySearcher.Experiment.newBuilder().buildPartial();
+			RunSettings sentinal = RunSettings.newBuilder().buildPartial();
 			for(;!exec.isShutdown();){
 				try {
 //					System.out.println("Connected and waiting on some experiments...");
@@ -232,13 +240,12 @@ public class Searcher {
 					experiments.send("gimme");
 					byte[] msg = experiments.recv(); //Get the new task
 					if(msg != null){
-						EmploySearcher.Experiment exp = EmploySearcher.Experiment.parseFrom(msg);
+						RunSettings exp = RunSettings.parseFrom(msg);
 						if(!exp.getTerminal() || exp.getArgumentCount() != 0){
 							incomplete.put(exp);
 							results.add(exec.submit(new ExperimentTask(exp)));
 						}
 						if(exp.getTerminal()){
-							System.out.println("Shutting down...");
 							exec.shutdown();
 						}
 					}
@@ -262,12 +269,12 @@ public class Searcher {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
+					System.out.println("Does this not get propagated back???");
 					e.printStackTrace();
 				}	
 			try {
 				Thread.sleep(1000); //Give it a few seconds before ending the results thread...
-				Searcher.this.machine.active = false;
+				Searcher.this.machineState.setActive(false);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -297,9 +304,9 @@ public class Searcher {
 		public void run() {
 			ZMQ.Socket results = cxt.socket(ZMQ.PUSH);
 			results.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getReplyPort());
-			for(;Searcher.this.machine.active;){
+			for(;Searcher.this.machineState.isActive();){
 				try {
-					ResultMessage rm = Searcher.this.results.poll(5, TimeUnit.SECONDS);
+					ResultMessage rm = Searcher.this.results.poll(50, TimeUnit.SECONDS);
 					if(rm != null)
 						results.send(rm.toByteArray(), ZMQ.NOBLOCK);
 				} catch (InterruptedException e) {
@@ -312,55 +319,9 @@ public class Searcher {
 		}
 	}
 	
-	/**
-	 * Encapsulates the various setting for experiments run on this machine that
-	 * will be shared across all experiments.
-	 * @author sloscal1
-	 *
-	 */
-	private class MachineState{
-		private int numReplicates = 1;
-		private Map<String, String> envVariables = new HashMap<>();
-		private volatile boolean active = true;
-		
-		public MachineState(Experiment exp) throws UnknownHostException{
-			allValues = exp;
-			//What name is being looked for in the setup experiment object
-			String localName = InetAddress.getLocalHost().getHostName();
-			if(localName.contains("/"))
-				localName = localName.substring(0, localName.indexOf('/'));
-			System.out.println("localname is: "+localName);
-			
-			//See if there is a profile that corresponds to this machine:
-			boolean profileFound = false;
-			for(int i = 0; !profileFound && i < allValues.getProfilesCount(); ++i){
-				Profile p = allValues.getProfiles(i);
-				if(p.getApplicableMachinesList().contains(localName)){
-					for(Env_Variable env : p.getEnvVariablesList())
-						envVariables.put(env.getKey(), env.getValue());
-					numReplicates = p.getReplicates();				
-					profileFound = true;
-				}
-			}
-			
-			//See if there are any overrides in a machine message:
-			boolean machineFound = false;
-			for(int i = 0; !machineFound && i < allValues.getMachinesCount(); ++i){
-				Machine m = allValues.getMachines(i);
-				if(localName.equals(m.getName())){
-					for(Env_Variable env : m.getEnvVariablesList())
-						envVariables.put(env.getKey(), env.getValue());
-					if(m.hasReplicates())
-						numReplicates = m.getReplicates();
-					machineFound = true;
-				}
-			}			
-		}
-	}
-	
 	public static void main(String[] args) throws Exception{
 		Map<ProgramParameter, Object> vals = ProgramParameter.getValues(args, allParams, allParams);
 		if(vals != null)
-			new Searcher((Experiment)vals.get(allParams.get(0)), (Contract)vals.get(allParams.get(1)));
+			new Searcher((Setup)vals.get(allParams.get(0)), (Contract)vals.get(allParams.get(1)));
 	}
 }

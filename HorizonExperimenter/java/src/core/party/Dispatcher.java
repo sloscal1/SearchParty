@@ -1,3 +1,19 @@
+/*
+Copyright 2015 Steven Loscalzo
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. 
+ */
+
 package core.party;
 
 import java.io.File;
@@ -7,8 +23,11 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
@@ -24,17 +43,17 @@ import com.google.protobuf.TextFormat;
 
 import core.io.Arg;
 import core.io.ProgramParameter;
-import core.io.Results;
-import core.messages.DispatchMessages;
-import core.messages.DispatchMessages.Machine;
-import core.messages.EmploySearcher;
-import core.messages.EmploySearcher.Experiment;
+import core.messages.DispatcherCentricMessages.Machine;
+import core.messages.DispatcherCentricMessages.Setup;
 import core.messages.ExperimentResults;
-import core.messages.ExperimentResults.ResultMessage;
+import core.messages.ExperimentResults.Result;
+import core.messages.SearcherCentricMessages.Argument;
+import core.messages.SearcherCentricMessages.Contract;
+import core.messages.SearcherCentricMessages.RunSettings;
 
 public class Dispatcher {
-	private DispatchMessages.Experiment inputExp;
-	private Results.Result databaseSetup;
+	private Setup inputExp;
+	//	private Result databaseSetup;
 	private int expPort;
 	private int resultPort;
 	private int readyPorts = 0;
@@ -56,9 +75,9 @@ public class Dispatcher {
 						while(in.hasNextLine())
 							text.append(in.nextLine());
 					}
-					DispatchMessages.Experiment.Builder builder = DispatchMessages.Experiment.newBuilder();
+					Setup.Builder builder = Setup.newBuilder();
 					TextFormat.merge(text.toString(), builder);
-					DispatchMessages.Experiment e = builder.build();
+					Setup e = builder.build();
 					values.put(this, e);
 					error = false;
 				} catch (FileNotFoundException e) {
@@ -73,7 +92,7 @@ public class Dispatcher {
 			@Override
 			public boolean process(String value,
 					Map<ProgramParameter, Object> values) {
-				boolean error = true;
+				//				boolean error = true;
 				//TODO get this working...
 				//				try {
 				//					DispatchMessages.Experiment e = DispatchMessages.Experiment.parseFrom(new FileInputStream(new File(value)));
@@ -94,10 +113,9 @@ public class Dispatcher {
 	 * @param exp
 	 * @param res
 	 */
-	public Dispatcher(DispatchMessages.Experiment exp, Results.Result res){
+	public Dispatcher(Setup exp, Result res){
 		this.inputExp = exp;
-		this.databaseSetup = res;
-		this.activeMachines = new Semaphore(exp.getMachinesCount());
+		this.activeMachines = new Semaphore(exp.getExpMachineCount());
 
 		try {
 			localIPv4 = InetAddress.getLocalHost().getHostAddress();
@@ -118,29 +136,35 @@ public class Dispatcher {
 				portReady.signal();
 				portLock.unlock();
 				//TODO need an experiment generating function...
-				experiments.recv();
-				experiments.send(Experiment.newBuilder()
-						.addArgument(core.messages.EmploySearcher.Argument.newBuilder()
+				Queue<RunSettings> runs = new LinkedList<>();
+				runs.add(RunSettings.newBuilder()
+						.addArgument(Argument.newBuilder()
 								.setFormalName("--episodes")
 								.setValue("25").build())
-								.build().toByteArray(), ZMQ.NOBLOCK);
-				experiments.recv();
-				experiments.send(Experiment.newBuilder()
-						.addArgument(core.messages.EmploySearcher.Argument.newBuilder()
+								.build());
+				runs.add(RunSettings.newBuilder()
+						.addArgument(Argument.newBuilder()
 								.setFormalName("--episodes")
 								.setValue("5").build())
-								.addArgument(core.messages.EmploySearcher.Argument.newBuilder()
+								.addArgument(Argument.newBuilder()
 										.setFormalName("--lambda")
 										.setValue("0.005").build())
-										.build().toByteArray(), ZMQ.NOBLOCK);
-				//Let all the remaining experiments know there are no more experiments...
+										.build());
+				for(int i = 0; i < 10; ++i)
+					runs.add(runs.peek());
+
 				experiments.setReceiveTimeOut(2000);
 				for(;activeMachines.availablePermits() != 0;){
 					byte[] msg = experiments.recv();
 					if(msg != null){
-						System.out.println("Sending a term exp");
-						experiments.send(Experiment.newBuilder()
-								.setTerminal(true).build().toByteArray(), ZMQ.NOBLOCK);
+						//Got a request, if there are more left and a running experimenter machine, send one
+						if(!runs.isEmpty())
+							experiments.send(runs.remove().toByteArray(), ZMQ.NOBLOCK);
+						else{
+							System.out.println("Sending a term exp");
+							experiments.send(RunSettings.newBuilder()
+									.setTerminal(true).build().toByteArray(), ZMQ.NOBLOCK);
+						}
 					}
 				}
 				System.out.println("All machines know we're out of experiments...");
@@ -162,8 +186,8 @@ public class Dispatcher {
 					try {
 						byte[] msg = results.recv();
 						if(res != null){
-							ResultMessage res = ExperimentResults.ResultMessage.parseFrom(msg);
-//							System.out.println("");
+							ExperimentResults.ResultMessage.parseFrom(msg);
+							//							System.out.println("");
 						}
 						//TODO push this information to the database
 					} catch (InvalidProtocolBufferException e) {
@@ -175,7 +199,7 @@ public class Dispatcher {
 			}
 		}).start();
 
-		Set<Machine> machines = new HashSet<>(exp.getMachinesList());
+		Set<core.messages.DispatcherCentricMessages.Machine> machines = new HashSet<>(exp.getExpMachineList());
 		String defaultUser = System.getProperty("user.name"); //get current user
 		//Wait for the binding to finish
 		portLock.lock();
@@ -193,15 +217,25 @@ public class Dispatcher {
 			new Thread(new Runnable(){
 				public void run() {
 					System.out.println("Machine: "+m);
+					MachineState state = new MachineState(exp, m.getName());
 					//Signal the remote machine to start its Searcher
 					String user = m.hasUsername() ? m.getUsername() : defaultUser;
+					//Need to find where searchparty.jar is on the remote machine:
+					String[] cpEntries = state.getEnvironmentVariables().get("CLASSPATH").split("[;:]");
+					String spLoc = null;
+					for(int i = 0; spLoc == null && i < cpEntries.length; ++i)
+						if(cpEntries[i].contains("searchparty.jar"))
+							spLoc = cpEntries[i];
 					ProcessBuilder builder = new ProcessBuilder("ssh", user+"@"+m.getName(),
-							"java -jar "+exp.getSearchPartyPath()+File.separator+"searchparty.jar --searcher -i \""+inputExp.toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")
-							+ "\" -c \""+EmploySearcher.Contract.newBuilder().setDispatchAddress(localIPv4)
+							"java -jar "+spLoc+" --searcher -i \""+inputExp.toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")
+							+ "\" -c \""+Contract.newBuilder().setDispatchAddress(localIPv4)
 							.setExperimentPort(expPort)
 							.setReplyPort(resultPort)
 							.build().toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")+"\"");
 					builder.redirectErrorStream(true);
+					for(Entry<String, String> var : state.getEnvironmentVariables().entrySet())
+						builder.environment().put(var.getKey(), var.getValue());
+
 					try {
 						Process p = builder.start();
 						Scanner output = new Scanner(p.getInputStream());
@@ -234,8 +268,8 @@ public class Dispatcher {
 	public static void main(String[] args){
 		//Takes the setup message and results message.
 		Map<ProgramParameter, Object> cli = ProgramParameter.getValues(args, params, params);
-		new Dispatcher((DispatchMessages.Experiment)cli.get(params.get(0)), 
-				(Results.Result)cli.get(params.get(1)));
+		new Dispatcher((Setup)cli.get(params.get(0)), 
+				(Result)cli.get(params.get(1)));
 	}
 
 
