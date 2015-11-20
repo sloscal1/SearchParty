@@ -35,6 +35,69 @@ public final class ExperimentResults {
      */
     core.messages.ExperimentResults.ResultOrBuilder getReportedValueOrBuilder(
         int index);
+
+    // optional string machine_name = 2;
+    /**
+     * <code>optional string machine_name = 2;</code>
+     *
+     * <pre>
+     *The machine that is running an experiment with these settings
+     * </pre>
+     */
+    boolean hasMachineName();
+    /**
+     * <code>optional string machine_name = 2;</code>
+     *
+     * <pre>
+     *The machine that is running an experiment with these settings
+     * </pre>
+     */
+    java.lang.String getMachineName();
+    /**
+     * <code>optional string machine_name = 2;</code>
+     *
+     * <pre>
+     *The machine that is running an experiment with these settings
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getMachineNameBytes();
+
+    // optional int64 uid = 3;
+    /**
+     * <code>optional int64 uid = 3;</code>
+     *
+     * <pre>
+     *Machine specific unique ID
+     * </pre>
+     */
+    boolean hasUid();
+    /**
+     * <code>optional int64 uid = 3;</code>
+     *
+     * <pre>
+     *Machine specific unique ID
+     * </pre>
+     */
+    long getUid();
+
+    // optional int64 timestamp = 4;
+    /**
+     * <code>optional int64 timestamp = 4;</code>
+     *
+     * <pre>
+     *Time the result message was constructed (machine, specific in millis)
+     * </pre>
+     */
+    boolean hasTimestamp();
+    /**
+     * <code>optional int64 timestamp = 4;</code>
+     *
+     * <pre>
+     *Time the result message was constructed (machine, specific in millis)
+     * </pre>
+     */
+    long getTimestamp();
   }
   /**
    * Protobuf type {@code search.ResultMessage}
@@ -95,6 +158,21 @@ public final class ExperimentResults {
               reportedValue_.add(input.readMessage(core.messages.ExperimentResults.Result.PARSER, extensionRegistry));
               break;
             }
+            case 18: {
+              bitField0_ |= 0x00000001;
+              machineName_ = input.readBytes();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000002;
+              uid_ = input.readInt64();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000004;
+              timestamp_ = input.readInt64();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -137,6 +215,7 @@ public final class ExperimentResults {
       return PARSER;
     }
 
+    private int bitField0_;
     // repeated .search.Result reported_value = 1;
     public static final int REPORTED_VALUE_FIELD_NUMBER = 1;
     private java.util.List<core.messages.ExperimentResults.Result> reportedValue_;
@@ -173,8 +252,114 @@ public final class ExperimentResults {
       return reportedValue_.get(index);
     }
 
+    // optional string machine_name = 2;
+    public static final int MACHINE_NAME_FIELD_NUMBER = 2;
+    private java.lang.Object machineName_;
+    /**
+     * <code>optional string machine_name = 2;</code>
+     *
+     * <pre>
+     *The machine that is running an experiment with these settings
+     * </pre>
+     */
+    public boolean hasMachineName() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional string machine_name = 2;</code>
+     *
+     * <pre>
+     *The machine that is running an experiment with these settings
+     * </pre>
+     */
+    public java.lang.String getMachineName() {
+      java.lang.Object ref = machineName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          machineName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string machine_name = 2;</code>
+     *
+     * <pre>
+     *The machine that is running an experiment with these settings
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getMachineNameBytes() {
+      java.lang.Object ref = machineName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        machineName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional int64 uid = 3;
+    public static final int UID_FIELD_NUMBER = 3;
+    private long uid_;
+    /**
+     * <code>optional int64 uid = 3;</code>
+     *
+     * <pre>
+     *Machine specific unique ID
+     * </pre>
+     */
+    public boolean hasUid() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional int64 uid = 3;</code>
+     *
+     * <pre>
+     *Machine specific unique ID
+     * </pre>
+     */
+    public long getUid() {
+      return uid_;
+    }
+
+    // optional int64 timestamp = 4;
+    public static final int TIMESTAMP_FIELD_NUMBER = 4;
+    private long timestamp_;
+    /**
+     * <code>optional int64 timestamp = 4;</code>
+     *
+     * <pre>
+     *Time the result message was constructed (machine, specific in millis)
+     * </pre>
+     */
+    public boolean hasTimestamp() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int64 timestamp = 4;</code>
+     *
+     * <pre>
+     *Time the result message was constructed (machine, specific in millis)
+     * </pre>
+     */
+    public long getTimestamp() {
+      return timestamp_;
+    }
+
     private void initFields() {
       reportedValue_ = java.util.Collections.emptyList();
+      machineName_ = "";
+      uid_ = 0L;
+      timestamp_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -197,6 +382,15 @@ public final class ExperimentResults {
       for (int i = 0; i < reportedValue_.size(); i++) {
         output.writeMessage(1, reportedValue_.get(i));
       }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(2, getMachineNameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt64(3, uid_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt64(4, timestamp_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -209,6 +403,18 @@ public final class ExperimentResults {
       for (int i = 0; i < reportedValue_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, reportedValue_.get(i));
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getMachineNameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(3, uid_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(4, timestamp_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -333,6 +539,12 @@ public final class ExperimentResults {
         } else {
           reportedValueBuilder_.clear();
         }
+        machineName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        uid_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        timestamp_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -360,6 +572,7 @@ public final class ExperimentResults {
       public core.messages.ExperimentResults.ResultMessage buildPartial() {
         core.messages.ExperimentResults.ResultMessage result = new core.messages.ExperimentResults.ResultMessage(this);
         int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
         if (reportedValueBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
             reportedValue_ = java.util.Collections.unmodifiableList(reportedValue_);
@@ -369,6 +582,19 @@ public final class ExperimentResults {
         } else {
           result.reportedValue_ = reportedValueBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.machineName_ = machineName_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.uid_ = uid_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.timestamp_ = timestamp_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -409,6 +635,17 @@ public final class ExperimentResults {
               reportedValueBuilder_.addAllMessages(other.reportedValue_);
             }
           }
+        }
+        if (other.hasMachineName()) {
+          bitField0_ |= 0x00000002;
+          machineName_ = other.machineName_;
+          onChanged();
+        }
+        if (other.hasUid()) {
+          setUid(other.getUid());
+        }
+        if (other.hasTimestamp()) {
+          setTimestamp(other.getTimestamp());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -681,6 +918,202 @@ public final class ExperimentResults {
           reportedValue_ = null;
         }
         return reportedValueBuilder_;
+      }
+
+      // optional string machine_name = 2;
+      private java.lang.Object machineName_ = "";
+      /**
+       * <code>optional string machine_name = 2;</code>
+       *
+       * <pre>
+       *The machine that is running an experiment with these settings
+       * </pre>
+       */
+      public boolean hasMachineName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string machine_name = 2;</code>
+       *
+       * <pre>
+       *The machine that is running an experiment with these settings
+       * </pre>
+       */
+      public java.lang.String getMachineName() {
+        java.lang.Object ref = machineName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          machineName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string machine_name = 2;</code>
+       *
+       * <pre>
+       *The machine that is running an experiment with these settings
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getMachineNameBytes() {
+        java.lang.Object ref = machineName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          machineName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string machine_name = 2;</code>
+       *
+       * <pre>
+       *The machine that is running an experiment with these settings
+       * </pre>
+       */
+      public Builder setMachineName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        machineName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string machine_name = 2;</code>
+       *
+       * <pre>
+       *The machine that is running an experiment with these settings
+       * </pre>
+       */
+      public Builder clearMachineName() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        machineName_ = getDefaultInstance().getMachineName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string machine_name = 2;</code>
+       *
+       * <pre>
+       *The machine that is running an experiment with these settings
+       * </pre>
+       */
+      public Builder setMachineNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        machineName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional int64 uid = 3;
+      private long uid_ ;
+      /**
+       * <code>optional int64 uid = 3;</code>
+       *
+       * <pre>
+       *Machine specific unique ID
+       * </pre>
+       */
+      public boolean hasUid() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional int64 uid = 3;</code>
+       *
+       * <pre>
+       *Machine specific unique ID
+       * </pre>
+       */
+      public long getUid() {
+        return uid_;
+      }
+      /**
+       * <code>optional int64 uid = 3;</code>
+       *
+       * <pre>
+       *Machine specific unique ID
+       * </pre>
+       */
+      public Builder setUid(long value) {
+        bitField0_ |= 0x00000004;
+        uid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int64 uid = 3;</code>
+       *
+       * <pre>
+       *Machine specific unique ID
+       * </pre>
+       */
+      public Builder clearUid() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        uid_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional int64 timestamp = 4;
+      private long timestamp_ ;
+      /**
+       * <code>optional int64 timestamp = 4;</code>
+       *
+       * <pre>
+       *Time the result message was constructed (machine, specific in millis)
+       * </pre>
+       */
+      public boolean hasTimestamp() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional int64 timestamp = 4;</code>
+       *
+       * <pre>
+       *Time the result message was constructed (machine, specific in millis)
+       * </pre>
+       */
+      public long getTimestamp() {
+        return timestamp_;
+      }
+      /**
+       * <code>optional int64 timestamp = 4;</code>
+       *
+       * <pre>
+       *Time the result message was constructed (machine, specific in millis)
+       * </pre>
+       */
+      public Builder setTimestamp(long value) {
+        bitField0_ |= 0x00000008;
+        timestamp_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int64 timestamp = 4;</code>
+       *
+       * <pre>
+       *Time the result message was constructed (machine, specific in millis)
+       * </pre>
+       */
+      public Builder clearTimestamp() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        timestamp_ = 0L;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:search.ResultMessage)
@@ -1692,14 +2125,15 @@ public final class ExperimentResults {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023proto/results.proto\022\006search\"7\n\rResultM" +
+      "\n\023proto/results.proto\022\006search\"m\n\rResultM" +
       "essage\022&\n\016reported_value\030\001 \003(\0132\016.search." +
-      "Result\"\236\001\n\006Result\022\014\n\004name\030\001 \002(\t\022\r\n\005value" +
-      "\030\002 \002(\t\022)\n\004type\030\003 \001(\0162\023.search.Result.Typ" +
-      "e:\006string\"L\n\004Type\022\t\n\005int32\020\000\022\013\n\007float32\020" +
-      "\001\022\013\n\007float64\020\002\022\n\n\006string\020\003\022\010\n\004bool\020\004\022\t\n\005" +
-      "int64\020\005B\"\n\rcore.messagesB\021ExperimentResu" +
-      "lts"
+      "Result\022\024\n\014machine_name\030\002 \001(\t\022\013\n\003uid\030\003 \001(" +
+      "\003\022\021\n\ttimestamp\030\004 \001(\003\"\236\001\n\006Result\022\014\n\004name\030" +
+      "\001 \002(\t\022\r\n\005value\030\002 \002(\t\022)\n\004type\030\003 \001(\0162\023.sea" +
+      "rch.Result.Type:\006string\"L\n\004Type\022\t\n\005int32" +
+      "\020\000\022\013\n\007float32\020\001\022\013\n\007float64\020\002\022\n\n\006string\020\003" +
+      "\022\010\n\004bool\020\004\022\t\n\005int64\020\005B\"\n\rcore.messagesB\021" +
+      "ExperimentResults"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1711,7 +2145,7 @@ public final class ExperimentResults {
           internal_static_search_ResultMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_ResultMessage_descriptor,
-              new java.lang.String[] { "ReportedValue", });
+              new java.lang.String[] { "ReportedValue", "MachineName", "Uid", "Timestamp", });
           internal_static_search_Result_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_search_Result_fieldAccessorTable = new

@@ -22,6 +22,7 @@ public class MachineState{
 	private Map<String, String> envVariables = new HashMap<>();
 	private volatile boolean active = true;
 	private String execCommand;
+	private String localName;
 	
 	public MachineState(Setup exp) throws UnknownHostException{
 		this(exp, InetAddress.getLocalHost().getHostName());
@@ -33,6 +34,7 @@ public class MachineState{
 		if(name.contains("/"))
 			name = name.substring(0, name.indexOf('/'));
 		System.out.println("localname is: "+name);
+		this.localName = name;
 		
 		//See if there is a profile that corresponds to this machine:
 		boolean profileFound = false;
@@ -58,6 +60,10 @@ public class MachineState{
 				machineFound = true;
 			}
 		}			
+	}
+	
+	public String getLocalName(){
+		return localName;
 	}
 	
 	public int getNumReplicates(){

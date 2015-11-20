@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -97,7 +98,8 @@ public class Searcher {
 			}
 		});
 	}
-
+	/** Generating variable for (JVM/machine local) UIDs */
+	private static long UIDgenerator = 0;
 	/** The list of jobs that have been submitted to processes on this machine */
 	private BlockingQueue<RunSettings> incomplete;
 	/** The results that have been received by processes running on this machine */
@@ -121,6 +123,13 @@ public class Searcher {
 		new Thread(new ExperimentHandler(cxt, msg)).start();
 	}
 
+	/**
+	 * @return a UID.
+	 */
+	public synchronized static long nextUID(){
+		return UIDgenerator++;
+	}
+	
 	/**
 	 * Starts up an experiment on this machine, called from ExperimentHnadler.
 	 * 
@@ -160,15 +169,22 @@ public class Searcher {
 			builder.redirectErrorStream(true);
 			for(Entry<String, String> var : machineState.getEnvironmentVariables().entrySet())
 				builder.environment().put(var.getKey(), var.getValue());
-			
+			//Experiment UID
+			final long uid = nextUID();
 			//Start up a thread to unambiguously get the results from this experiment.
 			new  Thread(){
 				public void run() {
 					for(;keepGoing;){
 						byte[] msg = local.recv();
 						try {
-							if(msg != null)
-								results.put(ResultMessage.parseFrom(msg)); //TODO may need to tag this so I know which results get put back where.
+							if(msg != null){
+								//Modify the message with it's local info (running machine name, local uid, time completed)
+								ResultMessage rm = ResultMessage.parseFrom(msg);
+								rm = ResultMessage.newBuilder(rm).setMachineName(machineState.getLocalName())
+															.setUid(uid)
+															.setTimestamp(new GregorianCalendar().getTime().getTime()).build();
+								results.put(rm);
+							}
 						} catch (InvalidProtocolBufferException e) {
 							System.err.println("Got a bad message with arguments: "+builder.command());
 							e.printStackTrace();

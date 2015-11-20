@@ -37,6 +37,9 @@ message Setup{
 	//and that the executable aligns with the given codebase. Perhaps in the
 	//future it can be an option
 	
+	//The path and name of the database to store the resulting information to
+	optional string database_path = 10 [default = "./results.db"];
+
 	//The path from the git_uri to the executable
 	optional string executable_command = 7;
 
@@ -84,13 +87,18 @@ enum OS{
 
 message Parameter{
 	required string param_name = 1;
-	required double min_value = 2;
-	required double max_value = 3;
-	optional double growth_value = 4;
+	optional double min_value = 2 [default = 0];
+	optional double max_value = 3 [default = 1];
+	optional double growth_value = 4 [default = 0.1];
 	optional GrowthPattern pattern = 5 [default = LINEAR];
+	//specific_values is set when the growth pattern is set to specific
+	repeated double specific_values = 6;
+	//The number of times each experiment involving this parameter setting must be run
+	optional int32 replicates = 7 [default = 1];
 	enum GrowthPattern{
 		LINEAR = 0;
-		GEOMETRIC = 1;
+		LOG = 1;
+		SPECIFIC = 2;
 	}
 }
 

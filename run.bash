@@ -36,11 +36,12 @@ echo "Class-Path: ." $(echo $CLASSPATH | tr ':' ' ') >> $MF_ADDITION
 jar cmf $MF_ADDITION searchparty.jar -C $JAVA_CLASS_DIR .
 rm $MF_ADDITION
 
-
-####### JAVA ############
-printf "Executing experiment...\n"
-java -jar searchparty.jar --dispatcher -i ~/git/SearchPartyTest/SearchPartyTest/startup.prototxt -o not_yet_done
-
-####### CLEAN ###########
-printf "Stopping %d zombie process(es)...\n" $(let "$(ps -elf | grep searchparty | wc -l) - 1")
-ps -elf | grep searchparty | sed -e "s/0 S sloscal1[ ]\+\([0-9]\+\).*/\1/g" | xargs kill -9
+if [ "$1" == "" ]; then
+  ####### JAVA ############
+  printf "Executing experiment...\n"
+  java -jar searchparty.jar --dispatcher -i ~/git/SearchPartyTest/SearchPartyTest/startup.prototxt -o not_yet_done
+  
+  ####### CLEAN ###########
+  printf "Stopping %d zombie process(es)...\n" $(let "$(ps -elf | grep searchparty | wc -l) - 1")
+  ps -elf | grep searchparty | sed -e "s/0 S sloscal1[ ]\+\([0-9]\+\).*/\1/g" | xargs kill -9
+fi

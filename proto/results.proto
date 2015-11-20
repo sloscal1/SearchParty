@@ -25,6 +25,12 @@ option java_outer_classname = "ExperimentResults";
 
 message ResultMessage{
 	repeated Result reported_value = 1;
+	//The machine that is running an experiment with these settings
+	optional string machine_name = 2;
+	//Machine specific unique ID
+	optional int64 uid = 3;
+	//Time the result message was constructed (machine, specific in millis)
+	optional int64 timestamp = 4;
 }
 
 message Result{

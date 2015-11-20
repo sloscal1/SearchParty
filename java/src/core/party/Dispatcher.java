@@ -23,11 +23,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
@@ -37,6 +35,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.zeromq.ZMQ;
+import org.zeromq.ZMQ.Context;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.TextFormat;
@@ -47,7 +46,6 @@ import core.messages.DispatcherCentricMessages.Machine;
 import core.messages.DispatcherCentricMessages.Setup;
 import core.messages.ExperimentResults;
 import core.messages.ExperimentResults.Result;
-import core.messages.SearcherCentricMessages.Argument;
 import core.messages.SearcherCentricMessages.Contract;
 import core.messages.SearcherCentricMessages.RunSettings;
 
@@ -61,7 +59,8 @@ public class Dispatcher {
 	private Condition portReady = portLock.newCondition();
 	private String localIPv4; 
 	private Semaphore activeMachines;
-
+	private ExpGenerator gen;
+	
 	public static List<ProgramParameter> params = new ArrayList<ProgramParameter>();
 	static{
 		params.add(new ProgramParameter("experiment-file", Arg.REQUIRED, 'i'){
@@ -116,7 +115,8 @@ public class Dispatcher {
 	public Dispatcher(Setup exp, Result res){
 		this.inputExp = exp;
 		this.activeMachines = new Semaphore(exp.getExpMachineCount());
-
+		this.gen = new ExhaustiveExpGenerator(exp);
+		
 		try {
 			localIPv4 = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e1) {
@@ -126,80 +126,12 @@ public class Dispatcher {
 
 		final ZMQ.Context cxt = ZMQ.context(1);
 		//Setup experiment request socket
-		new Thread(new Runnable(){
-			@Override
-			public void run() {
-				ZMQ.Socket experiments = cxt.socket(ZMQ.REP);
-				portLock.lock();
-				expPort = experiments.bindToRandomPort("tcp://"+localIPv4);
-				++readyPorts;
-				portReady.signal();
-				portLock.unlock();
-				//TODO need an experiment generating function...
-				Queue<RunSettings> runs = new LinkedList<>();
-				runs.add(RunSettings.newBuilder()
-						.addArgument(Argument.newBuilder()
-								.setFormalName("--episodes")
-								.setValue("25").build())
-								.build());
-				runs.add(RunSettings.newBuilder()
-						.addArgument(Argument.newBuilder()
-								.setFormalName("--episodes")
-								.setValue("5").build())
-								.addArgument(Argument.newBuilder()
-										.setFormalName("--lambda")
-										.setValue("0.005").build())
-										.build());
-				for(int i = 0; i < 10; ++i)
-					runs.add(runs.peek());
-
-				experiments.setReceiveTimeOut(2000);
-				for(;activeMachines.availablePermits() != 0;){
-					byte[] msg = experiments.recv();
-					if(msg != null){
-						//Got a request, if there are more left and a running experimenter machine, send one
-						if(!runs.isEmpty())
-							experiments.send(runs.remove().toByteArray(), ZMQ.NOBLOCK);
-						else{
-							System.out.println("Sending a term exp");
-							experiments.send(RunSettings.newBuilder()
-									.setTerminal(true).build().toByteArray(), ZMQ.NOBLOCK);
-						}
-					}
-				}
-				System.out.println("All machines know we're out of experiments...");
-				experiments.close();
-			}
-		}).start();
+		new Thread(new ExperimentDispatcher(cxt)).start();
 
 		//Setup results listener
-		new Thread(new Runnable(){
-			public void run() {
-				ZMQ.Socket results = cxt.socket(ZMQ.PULL);
-				portLock.lock();
-				resultPort = results.bindToRandomPort("tcp://"+localIPv4);
-				results.setReceiveTimeOut(2000);
-				++readyPorts;
-				portReady.signal();
-				portLock.unlock();
-				for(;activeMachines.availablePermits() != 0;){
-					try {
-						byte[] msg = results.recv();
-						if(res != null){
-							ExperimentResults.ResultMessage.parseFrom(msg);
-							//							System.out.println("");
-						}
-						//TODO push this information to the database
-					} catch (InvalidProtocolBufferException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				System.out.println("Terminated receiver...");
-			}
-		}).start();
+		new Thread(new ResultsReciever(cxt)).start();
 
-		Set<core.messages.DispatcherCentricMessages.Machine> machines = new HashSet<>(exp.getExpMachineList());
+		Set<Machine> machines = new HashSet<>(exp.getExpMachineList());
 		String defaultUser = System.getProperty("user.name"); //get current user
 		//Wait for the binding to finish
 		portLock.lock();
@@ -207,64 +139,139 @@ public class Dispatcher {
 			try {
 				portReady.await(10, TimeUnit.SECONDS);
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
+				System.out.println("Timeout while waiting for Dispatcher to set up dispatch/recieve structure.");
 				e1.printStackTrace();
 				System.exit(1);
 			}
 		portLock.unlock();
 
-		for(Machine m : machines){
-			new Thread(new Runnable(){
-				public void run() {
-					System.out.println("Machine: "+m);
-					MachineState state = new MachineState(exp, m.getName());
-					//Signal the remote machine to start its Searcher
-					String user = m.hasUsername() ? m.getUsername() : defaultUser;
-					//Need to find where searchparty.jar is on the remote machine:
-					String[] cpEntries = state.getEnvironmentVariables().get("CLASSPATH").split("[;:]");
-					String spLoc = null;
-					for(int i = 0; spLoc == null && i < cpEntries.length; ++i)
-						if(cpEntries[i].contains("searchparty.jar"))
-							spLoc = cpEntries[i];
-					ProcessBuilder builder = new ProcessBuilder("ssh", user+"@"+m.getName(),
-							"java -jar "+spLoc+" --searcher -i \""+inputExp.toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")
-							+ "\" -c \""+Contract.newBuilder().setDispatchAddress(localIPv4)
-							.setExperimentPort(expPort)
-							.setReplyPort(resultPort)
-							.build().toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")+"\"");
-					builder.redirectErrorStream(true);
-					for(Entry<String, String> var : state.getEnvironmentVariables().entrySet())
-						builder.environment().put(var.getKey(), var.getValue());
-
-					try {
-						Process p = builder.start();
-						Scanner output = new Scanner(p.getInputStream());
-						while(output.hasNextLine())
-							System.out.println("SENDER: "+Thread.currentThread().getId()+" "+output.nextLine());
-						p.waitFor();
-						output.close();
-						System.out.println("The Searcher: "+m.getName()+" terminated.");
-					} catch (IOException e) {
-						System.err.println("Cannot start Searcher process on "+m.getName()+": ");
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} finally{
-						try {
-							activeMachines.acquire();
-							System.out.println("Acquired.. "+activeMachines.availablePermits());
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}).start();
-		}
+		for(Machine m : machines)
+			new Thread(new DeploySearcher(m, exp, defaultUser)).start();
 	}
 
+	public class ExperimentDispatcher implements Runnable{
+		private ZMQ.Context cxt;
 
+		public ExperimentDispatcher(Context cxt) {
+			this.cxt = cxt;
+		}
+		@Override
+		public void run() {
+			ZMQ.Socket experiments = cxt.socket(ZMQ.REP);
+			portLock.lock();
+			expPort = experiments.bindToRandomPort("tcp://"+localIPv4);
+			++readyPorts;
+			portReady.signal();
+			portLock.unlock();
+			
+			experiments.setReceiveTimeOut(2000);
+			for(;activeMachines.availablePermits() != 0;){
+				byte[] msg = experiments.recv();
+				if(msg != null){
+					//Got a request, if there are more left and a running experimenter machine, send one
+					if(!gen.hasNext())
+						experiments.send(gen.next().toByteArray(), ZMQ.NOBLOCK);
+					else{
+						System.out.println("Sending a term exp");
+						experiments.send(RunSettings.newBuilder()
+								.setTerminal(true).build().toByteArray(), ZMQ.NOBLOCK);
+					}
+				}
+			}
+			System.out.println("All machines know we're out of experiments...");
+			experiments.close();
+		}
+	}
+	
+	public class ResultsReciever implements Runnable{
+		private ZMQ.Context cxt;
+
+		public ResultsReciever(Context cxt) {
+			this.cxt = cxt;
+		}
+
+		public void run() {
+			ZMQ.Socket results = cxt.socket(ZMQ.PULL);
+			portLock.lock();
+			resultPort = results.bindToRandomPort("tcp://"+localIPv4);
+			results.setReceiveTimeOut(2000);
+			++readyPorts;
+			portReady.signal();
+			portLock.unlock();
+			for(;activeMachines.availablePermits() != 0;){
+				try {
+					byte[] msg = results.recv();
+					if(msg != null){
+						ExperimentResults.ResultMessage.parseFrom(msg);
+						//							System.out.println("");
+					}
+					//TODO push this information to the database
+				} catch (InvalidProtocolBufferException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			System.out.println("Terminated receiver...");
+		}
+	}
+	public class DeploySearcher implements Runnable{
+		private Machine m;
+		private Setup exp;
+		private String defaultUser;
+
+		public DeploySearcher(Machine m, Setup exp, String defaultUser) {
+			this.m = m;
+			this.exp = exp;
+			this.defaultUser = defaultUser;
+		}
+
+		public void run() {
+			System.out.println("Machine: "+m);
+			MachineState state = new MachineState(exp, m.getName());
+			//Signal the remote machine to start its Searcher
+			String user = m.hasUsername() ? m.getUsername() : defaultUser;
+			//Need to find where searchparty.jar is on the remote machine:
+			String[] cpEntries = state.getEnvironmentVariables().get("CLASSPATH").split("[;:]");
+			String spLoc = null;
+			for(int i = 0; spLoc == null && i < cpEntries.length; ++i)
+				if(cpEntries[i].contains("searchparty.jar"))
+					spLoc = cpEntries[i];
+			ProcessBuilder builder = new ProcessBuilder("ssh", user+"@"+m.getName(),
+					"java -jar "+spLoc+" --searcher -i \""+inputExp.toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")
+					+ "\" -c \""+Contract.newBuilder().setDispatchAddress(localIPv4)
+					.setExperimentPort(expPort)
+					.setReplyPort(resultPort)
+					.build().toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")+"\"");
+			builder.redirectErrorStream(true);
+			for(Entry<String, String> var : state.getEnvironmentVariables().entrySet())
+				builder.environment().put(var.getKey(), var.getValue());
+
+			try {
+				Process p = builder.start();
+				Scanner output = new Scanner(p.getInputStream());
+				while(output.hasNextLine())
+					System.out.println("SENDER: "+Thread.currentThread().getId()+" "+output.nextLine());
+				p.waitFor();
+				output.close();
+				System.out.println("The Searcher: "+m.getName()+" terminated.");
+			} catch (IOException e) {
+				System.err.println("Cannot start Searcher process on "+m.getName()+": ");
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally{
+				try {
+					activeMachines.acquire();
+					System.out.println("Acquired.. "+activeMachines.availablePermits());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public static void main(String[] args){
 		//Takes the setup message and results message.
 		Map<ProgramParameter, Object> cli = ProgramParameter.getValues(args, params, params);

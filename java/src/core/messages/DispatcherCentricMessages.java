@@ -272,6 +272,33 @@ public final class DispatcherCentricMessages {
     com.google.protobuf.ByteString
         getGitTagBytes();
 
+    // optional string database_path = 10 [default = "./results.db"];
+    /**
+     * <code>optional string database_path = 10 [default = "./results.db"];</code>
+     *
+     * <pre>
+     *The path and name of the database to store the resulting information to
+     * </pre>
+     */
+    boolean hasDatabasePath();
+    /**
+     * <code>optional string database_path = 10 [default = "./results.db"];</code>
+     *
+     * <pre>
+     *The path and name of the database to store the resulting information to
+     * </pre>
+     */
+    java.lang.String getDatabasePath();
+    /**
+     * <code>optional string database_path = 10 [default = "./results.db"];</code>
+     *
+     * <pre>
+     *The path and name of the database to store the resulting information to
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getDatabasePathBytes();
+
     // optional string executable_command = 7;
     /**
      * <code>optional string executable_command = 7;</code>
@@ -478,24 +505,29 @@ public final class DispatcherCentricMessages {
               break;
             }
             case 58: {
-              bitField0_ |= 0x00000020;
+              bitField0_ |= 0x00000040;
               executableCommand_ = input.readBytes();
               break;
             }
             case 66: {
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
                 profile_ = new java.util.ArrayList<core.messages.DispatcherCentricMessages.Profile>();
-                mutable_bitField0_ |= 0x00000100;
+                mutable_bitField0_ |= 0x00000200;
               }
               profile_.add(input.readMessage(core.messages.DispatcherCentricMessages.Profile.PARSER, extensionRegistry));
               break;
             }
             case 74: {
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
                 expMachine_ = new java.util.ArrayList<core.messages.DispatcherCentricMessages.Machine>();
-                mutable_bitField0_ |= 0x00000080;
+                mutable_bitField0_ |= 0x00000100;
               }
               expMachine_.add(input.readMessage(core.messages.DispatcherCentricMessages.Machine.PARSER, extensionRegistry));
+              break;
+            }
+            case 82: {
+              bitField0_ |= 0x00000020;
+              databasePath_ = input.readBytes();
               break;
             }
           }
@@ -509,10 +541,10 @@ public final class DispatcherCentricMessages {
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           params_ = java.util.Collections.unmodifiableList(params_);
         }
-        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
           profile_ = java.util.Collections.unmodifiableList(profile_);
         }
-        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
           expMachine_ = java.util.Collections.unmodifiableList(expMachine_);
         }
         this.unknownFields = unknownFields.build();
@@ -852,6 +884,61 @@ public final class DispatcherCentricMessages {
       }
     }
 
+    // optional string database_path = 10 [default = "./results.db"];
+    public static final int DATABASE_PATH_FIELD_NUMBER = 10;
+    private java.lang.Object databasePath_;
+    /**
+     * <code>optional string database_path = 10 [default = "./results.db"];</code>
+     *
+     * <pre>
+     *The path and name of the database to store the resulting information to
+     * </pre>
+     */
+    public boolean hasDatabasePath() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional string database_path = 10 [default = "./results.db"];</code>
+     *
+     * <pre>
+     *The path and name of the database to store the resulting information to
+     * </pre>
+     */
+    public java.lang.String getDatabasePath() {
+      java.lang.Object ref = databasePath_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          databasePath_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string database_path = 10 [default = "./results.db"];</code>
+     *
+     * <pre>
+     *The path and name of the database to store the resulting information to
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getDatabasePathBytes() {
+      java.lang.Object ref = databasePath_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        databasePath_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     // optional string executable_command = 7;
     public static final int EXECUTABLE_COMMAND_FIELD_NUMBER = 7;
     private java.lang.Object executableCommand_;
@@ -863,7 +950,7 @@ public final class DispatcherCentricMessages {
      * </pre>
      */
     public boolean hasExecutableCommand() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
      * <code>optional string executable_command = 7;</code>
@@ -1026,6 +1113,7 @@ public final class DispatcherCentricMessages {
       gitUri_ = "";
       gitBranch_ = "";
       gitTag_ = "";
+      databasePath_ = "./results.db";
       executableCommand_ = "";
       expMachine_ = java.util.Collections.emptyList();
       profile_ = java.util.Collections.emptyList();
@@ -1086,7 +1174,7 @@ public final class DispatcherCentricMessages {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(6, getGitTagBytes());
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeBytes(7, getExecutableCommandBytes());
       }
       for (int i = 0; i < profile_.size(); i++) {
@@ -1094,6 +1182,9 @@ public final class DispatcherCentricMessages {
       }
       for (int i = 0; i < expMachine_.size(); i++) {
         output.writeMessage(9, expMachine_.get(i));
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(10, getDatabasePathBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -1128,7 +1219,7 @@ public final class DispatcherCentricMessages {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, getGitTagBytes());
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(7, getExecutableCommandBytes());
       }
@@ -1139,6 +1230,10 @@ public final class DispatcherCentricMessages {
       for (int i = 0; i < expMachine_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, expMachine_.get(i));
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(10, getDatabasePathBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1279,17 +1374,19 @@ public final class DispatcherCentricMessages {
         bitField0_ = (bitField0_ & ~0x00000010);
         gitTag_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
-        executableCommand_ = "";
+        databasePath_ = "./results.db";
         bitField0_ = (bitField0_ & ~0x00000040);
+        executableCommand_ = "";
+        bitField0_ = (bitField0_ & ~0x00000080);
         if (expMachineBuilder_ == null) {
           expMachine_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000080);
+          bitField0_ = (bitField0_ & ~0x00000100);
         } else {
           expMachineBuilder_.clear();
         }
         if (profileBuilder_ == null) {
           profile_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000100);
+          bitField0_ = (bitField0_ & ~0x00000200);
         } else {
           profileBuilder_.clear();
         }
@@ -1353,20 +1450,24 @@ public final class DispatcherCentricMessages {
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000020;
         }
+        result.databasePath_ = databasePath_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000040;
+        }
         result.executableCommand_ = executableCommand_;
         if (expMachineBuilder_ == null) {
-          if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          if (((bitField0_ & 0x00000100) == 0x00000100)) {
             expMachine_ = java.util.Collections.unmodifiableList(expMachine_);
-            bitField0_ = (bitField0_ & ~0x00000080);
+            bitField0_ = (bitField0_ & ~0x00000100);
           }
           result.expMachine_ = expMachine_;
         } else {
           result.expMachine_ = expMachineBuilder_.build();
         }
         if (profileBuilder_ == null) {
-          if (((bitField0_ & 0x00000100) == 0x00000100)) {
+          if (((bitField0_ & 0x00000200) == 0x00000200)) {
             profile_ = java.util.Collections.unmodifiableList(profile_);
-            bitField0_ = (bitField0_ & ~0x00000100);
+            bitField0_ = (bitField0_ & ~0x00000200);
           }
           result.profile_ = profile_;
         } else {
@@ -1439,8 +1540,13 @@ public final class DispatcherCentricMessages {
           gitTag_ = other.gitTag_;
           onChanged();
         }
-        if (other.hasExecutableCommand()) {
+        if (other.hasDatabasePath()) {
           bitField0_ |= 0x00000040;
+          databasePath_ = other.databasePath_;
+          onChanged();
+        }
+        if (other.hasExecutableCommand()) {
+          bitField0_ |= 0x00000080;
           executableCommand_ = other.executableCommand_;
           onChanged();
         }
@@ -1448,7 +1554,7 @@ public final class DispatcherCentricMessages {
           if (!other.expMachine_.isEmpty()) {
             if (expMachine_.isEmpty()) {
               expMachine_ = other.expMachine_;
-              bitField0_ = (bitField0_ & ~0x00000080);
+              bitField0_ = (bitField0_ & ~0x00000100);
             } else {
               ensureExpMachineIsMutable();
               expMachine_.addAll(other.expMachine_);
@@ -1461,7 +1567,7 @@ public final class DispatcherCentricMessages {
               expMachineBuilder_.dispose();
               expMachineBuilder_ = null;
               expMachine_ = other.expMachine_;
-              bitField0_ = (bitField0_ & ~0x00000080);
+              bitField0_ = (bitField0_ & ~0x00000100);
               expMachineBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getExpMachineFieldBuilder() : null;
@@ -1474,7 +1580,7 @@ public final class DispatcherCentricMessages {
           if (!other.profile_.isEmpty()) {
             if (profile_.isEmpty()) {
               profile_ = other.profile_;
-              bitField0_ = (bitField0_ & ~0x00000100);
+              bitField0_ = (bitField0_ & ~0x00000200);
             } else {
               ensureProfileIsMutable();
               profile_.addAll(other.profile_);
@@ -1487,7 +1593,7 @@ public final class DispatcherCentricMessages {
               profileBuilder_.dispose();
               profileBuilder_ = null;
               profile_ = other.profile_;
-              bitField0_ = (bitField0_ & ~0x00000100);
+              bitField0_ = (bitField0_ & ~0x00000200);
               profileBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getProfileFieldBuilder() : null;
@@ -2267,6 +2373,104 @@ public final class DispatcherCentricMessages {
         return this;
       }
 
+      // optional string database_path = 10 [default = "./results.db"];
+      private java.lang.Object databasePath_ = "./results.db";
+      /**
+       * <code>optional string database_path = 10 [default = "./results.db"];</code>
+       *
+       * <pre>
+       *The path and name of the database to store the resulting information to
+       * </pre>
+       */
+      public boolean hasDatabasePath() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional string database_path = 10 [default = "./results.db"];</code>
+       *
+       * <pre>
+       *The path and name of the database to store the resulting information to
+       * </pre>
+       */
+      public java.lang.String getDatabasePath() {
+        java.lang.Object ref = databasePath_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          databasePath_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string database_path = 10 [default = "./results.db"];</code>
+       *
+       * <pre>
+       *The path and name of the database to store the resulting information to
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getDatabasePathBytes() {
+        java.lang.Object ref = databasePath_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          databasePath_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string database_path = 10 [default = "./results.db"];</code>
+       *
+       * <pre>
+       *The path and name of the database to store the resulting information to
+       * </pre>
+       */
+      public Builder setDatabasePath(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        databasePath_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string database_path = 10 [default = "./results.db"];</code>
+       *
+       * <pre>
+       *The path and name of the database to store the resulting information to
+       * </pre>
+       */
+      public Builder clearDatabasePath() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        databasePath_ = getDefaultInstance().getDatabasePath();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string database_path = 10 [default = "./results.db"];</code>
+       *
+       * <pre>
+       *The path and name of the database to store the resulting information to
+       * </pre>
+       */
+      public Builder setDatabasePathBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        databasePath_ = value;
+        onChanged();
+        return this;
+      }
+
       // optional string executable_command = 7;
       private java.lang.Object executableCommand_ = "";
       /**
@@ -2277,7 +2481,7 @@ public final class DispatcherCentricMessages {
        * </pre>
        */
       public boolean hasExecutableCommand() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
        * <code>optional string executable_command = 7;</code>
@@ -2329,7 +2533,7 @@ public final class DispatcherCentricMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000040;
+  bitField0_ |= 0x00000080;
         executableCommand_ = value;
         onChanged();
         return this;
@@ -2342,7 +2546,7 @@ public final class DispatcherCentricMessages {
        * </pre>
        */
       public Builder clearExecutableCommand() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000080);
         executableCommand_ = getDefaultInstance().getExecutableCommand();
         onChanged();
         return this;
@@ -2359,7 +2563,7 @@ public final class DispatcherCentricMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000040;
+  bitField0_ |= 0x00000080;
         executableCommand_ = value;
         onChanged();
         return this;
@@ -2369,9 +2573,9 @@ public final class DispatcherCentricMessages {
       private java.util.List<core.messages.DispatcherCentricMessages.Machine> expMachine_ =
         java.util.Collections.emptyList();
       private void ensureExpMachineIsMutable() {
-        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
           expMachine_ = new java.util.ArrayList<core.messages.DispatcherCentricMessages.Machine>(expMachine_);
-          bitField0_ |= 0x00000080;
+          bitField0_ |= 0x00000100;
          }
       }
 
@@ -2564,7 +2768,7 @@ public final class DispatcherCentricMessages {
       public Builder clearExpMachine() {
         if (expMachineBuilder_ == null) {
           expMachine_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000080);
+          bitField0_ = (bitField0_ & ~0x00000100);
           onChanged();
         } else {
           expMachineBuilder_.clear();
@@ -2669,7 +2873,7 @@ public final class DispatcherCentricMessages {
           expMachineBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               core.messages.DispatcherCentricMessages.Machine, core.messages.DispatcherCentricMessages.Machine.Builder, core.messages.DispatcherCentricMessages.MachineOrBuilder>(
                   expMachine_,
-                  ((bitField0_ & 0x00000080) == 0x00000080),
+                  ((bitField0_ & 0x00000100) == 0x00000100),
                   getParentForChildren(),
                   isClean());
           expMachine_ = null;
@@ -2681,9 +2885,9 @@ public final class DispatcherCentricMessages {
       private java.util.List<core.messages.DispatcherCentricMessages.Profile> profile_ =
         java.util.Collections.emptyList();
       private void ensureProfileIsMutable() {
-        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
           profile_ = new java.util.ArrayList<core.messages.DispatcherCentricMessages.Profile>(profile_);
-          bitField0_ |= 0x00000100;
+          bitField0_ |= 0x00000200;
          }
       }
 
@@ -2876,7 +3080,7 @@ public final class DispatcherCentricMessages {
       public Builder clearProfile() {
         if (profileBuilder_ == null) {
           profile_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000100);
+          bitField0_ = (bitField0_ & ~0x00000200);
           onChanged();
         } else {
           profileBuilder_.clear();
@@ -2981,7 +3185,7 @@ public final class DispatcherCentricMessages {
           profileBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               core.messages.DispatcherCentricMessages.Profile, core.messages.DispatcherCentricMessages.Profile.Builder, core.messages.DispatcherCentricMessages.ProfileOrBuilder>(
                   profile_,
-                  ((bitField0_ & 0x00000100) == 0x00000100),
+                  ((bitField0_ & 0x00000200) == 0x00000200),
                   getParentForChildren(),
                   isClean());
           profile_ = null;
@@ -6431,33 +6635,33 @@ public final class DispatcherCentricMessages {
     com.google.protobuf.ByteString
         getParamNameBytes();
 
-    // required double min_value = 2;
+    // optional double min_value = 2 [default = 0];
     /**
-     * <code>required double min_value = 2;</code>
+     * <code>optional double min_value = 2 [default = 0];</code>
      */
     boolean hasMinValue();
     /**
-     * <code>required double min_value = 2;</code>
+     * <code>optional double min_value = 2 [default = 0];</code>
      */
     double getMinValue();
 
-    // required double max_value = 3;
+    // optional double max_value = 3 [default = 1];
     /**
-     * <code>required double max_value = 3;</code>
+     * <code>optional double max_value = 3 [default = 1];</code>
      */
     boolean hasMaxValue();
     /**
-     * <code>required double max_value = 3;</code>
+     * <code>optional double max_value = 3 [default = 1];</code>
      */
     double getMaxValue();
 
-    // optional double growth_value = 4;
+    // optional double growth_value = 4 [default = 0.1];
     /**
-     * <code>optional double growth_value = 4;</code>
+     * <code>optional double growth_value = 4 [default = 0.1];</code>
      */
     boolean hasGrowthValue();
     /**
-     * <code>optional double growth_value = 4;</code>
+     * <code>optional double growth_value = 4 [default = 0.1];</code>
      */
     double getGrowthValue();
 
@@ -6470,6 +6674,50 @@ public final class DispatcherCentricMessages {
      * <code>optional .search.Parameter.GrowthPattern pattern = 5 [default = LINEAR];</code>
      */
     core.messages.DispatcherCentricMessages.Parameter.GrowthPattern getPattern();
+
+    // repeated double specific_values = 6;
+    /**
+     * <code>repeated double specific_values = 6;</code>
+     *
+     * <pre>
+     *specific_values is set when the growth pattern is set to specific
+     * </pre>
+     */
+    java.util.List<java.lang.Double> getSpecificValuesList();
+    /**
+     * <code>repeated double specific_values = 6;</code>
+     *
+     * <pre>
+     *specific_values is set when the growth pattern is set to specific
+     * </pre>
+     */
+    int getSpecificValuesCount();
+    /**
+     * <code>repeated double specific_values = 6;</code>
+     *
+     * <pre>
+     *specific_values is set when the growth pattern is set to specific
+     * </pre>
+     */
+    double getSpecificValues(int index);
+
+    // optional int32 replicates = 7 [default = 1];
+    /**
+     * <code>optional int32 replicates = 7 [default = 1];</code>
+     *
+     * <pre>
+     *The number of times each experiment involving this parameter setting must be run
+     * </pre>
+     */
+    boolean hasReplicates();
+    /**
+     * <code>optional int32 replicates = 7 [default = 1];</code>
+     *
+     * <pre>
+     *The number of times each experiment involving this parameter setting must be run
+     * </pre>
+     */
+    int getReplicates();
   }
   /**
    * Protobuf type {@code search.Parameter}
@@ -6553,6 +6801,32 @@ public final class DispatcherCentricMessages {
               }
               break;
             }
+            case 49: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                specificValues_ = new java.util.ArrayList<java.lang.Double>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              specificValues_.add(input.readDouble());
+              break;
+            }
+            case 50: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
+                specificValues_ = new java.util.ArrayList<java.lang.Double>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                specificValues_.add(input.readDouble());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000020;
+              replicates_ = input.readInt32();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -6561,6 +6835,9 @@ public final class DispatcherCentricMessages {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          specificValues_ = java.util.Collections.unmodifiableList(specificValues_);
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -6602,9 +6879,13 @@ public final class DispatcherCentricMessages {
        */
       LINEAR(0, 0),
       /**
-       * <code>GEOMETRIC = 1;</code>
+       * <code>LOG = 1;</code>
        */
-      GEOMETRIC(1, 1),
+      LOG(1, 1),
+      /**
+       * <code>SPECIFIC = 2;</code>
+       */
+      SPECIFIC(2, 2),
       ;
 
       /**
@@ -6612,9 +6893,13 @@ public final class DispatcherCentricMessages {
        */
       public static final int LINEAR_VALUE = 0;
       /**
-       * <code>GEOMETRIC = 1;</code>
+       * <code>LOG = 1;</code>
        */
-      public static final int GEOMETRIC_VALUE = 1;
+      public static final int LOG_VALUE = 1;
+      /**
+       * <code>SPECIFIC = 2;</code>
+       */
+      public static final int SPECIFIC_VALUE = 2;
 
 
       public final int getNumber() { return value; }
@@ -6622,7 +6907,8 @@ public final class DispatcherCentricMessages {
       public static GrowthPattern valueOf(int value) {
         switch (value) {
           case 0: return LINEAR;
-          case 1: return GEOMETRIC;
+          case 1: return LOG;
+          case 2: return SPECIFIC;
           default: return null;
         }
       }
@@ -6718,49 +7004,49 @@ public final class DispatcherCentricMessages {
       }
     }
 
-    // required double min_value = 2;
+    // optional double min_value = 2 [default = 0];
     public static final int MIN_VALUE_FIELD_NUMBER = 2;
     private double minValue_;
     /**
-     * <code>required double min_value = 2;</code>
+     * <code>optional double min_value = 2 [default = 0];</code>
      */
     public boolean hasMinValue() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required double min_value = 2;</code>
+     * <code>optional double min_value = 2 [default = 0];</code>
      */
     public double getMinValue() {
       return minValue_;
     }
 
-    // required double max_value = 3;
+    // optional double max_value = 3 [default = 1];
     public static final int MAX_VALUE_FIELD_NUMBER = 3;
     private double maxValue_;
     /**
-     * <code>required double max_value = 3;</code>
+     * <code>optional double max_value = 3 [default = 1];</code>
      */
     public boolean hasMaxValue() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required double max_value = 3;</code>
+     * <code>optional double max_value = 3 [default = 1];</code>
      */
     public double getMaxValue() {
       return maxValue_;
     }
 
-    // optional double growth_value = 4;
+    // optional double growth_value = 4 [default = 0.1];
     public static final int GROWTH_VALUE_FIELD_NUMBER = 4;
     private double growthValue_;
     /**
-     * <code>optional double growth_value = 4;</code>
+     * <code>optional double growth_value = 4 [default = 0.1];</code>
      */
     public boolean hasGrowthValue() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional double growth_value = 4;</code>
+     * <code>optional double growth_value = 4 [default = 0.1];</code>
      */
     public double getGrowthValue() {
       return growthValue_;
@@ -6782,12 +7068,73 @@ public final class DispatcherCentricMessages {
       return pattern_;
     }
 
+    // repeated double specific_values = 6;
+    public static final int SPECIFIC_VALUES_FIELD_NUMBER = 6;
+    private java.util.List<java.lang.Double> specificValues_;
+    /**
+     * <code>repeated double specific_values = 6;</code>
+     *
+     * <pre>
+     *specific_values is set when the growth pattern is set to specific
+     * </pre>
+     */
+    public java.util.List<java.lang.Double>
+        getSpecificValuesList() {
+      return specificValues_;
+    }
+    /**
+     * <code>repeated double specific_values = 6;</code>
+     *
+     * <pre>
+     *specific_values is set when the growth pattern is set to specific
+     * </pre>
+     */
+    public int getSpecificValuesCount() {
+      return specificValues_.size();
+    }
+    /**
+     * <code>repeated double specific_values = 6;</code>
+     *
+     * <pre>
+     *specific_values is set when the growth pattern is set to specific
+     * </pre>
+     */
+    public double getSpecificValues(int index) {
+      return specificValues_.get(index);
+    }
+
+    // optional int32 replicates = 7 [default = 1];
+    public static final int REPLICATES_FIELD_NUMBER = 7;
+    private int replicates_;
+    /**
+     * <code>optional int32 replicates = 7 [default = 1];</code>
+     *
+     * <pre>
+     *The number of times each experiment involving this parameter setting must be run
+     * </pre>
+     */
+    public boolean hasReplicates() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 replicates = 7 [default = 1];</code>
+     *
+     * <pre>
+     *The number of times each experiment involving this parameter setting must be run
+     * </pre>
+     */
+    public int getReplicates() {
+      return replicates_;
+    }
+
     private void initFields() {
       paramName_ = "";
       minValue_ = 0D;
-      maxValue_ = 0D;
-      growthValue_ = 0D;
+      maxValue_ = 1D;
+      growthValue_ = 0.1D;
       pattern_ = core.messages.DispatcherCentricMessages.Parameter.GrowthPattern.LINEAR;
+      specificValues_ = java.util.Collections.emptyList();
+      replicates_ = 1;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6795,14 +7142,6 @@ public final class DispatcherCentricMessages {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasParamName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasMinValue()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasMaxValue()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -6827,6 +7166,12 @@ public final class DispatcherCentricMessages {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeEnum(5, pattern_.getNumber());
+      }
+      for (int i = 0; i < specificValues_.size(); i++) {
+        output.writeDouble(6, specificValues_.get(i));
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(7, replicates_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -6856,6 +7201,16 @@ public final class DispatcherCentricMessages {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(5, pattern_.getNumber());
+      }
+      {
+        int dataSize = 0;
+        dataSize = 8 * getSpecificValuesList().size();
+        size += dataSize;
+        size += 1 * getSpecificValuesList().size();
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, replicates_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -6977,12 +7332,16 @@ public final class DispatcherCentricMessages {
         bitField0_ = (bitField0_ & ~0x00000001);
         minValue_ = 0D;
         bitField0_ = (bitField0_ & ~0x00000002);
-        maxValue_ = 0D;
+        maxValue_ = 1D;
         bitField0_ = (bitField0_ & ~0x00000004);
-        growthValue_ = 0D;
+        growthValue_ = 0.1D;
         bitField0_ = (bitField0_ & ~0x00000008);
         pattern_ = core.messages.DispatcherCentricMessages.Parameter.GrowthPattern.LINEAR;
         bitField0_ = (bitField0_ & ~0x00000010);
+        specificValues_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        replicates_ = 1;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -7031,6 +7390,15 @@ public final class DispatcherCentricMessages {
           to_bitField0_ |= 0x00000010;
         }
         result.pattern_ = pattern_;
+        if (((bitField0_ & 0x00000020) == 0x00000020)) {
+          specificValues_ = java.util.Collections.unmodifiableList(specificValues_);
+          bitField0_ = (bitField0_ & ~0x00000020);
+        }
+        result.specificValues_ = specificValues_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.replicates_ = replicates_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -7064,20 +7432,25 @@ public final class DispatcherCentricMessages {
         if (other.hasPattern()) {
           setPattern(other.getPattern());
         }
+        if (!other.specificValues_.isEmpty()) {
+          if (specificValues_.isEmpty()) {
+            specificValues_ = other.specificValues_;
+            bitField0_ = (bitField0_ & ~0x00000020);
+          } else {
+            ensureSpecificValuesIsMutable();
+            specificValues_.addAll(other.specificValues_);
+          }
+          onChanged();
+        }
+        if (other.hasReplicates()) {
+          setReplicates(other.getReplicates());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasParamName()) {
-          
-          return false;
-        }
-        if (!hasMinValue()) {
-          
-          return false;
-        }
-        if (!hasMaxValue()) {
           
           return false;
         }
@@ -7177,22 +7550,22 @@ public final class DispatcherCentricMessages {
         return this;
       }
 
-      // required double min_value = 2;
+      // optional double min_value = 2 [default = 0];
       private double minValue_ ;
       /**
-       * <code>required double min_value = 2;</code>
+       * <code>optional double min_value = 2 [default = 0];</code>
        */
       public boolean hasMinValue() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required double min_value = 2;</code>
+       * <code>optional double min_value = 2 [default = 0];</code>
        */
       public double getMinValue() {
         return minValue_;
       }
       /**
-       * <code>required double min_value = 2;</code>
+       * <code>optional double min_value = 2 [default = 0];</code>
        */
       public Builder setMinValue(double value) {
         bitField0_ |= 0x00000002;
@@ -7201,7 +7574,7 @@ public final class DispatcherCentricMessages {
         return this;
       }
       /**
-       * <code>required double min_value = 2;</code>
+       * <code>optional double min_value = 2 [default = 0];</code>
        */
       public Builder clearMinValue() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -7210,22 +7583,22 @@ public final class DispatcherCentricMessages {
         return this;
       }
 
-      // required double max_value = 3;
-      private double maxValue_ ;
+      // optional double max_value = 3 [default = 1];
+      private double maxValue_ = 1D;
       /**
-       * <code>required double max_value = 3;</code>
+       * <code>optional double max_value = 3 [default = 1];</code>
        */
       public boolean hasMaxValue() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required double max_value = 3;</code>
+       * <code>optional double max_value = 3 [default = 1];</code>
        */
       public double getMaxValue() {
         return maxValue_;
       }
       /**
-       * <code>required double max_value = 3;</code>
+       * <code>optional double max_value = 3 [default = 1];</code>
        */
       public Builder setMaxValue(double value) {
         bitField0_ |= 0x00000004;
@@ -7234,31 +7607,31 @@ public final class DispatcherCentricMessages {
         return this;
       }
       /**
-       * <code>required double max_value = 3;</code>
+       * <code>optional double max_value = 3 [default = 1];</code>
        */
       public Builder clearMaxValue() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        maxValue_ = 0D;
+        maxValue_ = 1D;
         onChanged();
         return this;
       }
 
-      // optional double growth_value = 4;
-      private double growthValue_ ;
+      // optional double growth_value = 4 [default = 0.1];
+      private double growthValue_ = 0.1D;
       /**
-       * <code>optional double growth_value = 4;</code>
+       * <code>optional double growth_value = 4 [default = 0.1];</code>
        */
       public boolean hasGrowthValue() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional double growth_value = 4;</code>
+       * <code>optional double growth_value = 4 [default = 0.1];</code>
        */
       public double getGrowthValue() {
         return growthValue_;
       }
       /**
-       * <code>optional double growth_value = 4;</code>
+       * <code>optional double growth_value = 4 [default = 0.1];</code>
        */
       public Builder setGrowthValue(double value) {
         bitField0_ |= 0x00000008;
@@ -7267,11 +7640,11 @@ public final class DispatcherCentricMessages {
         return this;
       }
       /**
-       * <code>optional double growth_value = 4;</code>
+       * <code>optional double growth_value = 4 [default = 0.1];</code>
        */
       public Builder clearGrowthValue() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        growthValue_ = 0D;
+        growthValue_ = 0.1D;
         onChanged();
         return this;
       }
@@ -7308,6 +7681,149 @@ public final class DispatcherCentricMessages {
       public Builder clearPattern() {
         bitField0_ = (bitField0_ & ~0x00000010);
         pattern_ = core.messages.DispatcherCentricMessages.Parameter.GrowthPattern.LINEAR;
+        onChanged();
+        return this;
+      }
+
+      // repeated double specific_values = 6;
+      private java.util.List<java.lang.Double> specificValues_ = java.util.Collections.emptyList();
+      private void ensureSpecificValuesIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          specificValues_ = new java.util.ArrayList<java.lang.Double>(specificValues_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+      /**
+       * <code>repeated double specific_values = 6;</code>
+       *
+       * <pre>
+       *specific_values is set when the growth pattern is set to specific
+       * </pre>
+       */
+      public java.util.List<java.lang.Double>
+          getSpecificValuesList() {
+        return java.util.Collections.unmodifiableList(specificValues_);
+      }
+      /**
+       * <code>repeated double specific_values = 6;</code>
+       *
+       * <pre>
+       *specific_values is set when the growth pattern is set to specific
+       * </pre>
+       */
+      public int getSpecificValuesCount() {
+        return specificValues_.size();
+      }
+      /**
+       * <code>repeated double specific_values = 6;</code>
+       *
+       * <pre>
+       *specific_values is set when the growth pattern is set to specific
+       * </pre>
+       */
+      public double getSpecificValues(int index) {
+        return specificValues_.get(index);
+      }
+      /**
+       * <code>repeated double specific_values = 6;</code>
+       *
+       * <pre>
+       *specific_values is set when the growth pattern is set to specific
+       * </pre>
+       */
+      public Builder setSpecificValues(
+          int index, double value) {
+        ensureSpecificValuesIsMutable();
+        specificValues_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated double specific_values = 6;</code>
+       *
+       * <pre>
+       *specific_values is set when the growth pattern is set to specific
+       * </pre>
+       */
+      public Builder addSpecificValues(double value) {
+        ensureSpecificValuesIsMutable();
+        specificValues_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated double specific_values = 6;</code>
+       *
+       * <pre>
+       *specific_values is set when the growth pattern is set to specific
+       * </pre>
+       */
+      public Builder addAllSpecificValues(
+          java.lang.Iterable<? extends java.lang.Double> values) {
+        ensureSpecificValuesIsMutable();
+        super.addAll(values, specificValues_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated double specific_values = 6;</code>
+       *
+       * <pre>
+       *specific_values is set when the growth pattern is set to specific
+       * </pre>
+       */
+      public Builder clearSpecificValues() {
+        specificValues_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+
+      // optional int32 replicates = 7 [default = 1];
+      private int replicates_ = 1;
+      /**
+       * <code>optional int32 replicates = 7 [default = 1];</code>
+       *
+       * <pre>
+       *The number of times each experiment involving this parameter setting must be run
+       * </pre>
+       */
+      public boolean hasReplicates() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional int32 replicates = 7 [default = 1];</code>
+       *
+       * <pre>
+       *The number of times each experiment involving this parameter setting must be run
+       * </pre>
+       */
+      public int getReplicates() {
+        return replicates_;
+      }
+      /**
+       * <code>optional int32 replicates = 7 [default = 1];</code>
+       *
+       * <pre>
+       *The number of times each experiment involving this parameter setting must be run
+       * </pre>
+       */
+      public Builder setReplicates(int value) {
+        bitField0_ |= 0x00000040;
+        replicates_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 replicates = 7 [default = 1];</code>
+       *
+       * <pre>
+       *The number of times each experiment involving this parameter setting must be run
+       * </pre>
+       */
+      public Builder clearReplicates() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        replicates_ = 1;
         onChanged();
         return this;
       }
@@ -7357,29 +7873,31 @@ public final class DispatcherCentricMessages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\021proto/setup.proto\022\006search\"\363\001\n\005Setup\022\027\n" +
+      "\n\021proto/setup.proto\022\006search\"\230\002\n\005Setup\022\027\n" +
       "\017experiment_name\030\001 \001(\t\022!\n\006params\030\002 \003(\0132\021" +
       ".search.Parameter\022\024\n\014continuation\030\003 \001(\t\022" +
       "\017\n\007git_uri\030\004 \002(\t\022\022\n\ngit_branch\030\005 \002(\t\022\017\n\007" +
-      "git_tag\030\006 \001(\t\022\032\n\022executable_command\030\007 \001(" +
-      "\t\022$\n\013exp_machine\030\t \003(\0132\017.search.Machine\022" +
-      " \n\007profile\030\010 \003(\0132\017.search.Profile\")\n\013Env" +
-      "Variable\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"\207\001\n" +
-      "\007Machine\022\014\n\004name\030\001 \002(\t\022\022\n\nreplicates\030\002 \001" +
-      "(\005\022\020\n\010username\030\003 \001(\t\022)\n\014env_variable\030\004 \003",
-      "(\0132\023.search.EnvVariable\022\035\n\002os\030\005 \001(\0162\n.se" +
-      "arch.OS:\005LINUX\"\232\001\n\007Profile\022*\n\renv_variab" +
-      "les\030\001 \003(\0132\023.search.EnvVariable\022\033\n\023applic" +
-      "able_machines\030\002 \003(\t\022\035\n\002os\030\003 \001(\0162\n.search" +
-      ".OS:\005LINUX\022\025\n\nreplicates\030\004 \001(\005:\0011\022\020\n\010use" +
-      "rname\030\005 \001(\t\"\301\001\n\tParameter\022\022\n\nparam_name\030" +
-      "\001 \002(\t\022\021\n\tmin_value\030\002 \002(\001\022\021\n\tmax_value\030\003 " +
-      "\002(\001\022\024\n\014growth_value\030\004 \001(\001\0228\n\007pattern\030\005 \001" +
-      "(\0162\037.search.Parameter.GrowthPattern:\006LIN" +
-      "EAR\"*\n\rGrowthPattern\022\n\n\006LINEAR\020\000\022\r\n\tGEOM",
-      "ETRIC\020\001*%\n\002OS\022\t\n\005LINUX\020\000\022\007\n\003MAC\020\001\022\013\n\007WIN" +
-      "DOWS\020\002B*\n\rcore.messagesB\031DispatcherCentr" +
-      "icMessages"
+      "git_tag\030\006 \001(\t\022#\n\rdatabase_path\030\n \001(\t:\014./" +
+      "results.db\022\032\n\022executable_command\030\007 \001(\t\022$" +
+      "\n\013exp_machine\030\t \003(\0132\017.search.Machine\022 \n\007" +
+      "profile\030\010 \003(\0132\017.search.Profile\")\n\013EnvVar" +
+      "iable\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"\207\001\n\007Ma" +
+      "chine\022\014\n\004name\030\001 \002(\t\022\022\n\nreplicates\030\002 \001(\005\022",
+      "\020\n\010username\030\003 \001(\t\022)\n\014env_variable\030\004 \003(\0132" +
+      "\023.search.EnvVariable\022\035\n\002os\030\005 \001(\0162\n.searc" +
+      "h.OS:\005LINUX\"\232\001\n\007Profile\022*\n\renv_variables" +
+      "\030\001 \003(\0132\023.search.EnvVariable\022\033\n\023applicabl" +
+      "e_machines\030\002 \003(\t\022\035\n\002os\030\003 \001(\0162\n.search.OS" +
+      ":\005LINUX\022\025\n\nreplicates\030\004 \001(\005:\0011\022\020\n\010userna" +
+      "me\030\005 \001(\t\"\204\002\n\tParameter\022\022\n\nparam_name\030\001 \002" +
+      "(\t\022\024\n\tmin_value\030\002 \001(\001:\0010\022\024\n\tmax_value\030\003 " +
+      "\001(\001:\0011\022\031\n\014growth_value\030\004 \001(\001:\0030.1\0228\n\007pat" +
+      "tern\030\005 \001(\0162\037.search.Parameter.GrowthPatt",
+      "ern:\006LINEAR\022\027\n\017specific_values\030\006 \003(\001\022\025\n\n" +
+      "replicates\030\007 \001(\005:\0011\"2\n\rGrowthPattern\022\n\n\006" +
+      "LINEAR\020\000\022\007\n\003LOG\020\001\022\014\n\010SPECIFIC\020\002*%\n\002OS\022\t\n" +
+      "\005LINUX\020\000\022\007\n\003MAC\020\001\022\013\n\007WINDOWS\020\002B*\n\rcore.m" +
+      "essagesB\031DispatcherCentricMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -7391,7 +7909,7 @@ public final class DispatcherCentricMessages {
           internal_static_search_Setup_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Setup_descriptor,
-              new java.lang.String[] { "ExperimentName", "Params", "Continuation", "GitUri", "GitBranch", "GitTag", "ExecutableCommand", "ExpMachine", "Profile", });
+              new java.lang.String[] { "ExperimentName", "Params", "Continuation", "GitUri", "GitBranch", "GitTag", "DatabasePath", "ExecutableCommand", "ExpMachine", "Profile", });
           internal_static_search_EnvVariable_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_search_EnvVariable_fieldAccessorTable = new
@@ -7415,7 +7933,7 @@ public final class DispatcherCentricMessages {
           internal_static_search_Parameter_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Parameter_descriptor,
-              new java.lang.String[] { "ParamName", "MinValue", "MaxValue", "GrowthValue", "Pattern", });
+              new java.lang.String[] { "ParamName", "MinValue", "MaxValue", "GrowthValue", "Pattern", "SpecificValues", "Replicates", });
           return null;
         }
       };
