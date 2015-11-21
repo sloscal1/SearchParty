@@ -21,57 +21,65 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.protobuf.TextFormat;
-import com.google.protobuf.TextFormat.ParseException;
-
 import core.messages.DispatcherCentricMessages.Parameter;
 import core.messages.DispatcherCentricMessages.Parameter.GrowthPattern;
 import core.messages.DispatcherCentricMessages.Setup;
+import core.messages.SearcherCentricMessages.Argument;
 import core.messages.SearcherCentricMessages.RunSettings;
+import core.messages.SearcherCentricMessages.RunSettings.Builder;
 
 public class ExhaustiveExpGenerator implements ExpGenerator{
-	private List<String> allSettings = new ArrayList<>();
+	private List<RunSettings> allSettings = new ArrayList<>();
 	private int index = 0;
 	
 	public ExhaustiveExpGenerator(Setup msg) {
 		//Get the list of Parameters to construct experiments from
 		List<Parameter> params = new LinkedList<>(msg.getParamsList());
 		Collections.reverse(params);
-		recursivelyBuildSettings("", params);
+		recursivelyBuildSettings(RunSettings.newBuilder(), params);
 	}
 
-	private void recursivelyBuildSettings(String prev, List<Parameter> remainingParams){
+	private void recursivelyBuildSettings(Builder b, List<Parameter> remainingParams){
 		//Parse the user defined settings for this parameter
 		Parameter current = remainingParams.get(0);
-		GrowthUtil f = null;
-		if(GrowthPattern.LINEAR == current.getPattern())
-			f = new GrowthUtil.Linear();
-		else if(GrowthPattern.LOG == current.getPattern())
-			f = new GrowthUtil.Log();
-		else if(current.getSpecificValuesCount() != 0 && GrowthPattern.SPECIFIC == current.getPattern())
-			f = new GrowthUtil.Specific(current.getSpecificValuesList());
-		else
-			throw new IllegalStateException("Could not parse Parameter "+current.getParamName()+", incorrect growth pattern.");
-
 		double min = current.getMinValue();
 		double max = current.getMaxValue();
 		double rate = current.getGrowthValue();
+		
+		GrowthUtil f = null;
+		if(GrowthPattern.LINEAR == current.getPattern())
+			f = new GrowthUtil.Linear(min, max, rate);
+		else if(GrowthPattern.LOG == current.getPattern())
+			f = new GrowthUtil.Log(min, max);
+		else if(current.getSpecificValuesCount() != 0 && GrowthPattern.SPECIFIC == current.getPattern()){
+			f = new GrowthUtil.Specific(current.getSpecificValuesList());
+			min = current.getSpecificValues(0);
+		}
+		else
+			throw new IllegalStateException("Could not parse Parameter "+current.getParamName()+", incorrect growth pattern.");
 
+		
 		//Generate the values for this parameter
 		int size = remainingParams.size();
 		List<Parameter> rem = size > 1 ? remainingParams.subList(1, size) : null;
-		for(double value = rate, last = Double.NaN; 
-				last != rate && f.hasNext(); 
-				last = value, f.next(value, min, max, rate)){
-			System.out.println(current.getParamName()+" "+value+" "+f.hasNext());
+		int newPos = b.getArgumentCount();
+		Argument.Builder argB = Argument.newBuilder();
+		b.addArgument(argB.setFormalName("").setValue("").build());
+
+		//This loop seems pretty contrived, it is due to the fact that I increment before testing, the last value
+		//would get omitted. This seems to work for the time being though.
+		for(double value = min, last = Double.NaN; 
+				last != value; //index is 0 so yes, it has next...
+				last = value, value = f.hasNext()? f.next() : value){ //next should return what is in index 1
+			System.out.println(current.getParamName()+" "+value+" "+f.hasNext()+" "+min+" "+max+" "+rate);		
+			argB.setFormalName(current.getParamName());
+			argB.setValue(""+value);
+			b.setArgument(newPos, argB.build());
 			if(rem != null)
-				recursivelyBuildSettings(prev+" formal_name : \""+current.getParamName()+"\" value: \""+value+"\"", rem);
-			else{
-				allSettings.add(prev.trim());
-				System.out.println(allSettings.get(allSettings.size()-1));
-			}
+				recursivelyBuildSettings(b, rem);
+			else
+				allSettings.add(b.build());
 		}
-		System.out.println(f.hasNext());
 	}
 	
 	@Override
@@ -81,17 +89,7 @@ public class ExhaustiveExpGenerator implements ExpGenerator{
 	
 	@Override
 	public RunSettings next() {
-		RunSettings.Builder b = RunSettings.newBuilder();
-		try {
-			TextFormat.merge(allSettings.get(index++), b);
-			if(index == allSettings.size())
-				b.setTerminal(true); //This generator is out of experiments!
-		} catch (ParseException e) {
-			System.err.println("Serious issue, internal code could not generate RunSettings!!!");
-			e.printStackTrace();
-			System.exit(1);
-		}
-		return b.build();
+		return allSettings.get(index++);
 	}
 
 }

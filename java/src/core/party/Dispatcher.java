@@ -46,6 +46,7 @@ import core.messages.DispatcherCentricMessages.Machine;
 import core.messages.DispatcherCentricMessages.Setup;
 import core.messages.ExperimentResults;
 import core.messages.ExperimentResults.Result;
+import core.messages.ExperimentResults.ResultMessage;
 import core.messages.SearcherCentricMessages.Contract;
 import core.messages.SearcherCentricMessages.RunSettings;
 
@@ -202,8 +203,8 @@ public class Dispatcher {
 				try {
 					byte[] msg = results.recv();
 					if(msg != null){
-						ExperimentResults.ResultMessage.parseFrom(msg);
-						//							System.out.println("");
+						ResultMessage rm = ExperimentResults.ResultMessage.parseFrom(msg);
+						System.out.println(rm);
 					}
 					//TODO push this information to the database
 				} catch (InvalidProtocolBufferException e) {

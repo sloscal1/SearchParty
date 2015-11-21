@@ -26,6 +26,8 @@ import java.util.List;
  *
  */
 public abstract class GrowthUtil {
+	/** Acceptable rounding error in double equality calculations */
+	public static final double EPSILON = 1e-5;
 	/** Whether or not this pattern has another value to report */
 	protected boolean hasNext = true;
 	
@@ -46,37 +48,67 @@ public abstract class GrowthUtil {
 	 * @param rate the rate of change of the parameter (current + rate for LINEAR, current * min for LOG)
 	 * @return the next value, could exceed max
 	 */
-	public abstract double next(double current, double min, double max, double rate);
+	public abstract double next();
 	
 	public static class Linear extends GrowthUtil{
+		private double max;
+		private double rate;
+		private double current;
+
+		public Linear(double min, double max, double rate){
+			this.current = min;
+			this.max = max;
+			this.rate = rate;
+		}
+		
+		public boolean hasNext(){
+			return current + rate <= max + EPSILON;
+		}
+		
 		@Override
-		public double next(double current, double min, double max, double rate) {
-			double next =  current + rate;
-			hasNext = next + rate <= max;
-			return next;
+		public double next() {
+			current += rate;
+			return current;
 		}
 	}
 	
 	public static class Log extends GrowthUtil{
-		public double next(double current, double min, double max, double rate){
-			double next =  current * min;
-			hasNext = next * rate <= max;
-			return next;
+		private double min;
+		private double max;
+		private double current;
+		
+		public Log(double min, double max){
+			this.min = min;
+			this.current = min;
+			this.max = max;
+		}
+		
+		public boolean hasNext(){
+			return current * min <= max + EPSILON;
+		}
+		
+		public double next(){
+			current *= min;
+			return current;
 		}
 	}
 	
 	public static class Specific extends GrowthUtil{
 		private List<Double> values;
-		private int index = 0;
+		private int index = 1; //min is assigned values(0)
 		
 		public Specific(List<Double> values){
 			this.values = values;
 		}
+		
 		@Override
-		public double next(double current, double min, double max, double rate) {
-			hasNext = index + 1 < values.size();
-			return values.get(index++);
+		public boolean hasNext() {
+			return index < values.size();
 		}
 		
+		@Override
+		public double next() {
+			return values.get(index++);
+		}
 	}
 }
