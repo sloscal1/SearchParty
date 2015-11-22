@@ -16,9 +16,12 @@ limitations under the License.
 
 package core.party;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -46,7 +49,6 @@ import core.messages.DispatcherCentricMessages.Machine;
 import core.messages.DispatcherCentricMessages.Setup;
 import core.messages.ExperimentResults;
 import core.messages.ExperimentResults.Result;
-import core.messages.ExperimentResults.ResultMessage;
 import core.messages.SearcherCentricMessages.Contract;
 import core.messages.SearcherCentricMessages.RunSettings;
 
@@ -61,6 +63,9 @@ public class Dispatcher {
 	private String localIPv4; 
 	private Semaphore activeMachines;
 	private ExpGenerator gen;
+	private PrintStream oldOut = System.out;
+	private PrintStream oldErr = System.err;
+	private File output;
 	
 	public static List<ProgramParameter> params = new ArrayList<ProgramParameter>();
 	static{
@@ -117,6 +122,16 @@ public class Dispatcher {
 		this.inputExp = exp;
 		this.activeMachines = new Semaphore(exp.getExpMachineCount());
 		this.gen = new ExhaustiveExpGenerator(exp);
+		try {
+			this.output = File.createTempFile("spf", ".txt");
+			System.out.println("Printing info to: "+output.getCanonicalPath());
+			PrintStream out = new PrintStream(new BufferedOutputStream (new FileOutputStream(output)));
+			System.setOut(out);
+			System.setErr(out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		try {
 			localIPv4 = InetAddress.getLocalHost().getHostAddress();
@@ -170,7 +185,7 @@ public class Dispatcher {
 				byte[] msg = experiments.recv();
 				if(msg != null){
 					//Got a request, if there are more left and a running experimenter machine, send one
-					if(!gen.hasNext())
+					if(gen.hasNext())
 						experiments.send(gen.next().toByteArray(), ZMQ.NOBLOCK);
 					else{
 						System.out.println("Sending a term exp");
@@ -203,8 +218,8 @@ public class Dispatcher {
 				try {
 					byte[] msg = results.recv();
 					if(msg != null){
-						ResultMessage rm = ExperimentResults.ResultMessage.parseFrom(msg);
-						System.out.println(rm);
+						ExperimentResults.ResultMessage.parseFrom(msg);
+//						System.out.println(rm);
 					}
 					//TODO push this information to the database
 				} catch (InvalidProtocolBufferException e) {
@@ -213,6 +228,10 @@ public class Dispatcher {
 				}
 			}
 			System.out.println("Terminated receiver...");
+			System.out.close();
+			System.setErr(oldErr);
+			System.setOut(oldOut);
+			System.out.println("All experiments finished.");
 		}
 	}
 	public class DeploySearcher implements Runnable{

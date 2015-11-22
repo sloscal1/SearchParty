@@ -47,6 +47,8 @@ message Setup{
 	repeated Machine exp_machine = 9;
 	//These are the profiles to be used
 	repeated Profile profile = 8;
+	//The base random seed to initialize the random settings for each experiment
+	optional int64 rand_seed = 11;
 }
 
 //Key-Value pairs for things like LD_LIBRARY_PATH=/usr/local/lib etc.

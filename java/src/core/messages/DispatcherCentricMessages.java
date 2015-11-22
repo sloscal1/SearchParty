@@ -415,6 +415,24 @@ public final class DispatcherCentricMessages {
      */
     core.messages.DispatcherCentricMessages.ProfileOrBuilder getProfileOrBuilder(
         int index);
+
+    // optional int64 rand_seed = 11;
+    /**
+     * <code>optional int64 rand_seed = 11;</code>
+     *
+     * <pre>
+     *The base random seed to initialize the random settings for each experiment
+     * </pre>
+     */
+    boolean hasRandSeed();
+    /**
+     * <code>optional int64 rand_seed = 11;</code>
+     *
+     * <pre>
+     *The base random seed to initialize the random settings for each experiment
+     * </pre>
+     */
+    long getRandSeed();
   }
   /**
    * Protobuf type {@code search.Setup}
@@ -528,6 +546,11 @@ public final class DispatcherCentricMessages {
             case 82: {
               bitField0_ |= 0x00000020;
               databasePath_ = input.readBytes();
+              break;
+            }
+            case 88: {
+              bitField0_ |= 0x00000080;
+              randSeed_ = input.readInt64();
               break;
             }
           }
@@ -1106,6 +1129,30 @@ public final class DispatcherCentricMessages {
       return profile_.get(index);
     }
 
+    // optional int64 rand_seed = 11;
+    public static final int RAND_SEED_FIELD_NUMBER = 11;
+    private long randSeed_;
+    /**
+     * <code>optional int64 rand_seed = 11;</code>
+     *
+     * <pre>
+     *The base random seed to initialize the random settings for each experiment
+     * </pre>
+     */
+    public boolean hasRandSeed() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int64 rand_seed = 11;</code>
+     *
+     * <pre>
+     *The base random seed to initialize the random settings for each experiment
+     * </pre>
+     */
+    public long getRandSeed() {
+      return randSeed_;
+    }
+
     private void initFields() {
       experimentName_ = "";
       params_ = java.util.Collections.emptyList();
@@ -1117,6 +1164,7 @@ public final class DispatcherCentricMessages {
       executableCommand_ = "";
       expMachine_ = java.util.Collections.emptyList();
       profile_ = java.util.Collections.emptyList();
+      randSeed_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1186,6 +1234,9 @@ public final class DispatcherCentricMessages {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeBytes(10, getDatabasePathBytes());
       }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt64(11, randSeed_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1234,6 +1285,10 @@ public final class DispatcherCentricMessages {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(10, getDatabasePathBytes());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(11, randSeed_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1390,6 +1445,8 @@ public final class DispatcherCentricMessages {
         } else {
           profileBuilder_.clear();
         }
+        randSeed_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -1473,6 +1530,10 @@ public final class DispatcherCentricMessages {
         } else {
           result.profile_ = profileBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.randSeed_ = randSeed_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1601,6 +1662,9 @@ public final class DispatcherCentricMessages {
               profileBuilder_.addAllMessages(other.profile_);
             }
           }
+        }
+        if (other.hasRandSeed()) {
+          setRandSeed(other.getRandSeed());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3191,6 +3255,55 @@ public final class DispatcherCentricMessages {
           profile_ = null;
         }
         return profileBuilder_;
+      }
+
+      // optional int64 rand_seed = 11;
+      private long randSeed_ ;
+      /**
+       * <code>optional int64 rand_seed = 11;</code>
+       *
+       * <pre>
+       *The base random seed to initialize the random settings for each experiment
+       * </pre>
+       */
+      public boolean hasRandSeed() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional int64 rand_seed = 11;</code>
+       *
+       * <pre>
+       *The base random seed to initialize the random settings for each experiment
+       * </pre>
+       */
+      public long getRandSeed() {
+        return randSeed_;
+      }
+      /**
+       * <code>optional int64 rand_seed = 11;</code>
+       *
+       * <pre>
+       *The base random seed to initialize the random settings for each experiment
+       * </pre>
+       */
+      public Builder setRandSeed(long value) {
+        bitField0_ |= 0x00000400;
+        randSeed_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int64 rand_seed = 11;</code>
+       *
+       * <pre>
+       *The base random seed to initialize the random settings for each experiment
+       * </pre>
+       */
+      public Builder clearRandSeed() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        randSeed_ = 0L;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:search.Setup)
@@ -7873,31 +7986,32 @@ public final class DispatcherCentricMessages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\021proto/setup.proto\022\006search\"\230\002\n\005Setup\022\027\n" +
+      "\n\021proto/setup.proto\022\006search\"\253\002\n\005Setup\022\027\n" +
       "\017experiment_name\030\001 \001(\t\022!\n\006params\030\002 \003(\0132\021" +
       ".search.Parameter\022\024\n\014continuation\030\003 \001(\t\022" +
       "\017\n\007git_uri\030\004 \002(\t\022\022\n\ngit_branch\030\005 \002(\t\022\017\n\007" +
       "git_tag\030\006 \001(\t\022#\n\rdatabase_path\030\n \001(\t:\014./" +
       "results.db\022\032\n\022executable_command\030\007 \001(\t\022$" +
       "\n\013exp_machine\030\t \003(\0132\017.search.Machine\022 \n\007" +
-      "profile\030\010 \003(\0132\017.search.Profile\")\n\013EnvVar" +
-      "iable\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t\"\207\001\n\007Ma" +
-      "chine\022\014\n\004name\030\001 \002(\t\022\022\n\nreplicates\030\002 \001(\005\022",
-      "\020\n\010username\030\003 \001(\t\022)\n\014env_variable\030\004 \003(\0132" +
-      "\023.search.EnvVariable\022\035\n\002os\030\005 \001(\0162\n.searc" +
-      "h.OS:\005LINUX\"\232\001\n\007Profile\022*\n\renv_variables" +
-      "\030\001 \003(\0132\023.search.EnvVariable\022\033\n\023applicabl" +
-      "e_machines\030\002 \003(\t\022\035\n\002os\030\003 \001(\0162\n.search.OS" +
-      ":\005LINUX\022\025\n\nreplicates\030\004 \001(\005:\0011\022\020\n\010userna" +
-      "me\030\005 \001(\t\"\204\002\n\tParameter\022\022\n\nparam_name\030\001 \002" +
-      "(\t\022\024\n\tmin_value\030\002 \001(\001:\0010\022\024\n\tmax_value\030\003 " +
-      "\001(\001:\0011\022\031\n\014growth_value\030\004 \001(\001:\0030.1\0228\n\007pat" +
-      "tern\030\005 \001(\0162\037.search.Parameter.GrowthPatt",
-      "ern:\006LINEAR\022\027\n\017specific_values\030\006 \003(\001\022\025\n\n" +
-      "replicates\030\007 \001(\005:\0011\"2\n\rGrowthPattern\022\n\n\006" +
-      "LINEAR\020\000\022\007\n\003LOG\020\001\022\014\n\010SPECIFIC\020\002*%\n\002OS\022\t\n" +
-      "\005LINUX\020\000\022\007\n\003MAC\020\001\022\013\n\007WINDOWS\020\002B*\n\rcore.m" +
-      "essagesB\031DispatcherCentricMessages"
+      "profile\030\010 \003(\0132\017.search.Profile\022\021\n\trand_s" +
+      "eed\030\013 \001(\003\")\n\013EnvVariable\022\013\n\003key\030\001 \002(\t\022\r\n" +
+      "\005value\030\002 \002(\t\"\207\001\n\007Machine\022\014\n\004name\030\001 \002(\t\022\022",
+      "\n\nreplicates\030\002 \001(\005\022\020\n\010username\030\003 \001(\t\022)\n\014" +
+      "env_variable\030\004 \003(\0132\023.search.EnvVariable\022" +
+      "\035\n\002os\030\005 \001(\0162\n.search.OS:\005LINUX\"\232\001\n\007Profi" +
+      "le\022*\n\renv_variables\030\001 \003(\0132\023.search.EnvVa" +
+      "riable\022\033\n\023applicable_machines\030\002 \003(\t\022\035\n\002o" +
+      "s\030\003 \001(\0162\n.search.OS:\005LINUX\022\025\n\nreplicates" +
+      "\030\004 \001(\005:\0011\022\020\n\010username\030\005 \001(\t\"\204\002\n\tParamete" +
+      "r\022\022\n\nparam_name\030\001 \002(\t\022\024\n\tmin_value\030\002 \001(\001" +
+      ":\0010\022\024\n\tmax_value\030\003 \001(\001:\0011\022\031\n\014growth_valu" +
+      "e\030\004 \001(\001:\0030.1\0228\n\007pattern\030\005 \001(\0162\037.search.P",
+      "arameter.GrowthPattern:\006LINEAR\022\027\n\017specif" +
+      "ic_values\030\006 \003(\001\022\025\n\nreplicates\030\007 \001(\005:\0011\"2" +
+      "\n\rGrowthPattern\022\n\n\006LINEAR\020\000\022\007\n\003LOG\020\001\022\014\n\010" +
+      "SPECIFIC\020\002*%\n\002OS\022\t\n\005LINUX\020\000\022\007\n\003MAC\020\001\022\013\n\007" +
+      "WINDOWS\020\002B*\n\rcore.messagesB\031DispatcherCe" +
+      "ntricMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -7909,7 +8023,7 @@ public final class DispatcherCentricMessages {
           internal_static_search_Setup_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Setup_descriptor,
-              new java.lang.String[] { "ExperimentName", "Params", "Continuation", "GitUri", "GitBranch", "GitTag", "DatabasePath", "ExecutableCommand", "ExpMachine", "Profile", });
+              new java.lang.String[] { "ExperimentName", "Params", "Continuation", "GitUri", "GitBranch", "GitTag", "DatabasePath", "ExecutableCommand", "ExpMachine", "Profile", "RandSeed", });
           internal_static_search_EnvVariable_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_search_EnvVariable_fieldAccessorTable = new
