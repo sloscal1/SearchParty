@@ -131,8 +131,8 @@ public class Dispatcher {
 			this.output = File.createTempFile("spf", ".txt");
 			System.out.println("Printing info to: "+output.getCanonicalPath());
 			PrintStream out = new PrintStream(new BufferedOutputStream (new FileOutputStream(output)));
-			System.setOut(out);
-			System.setErr(out);
+//			System.setOut(out);
+//			System.setErr(out);
 		} catch (IOException e) {
 			System.err.println("Could not create temporary file, printing to console."); 
 			e.printStackTrace();
@@ -243,10 +243,8 @@ public class Dispatcher {
 				try {
 					byte[] msg = results.recv();
 					if(msg != null){
-						ExperimentResults.ResultMessage.parseFrom(msg);
-//						System.out.println(rm);
+						dbMan.insertResults(ExperimentResults.ResultMessage.parseFrom(msg));
 					}
-					//TODO push this information to the database
 				} catch (InvalidProtocolBufferException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

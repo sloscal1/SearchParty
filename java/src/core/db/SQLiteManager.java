@@ -6,11 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 import core.messages.DispatcherCentricMessages;
 import core.messages.DispatcherCentricMessages.Parameter.DataType;
 import core.messages.DispatcherCentricMessages.Setup;
+import core.messages.ExperimentResults.Result;
+import core.messages.ExperimentResults.ResultMessage;
 import core.messages.SearcherCentricMessages.Argument;
 import core.messages.SearcherCentricMessages.RunSettings;
 
@@ -21,7 +25,8 @@ public class SQLiteManager {
 	private String runParams;
 	private Setup exp;
 	private int currentExpID;
-	
+	private Set<String> createdResultTables = new HashSet<>();
+
 	public SQLiteManager(Setup inputExp) throws SQLException{
 		dbConn = DriverManager.getConnection("jdbc:sqlite:"+inputExp.getDatabasePath());
 		dbConn.setAutoCommit(false);
@@ -29,10 +34,9 @@ public class SQLiteManager {
 		runTableName = getTableNameFrom(inputExp.getExperimentName());
 		this.exp = inputExp;
 	}
-	
+
 	private String getTableNameFrom(String experimentName) {
-		// TODO Auto-generated method stub
-		return null;
+		return experimentName;
 	}
 
 	public boolean runsTableExists(){
@@ -47,7 +51,7 @@ public class SQLiteManager {
 		}
 		return retVal;
 	}
-	
+
 	public boolean experimentTableExists(){
 		boolean retVal = false;
 		ResultSet exist;
@@ -59,12 +63,12 @@ public class SQLiteManager {
 		}
 		return retVal;
 	}
-	
+
 	public void createExperimentTable(){
 		//One table per test method with all parameter settings and a unique key
 		try {
 			stmt.executeUpdate("CREATE TABLE ALL_EXP ( "
-					+ "ExpID INT PRIMARY KEY NOT NULL, "
+					+ "ExpID INT PRIMARY KEY, "
 					+ "Name TEXT NOT NULL, "
 					+ "Proto BLOB NOT NULL, "
 					+ "RunTime INT NOT NULL)");
@@ -80,27 +84,26 @@ public class SQLiteManager {
 		StringBuilder sb = new StringBuilder();
 		runParams = "";
 		for(DispatcherCentricMessages.Parameter p : exp.getParamsList()){
-			sb.append(p.getParamName()+" "+getDBType(p.getType())+", ");
+			sb.append(" "+p.getParamName()+" "+getDBType(p.getType())+",");
 			runParams += p.getParamName()+",";
 		}
 		sb.deleteCharAt(sb.length()-1);
-		
 		//Create the table
 		try {
 			stmt.executeUpdate("CREATE TABLE "+runTableName+" ( "
-				+ "ExpID INT NOT NULL, "
-				+ "RunID INT PRIMARY KEY NOT NULL, "
-				+ "Seed INT NOT NULL, "
-				+ sb.toString() +")");
+					+ "ExpID INT NOT NULL, "
+					+ "RunID INT PRIMARY KEY, "
+					+ "Seed INT NOT NULL, "
+					+ sb.toString() +")");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	private String getDBType(DataType type){
 		return type == DataType.STRING ? "TEXT" : type.toString();
-			
+
 	}
 
 	public void insertExperiment() {
@@ -111,14 +114,14 @@ public class SQLiteManager {
 					+"'"+exp.toByteString()+"', "
 					+new GregorianCalendar().getTimeInMillis()+");");
 			ResultSet idVal = stmt.executeQuery("SELECT ExpID FROM ALL_EXP ORDER BY ExpID DESC LIMIT 1;");
-			currentExpID = idVal.getInt(0);
+			currentExpID = idVal.getInt(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+
 		}
 	}
-	
+
 	public void insertRun(RunSettings run){
 		StringBuilder values = new StringBuilder();
 		for(Argument arg : run.getArgumentList()){
@@ -131,7 +134,7 @@ public class SQLiteManager {
 			scan.close();
 		}
 		values.deleteCharAt(values.length()-1);
-		
+
 		try {
 			stmt.executeUpdate("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
 					+currentExpID+", "+values.toString()+");");
@@ -142,4 +145,41 @@ public class SQLiteManager {
 	}
 	//One table per parameter settings key with all result values
 	//create table per (if executable and all start parameters are the same, it should go to the same table.)
+
+	public void insertResults(ResultMessage msg) {
+		//See if this table exists:
+		//TODO: The DB table name needs to be more specific, maybe include exp_id and run_id to completely identify it.
+		
+		if(!createdResultTables.contains(msg.getTableName())){
+			StringBuilder columns = new StringBuilder();
+			for(Result r : msg.getReportedValueList())
+				columns.append(" "+r.getName()+" DOUBLE,");
+			columns.append(" Timestamp INT,");
+			columns.append(" Machine TEXT");
+
+			try {
+				stmt.executeUpdate("CREATE TABLE "+msg.getTableName()+" ( "
+						+columns.toString()+")");
+				createdResultTables.add(msg.getTableName());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		//Now put these values into the appropriate table
+		StringBuilder columnNames = new StringBuilder();
+		StringBuilder values = new StringBuilder();
+		for(Result r : msg.getReportedValueList()){
+			columnNames.append(" "+r.getName()+",");
+			values.append(" "+r.getValue()+",");
+		}
+		try {
+			stmt.executeUpdate("INSERT INTO "+msg.getTableName()+"("+columnNames.toString()+" Timestamp, Machine )+"
+					+ " VALUES("+values.toString()+" "+msg.getTimestamp()+", "+msg.getMachineName()+");");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

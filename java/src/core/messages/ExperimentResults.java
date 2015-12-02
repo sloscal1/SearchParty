@@ -98,6 +98,33 @@ public final class ExperimentResults {
      * </pre>
      */
     long getTimestamp();
+
+    // optional string table_name = 5;
+    /**
+     * <code>optional string table_name = 5;</code>
+     *
+     * <pre>
+     *The table where these results should be entered
+     * </pre>
+     */
+    boolean hasTableName();
+    /**
+     * <code>optional string table_name = 5;</code>
+     *
+     * <pre>
+     *The table where these results should be entered
+     * </pre>
+     */
+    java.lang.String getTableName();
+    /**
+     * <code>optional string table_name = 5;</code>
+     *
+     * <pre>
+     *The table where these results should be entered
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getTableNameBytes();
   }
   /**
    * Protobuf type {@code search.ResultMessage}
@@ -171,6 +198,11 @@ public final class ExperimentResults {
             case 32: {
               bitField0_ |= 0x00000004;
               timestamp_ = input.readInt64();
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000008;
+              tableName_ = input.readBytes();
               break;
             }
           }
@@ -355,11 +387,67 @@ public final class ExperimentResults {
       return timestamp_;
     }
 
+    // optional string table_name = 5;
+    public static final int TABLE_NAME_FIELD_NUMBER = 5;
+    private java.lang.Object tableName_;
+    /**
+     * <code>optional string table_name = 5;</code>
+     *
+     * <pre>
+     *The table where these results should be entered
+     * </pre>
+     */
+    public boolean hasTableName() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string table_name = 5;</code>
+     *
+     * <pre>
+     *The table where these results should be entered
+     * </pre>
+     */
+    public java.lang.String getTableName() {
+      java.lang.Object ref = tableName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          tableName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string table_name = 5;</code>
+     *
+     * <pre>
+     *The table where these results should be entered
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getTableNameBytes() {
+      java.lang.Object ref = tableName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        tableName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       reportedValue_ = java.util.Collections.emptyList();
       machineName_ = "";
       uid_ = 0L;
       timestamp_ = 0L;
+      tableName_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -391,6 +479,9 @@ public final class ExperimentResults {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt64(4, timestamp_);
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(5, getTableNameBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -415,6 +506,10 @@ public final class ExperimentResults {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(4, timestamp_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getTableNameBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -545,6 +640,8 @@ public final class ExperimentResults {
         bitField0_ = (bitField0_ & ~0x00000004);
         timestamp_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000008);
+        tableName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -594,6 +691,10 @@ public final class ExperimentResults {
           to_bitField0_ |= 0x00000004;
         }
         result.timestamp_ = timestamp_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.tableName_ = tableName_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -646,6 +747,11 @@ public final class ExperimentResults {
         }
         if (other.hasTimestamp()) {
           setTimestamp(other.getTimestamp());
+        }
+        if (other.hasTableName()) {
+          bitField0_ |= 0x00000010;
+          tableName_ = other.tableName_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1112,6 +1218,104 @@ public final class ExperimentResults {
       public Builder clearTimestamp() {
         bitField0_ = (bitField0_ & ~0x00000008);
         timestamp_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional string table_name = 5;
+      private java.lang.Object tableName_ = "";
+      /**
+       * <code>optional string table_name = 5;</code>
+       *
+       * <pre>
+       *The table where these results should be entered
+       * </pre>
+       */
+      public boolean hasTableName() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional string table_name = 5;</code>
+       *
+       * <pre>
+       *The table where these results should be entered
+       * </pre>
+       */
+      public java.lang.String getTableName() {
+        java.lang.Object ref = tableName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          tableName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string table_name = 5;</code>
+       *
+       * <pre>
+       *The table where these results should be entered
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getTableNameBytes() {
+        java.lang.Object ref = tableName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          tableName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string table_name = 5;</code>
+       *
+       * <pre>
+       *The table where these results should be entered
+       * </pre>
+       */
+      public Builder setTableName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        tableName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string table_name = 5;</code>
+       *
+       * <pre>
+       *The table where these results should be entered
+       * </pre>
+       */
+      public Builder clearTableName() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        tableName_ = getDefaultInstance().getTableName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string table_name = 5;</code>
+       *
+       * <pre>
+       *The table where these results should be entered
+       * </pre>
+       */
+      public Builder setTableNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        tableName_ = value;
         onChanged();
         return this;
       }
@@ -2125,15 +2329,15 @@ public final class ExperimentResults {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\023proto/results.proto\022\006search\"m\n\rResultM" +
-      "essage\022&\n\016reported_value\030\001 \003(\0132\016.search." +
-      "Result\022\024\n\014machine_name\030\002 \001(\t\022\013\n\003uid\030\003 \001(" +
-      "\003\022\021\n\ttimestamp\030\004 \001(\003\"\236\001\n\006Result\022\014\n\004name\030" +
-      "\001 \002(\t\022\r\n\005value\030\002 \002(\t\022)\n\004type\030\003 \001(\0162\023.sea" +
-      "rch.Result.Type:\006string\"L\n\004Type\022\t\n\005int32" +
-      "\020\000\022\013\n\007float32\020\001\022\013\n\007float64\020\002\022\n\n\006string\020\003" +
-      "\022\010\n\004bool\020\004\022\t\n\005int64\020\005B\"\n\rcore.messagesB\021" +
-      "ExperimentResults"
+      "\n\023proto/results.proto\022\006search\"\201\001\n\rResult" +
+      "Message\022&\n\016reported_value\030\001 \003(\0132\016.search" +
+      ".Result\022\024\n\014machine_name\030\002 \001(\t\022\013\n\003uid\030\003 \001" +
+      "(\003\022\021\n\ttimestamp\030\004 \001(\003\022\022\n\ntable_name\030\005 \001(" +
+      "\t\"\236\001\n\006Result\022\014\n\004name\030\001 \002(\t\022\r\n\005value\030\002 \002(" +
+      "\t\022)\n\004type\030\003 \001(\0162\023.search.Result.Type:\006st" +
+      "ring\"L\n\004Type\022\t\n\005int32\020\000\022\013\n\007float32\020\001\022\013\n\007" +
+      "float64\020\002\022\n\n\006string\020\003\022\010\n\004bool\020\004\022\t\n\005int64" +
+      "\020\005B\"\n\rcore.messagesB\021ExperimentResults"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2145,7 +2349,7 @@ public final class ExperimentResults {
           internal_static_search_ResultMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_ResultMessage_descriptor,
-              new java.lang.String[] { "ReportedValue", "MachineName", "Uid", "Timestamp", });
+              new java.lang.String[] { "ReportedValue", "MachineName", "Uid", "Timestamp", "TableName", });
           internal_static_search_Result_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_search_Result_fieldAccessorTable = new
