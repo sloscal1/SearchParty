@@ -97,10 +97,17 @@ message Parameter{
 	repeated double specific_values = 6;
 	//The number of times each experiment involving this parameter setting must be run
 	optional int32 replicates = 7 [default = 1];
+        //The data type of the values of this parameter
+        optional DataType type = 8 [default = DOUBLE];
 	enum GrowthPattern{
 		LINEAR = 0;
 		LOG = 1;
 		SPECIFIC = 2;
 	}
+        enum DataType{
+                DOUBLE = 0;
+                INT = 1;
+                STRING = 2;
+        }
 }
 

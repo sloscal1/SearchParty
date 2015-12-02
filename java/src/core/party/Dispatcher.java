@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +44,7 @@ import org.zeromq.ZMQ.Context;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.TextFormat;
 
+import core.db.SQLiteManager;
 import core.io.Arg;
 import core.io.ProgramParameter;
 import core.messages.DispatcherCentricMessages.Machine;
@@ -66,6 +68,7 @@ public class Dispatcher {
 	private PrintStream oldOut = System.out;
 	private PrintStream oldErr = System.err;
 	private File output;
+	private SQLiteManager dbMan;
 	
 	public static List<ProgramParameter> params = new ArrayList<ProgramParameter>();
 	static{
@@ -122,6 +125,8 @@ public class Dispatcher {
 		this.inputExp = exp;
 		this.activeMachines = new Semaphore(exp.getExpMachineCount());
 		this.gen = new ExhaustiveExpGenerator(exp);
+		
+		//Setup debug information, TODO eventually replace with a logger.
 		try {
 			this.output = File.createTempFile("spf", ".txt");
 			System.out.println("Printing info to: "+output.getCanonicalPath());
@@ -129,17 +134,35 @@ public class Dispatcher {
 			System.setOut(out);
 			System.setErr(out);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.err.println("Could not create temporary file, printing to console."); 
 			e.printStackTrace();
 		}
 		
+		//Need to get the name of the node that is running the dispatcher
 		try {
 			localIPv4 = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e1) {
 			System.err.println("Cannot get Dispatcher IPv4, attempting to use localhost.");
 			localIPv4 = "127.0.0.1";
-		} 
+		}
 
+		//Set up the database
+		try {
+			dbMan = new SQLiteManager(inputExp);
+			if(!dbMan.experimentTableExists())
+				dbMan.createExperimentTable();
+			if(!dbMan.runsTableExists())
+				dbMan.createRunsTable();
+			dbMan.insertExperiment();
+			
+			//create machine table (#cpus, #gpus, #library verisons???)
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			System.exit(0);	
+		}
+		
 		final ZMQ.Context cxt = ZMQ.context(1);
 		//Setup experiment request socket
 		new Thread(new ExperimentDispatcher(cxt)).start();
@@ -185,9 +208,11 @@ public class Dispatcher {
 				byte[] msg = experiments.recv();
 				if(msg != null){
 					//Got a request, if there are more left and a running experimenter machine, send one
-					if(gen.hasNext())
-						experiments.send(gen.next().toByteArray(), ZMQ.NOBLOCK);
-					else{
+					if(gen.hasNext()){
+						RunSettings run = gen.next();
+						dbMan.insertRun(run);
+						experiments.send(run.toByteArray(), ZMQ.NOBLOCK);
+					}else{
 						System.out.println("Sending a term exp");
 						experiments.send(RunSettings.newBuilder()
 								.setTerminal(true).build().toByteArray(), ZMQ.NOBLOCK);

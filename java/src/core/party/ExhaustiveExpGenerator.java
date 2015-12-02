@@ -29,9 +29,19 @@ import core.messages.SearcherCentricMessages.Argument;
 import core.messages.SearcherCentricMessages.RunSettings;
 import core.messages.SearcherCentricMessages.RunSettings.Builder;
 
+/**
+ * Create all the experiments to be run in this session up front before
+ * any are executed.
+ * 
+ * @author sloscal1
+ *
+ */
 public class ExhaustiveExpGenerator implements ExpGenerator{
+	/** The list of all the settings that have been generated */
 	private List<RunSettings> allSettings = new ArrayList<>();
+	/** The current index to select the run setting from */
 	private int index = 0;
+	/** The source random seed to compose with each run setting */
 	private long randSeed;
 
 	public ExhaustiveExpGenerator(Setup msg) {
