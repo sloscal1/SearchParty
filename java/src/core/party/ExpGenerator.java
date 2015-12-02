@@ -26,7 +26,7 @@ import core.messages.SearcherCentricMessages.RunSettings;
  *
  */
 public interface ExpGenerator {
-	final String RAND_SEED_ARG_NAME = "--randseed";
+	final String RAND_SEED_ARG_NAME = "randseed";
 	
 	RunSettings next();
 	boolean hasNext();

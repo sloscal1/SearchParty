@@ -77,10 +77,13 @@ public class ExhaustiveExpGenerator implements ExpGenerator{
 		//Generate the values for this parameter
 		int size = remainingParams.size();
 		List<Parameter> rem = size > 1 ? remainingParams.subList(1, size) : null;
-		Argument.Builder argB = Argument.newBuilder().setFormalName(current.getParamName());
+		String formalName = current.getParamName();
+		formalName = (formalName.length() > 1)? "--"+formalName : "-"+formalName;
+			
+		Argument.Builder argB = Argument.newBuilder().setFormalName(formalName);
 
 		//The randseed to set each RunSetting's repeatability source with
-		Argument.Builder argRand = Argument.newBuilder().setFormalName(ExpGenerator.RAND_SEED_ARG_NAME); //TODO undoc requirement.
+		Argument.Builder argRand = Argument.newBuilder().setFormalName("--"+ExpGenerator.RAND_SEED_ARG_NAME); //TODO undoc requirement.
 		Random rand = null;
 		if(rem == null)
 			rand = new Random(randSeed);
