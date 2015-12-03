@@ -51,6 +51,7 @@ public abstract class ProgramParameter {
 	 * @return true if an error occurred during initiatlization
 	 */
 	public boolean process(String value, Map<ProgramParameter, Object> values){
+		values.put(this, value);
 		return false;
 	}
 	
@@ -88,7 +89,7 @@ public abstract class ProgramParameter {
 				getOptString += "::";
 		}
 		//Now parse the options:
-		Getopt opts = new Getopt("SampleExperiment", commandLineArgs, getOptString, options);
+		Getopt opts = new Getopt("ProgramParameter", commandLineArgs, getOptString, options);
 		opts.setOpterr(true);
 
 		boolean error = false;

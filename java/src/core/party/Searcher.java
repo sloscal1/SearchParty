@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -148,7 +149,7 @@ public class Searcher {
 		public Integer call() throws UnknownHostException {
 			//Set up the comms channel for this experiment, need the port to pass along to the experiment:
 			ZMQ.Context context = ZMQ.context(1);
-			ZMQ.Socket local = context.socket(ZMQ.PULL); 
+			final ZMQ.Socket local = context.socket(ZMQ.PULL); 
 			local.setReceiveTimeOut(10000);
 			int listeningPort = local.bindToRandomPort("tcp://"+InetAddress.getLocalHost().getHostAddress());
 			//Build up the command that we're going to run on this machine
@@ -273,8 +274,8 @@ public class Searcher {
 					e.printStackTrace();
 				} catch (ZMQException e){
 					System.out.println("Caught...");
-					if(!exec.isShutdown()) exec.shutdown();
 					e.printStackTrace();
+					if(!exec.isShutdown()) exec.shutdown();
 				}
 			}
 			//Wait for all the tasks to complete...
@@ -336,6 +337,8 @@ public class Searcher {
 	}
 	
 	public static void main(String[] args) throws Exception{
+		System.out.println(System.getenv("LD_LIBRARY_PATH"));
+		System.out.println(System.getenv("CLASSPATH"));
 		Map<ProgramParameter, Object> vals = ProgramParameter.getValues(args, allParams, allParams);
 		if(vals != null)
 			new Searcher((Setup)vals.get(allParams.get(0)), (Contract)vals.get(allParams.get(1)));

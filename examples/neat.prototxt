@@ -1,0 +1,60 @@
+experiment_name : "NEAT_6_0"
+git_uri : "file:///home/sloscal1/git/SearchParty"
+git_branch : "novelty"
+
+executable_command : "java mil.af.rl.novelty.NoveltyEvolverSP"
+
+params{
+  param_name : "prop-template"
+	specific_values : "NEAT_NOVELTY_DPB.properties"
+}
+params{
+	param_name : "prop-dir"
+	specific_values : "/home/sloscal1/Experiments/NS_20151203/properties"
+}
+params{
+	param_name : "main-class"
+	specific_values : "mil.af.rl.novelty.NoveltySearchSP"
+}
+params{
+	param_name : "behavior_vector_generator.num_samples"
+  min_value : 1
+	max_value : 16
+	growth_value : 2
+	pattern : LOG
+	replicates : 100
+}
+
+exp_machine{
+	remote_name : "aamas.ai"
+	local_name : "AAMAS"
+}
+
+exp_machine{
+	remote_name : "aaai.ai"
+	local_name : "AAAI"
+}
+
+exp_machine{
+	remote_name : "icml.ai"
+	local_name : "ICML"
+}
+
+profile{
+	applicable_machines : "AAMAS"
+	applicable_machines : "ICML"
+	applicable_machines : "AAAI"
+	
+	replicates : 6
+
+	env_variables{
+		key : "CLASSPATH"
+		value :
+		"/home/sloscal1/Experiments/NS_20151203/bin:/home/sloscal1/Experiments/NS_20151203/properties:lib/anji.jar:lib/commons-lang3-3.1.jar:lib/commons-math3-3.5.jar:lib/jakarta-regexp-1.5.jar:lib/jgap.jar:lib/log4j.jar:lib/weka.jar:/home/sloscal1/Programming/jars/jeromq-3.6.0-SNAPSHOT.jar:/home/sloscal1/git/SearchParty/searchparty.jar"
+	}
+	env_variables{
+		key : "LD_LIBRARY_PATH"
+		value : "/home/sloscal1/git/SearchParty/.install/lib"
+	}
+}
+	

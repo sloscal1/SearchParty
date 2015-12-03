@@ -52,7 +52,7 @@ public class MachineState{
 		boolean machineFound = false;
 		for(int i = 0; !machineFound && i < exp.getExpMachineCount(); ++i){
 			Machine m = exp.getExpMachine(i);
-			if(name.equals(m.getName())){
+			if(name.equals(m.getLocalName()) || name.equals(m.getRemoteName())){
 				for(EnvVariable env : m.getEnvVariableList())
 					envVariables.put(env.getKey(), env.getValue());
 				if(m.hasReplicates())

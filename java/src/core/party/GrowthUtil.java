@@ -48,7 +48,7 @@ public abstract class GrowthUtil {
 	 * @param rate the rate of change of the parameter (current + rate for LINEAR, current * min for LOG)
 	 * @return the next value, could exceed max
 	 */
-	public abstract double next();
+	public abstract Object next();
 	
 	public static class Linear extends GrowthUtil{
 		private double max;
@@ -66,38 +66,38 @@ public abstract class GrowthUtil {
 		}
 		
 		@Override
-		public double next() {
+		public Object next() {
 			current += rate;
 			return current;
 		}
 	}
 	
 	public static class Log extends GrowthUtil{
-		private double min;
 		private double max;
+		private double growth;
 		private double current;
 		
-		public Log(double min, double max){
-			this.min = min;
+		public Log(double min, double max, double growth){
 			this.current = min;
+			this.growth = growth;
 			this.max = max;
 		}
 		
 		public boolean hasNext(){
-			return current * min <= max + EPSILON;
+			return current * growth <= max + EPSILON;
 		}
 		
-		public double next(){
-			current *= min;
+		public Object next(){
+			current *= growth;
 			return current;
 		}
 	}
 	
 	public static class Specific extends GrowthUtil{
-		private List<Double> values;
+		private List<String> values;
 		private int index = 1; //min is assigned values(0)
 		
-		public Specific(List<Double> values){
+		public Specific(List<String> values){
 			this.values = values;
 		}
 		
@@ -107,7 +107,7 @@ public abstract class GrowthUtil {
 		}
 		
 		@Override
-		public double next() {
+		public Object next() {
 			return values.get(index++);
 		}
 	}

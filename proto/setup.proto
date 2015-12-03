@@ -60,7 +60,7 @@ message EnvVariable{
 }
 
 message Machine{
-	required string name = 1;
+	required string local_name = 1;
 	//The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
 	optional int32 replicates = 2;
 	optional string username = 3;
@@ -69,6 +69,7 @@ message Machine{
 	//experiment on this machine, these will override values set in the profile
 	repeated EnvVariable env_variable = 4;
 	optional OS os = 5 [default = LINUX];
+	optional string remote_name = 6;
 }
 
 message Profile{
@@ -94,7 +95,7 @@ message Parameter{
 	optional double growth_value = 4 [default = 0.1];
 	optional GrowthPattern pattern = 5 [default = LINEAR];
 	//specific_values is set when the growth pattern is set to specific
-	repeated double specific_values = 6;
+	repeated string specific_values = 6;
 	//The number of times each experiment involving this parameter setting must be run
 	optional int32 replicates = 7 [default = 1];
         //The data type of the values of this parameter

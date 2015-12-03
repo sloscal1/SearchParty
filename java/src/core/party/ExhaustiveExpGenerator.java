@@ -55,21 +55,20 @@ public class ExhaustiveExpGenerator implements ExpGenerator{
 	private void recursivelyBuildSettings(Builder b, int replicates, List<Parameter> remainingParams){
 		//Parse the user defined settings for this parameter
 		Parameter current = remainingParams.get(0);
-		double min = current.getMinValue();
+		Object min = current.getMinValue();
 		double max = current.getMaxValue();
 		double rate = current.getGrowthValue();
 		//See what the max replicates are so far:
 		int maxReps = Math.max(replicates, current.getReplicates());
 
 		GrowthUtil f = null;
-		if(GrowthPattern.LINEAR == current.getPattern())
-			f = new GrowthUtil.Linear(min, max, rate);
-		else if(GrowthPattern.LOG == current.getPattern())
-			f = new GrowthUtil.Log(min, max);
-		else if(current.getSpecificValuesCount() != 0 && GrowthPattern.SPECIFIC == current.getPattern()){
+		if(current.getSpecificValuesCount() != 0){
 			f = new GrowthUtil.Specific(current.getSpecificValuesList());
 			min = current.getSpecificValues(0);
-		}
+		}else if(GrowthPattern.LINEAR == current.getPattern())
+			f = new GrowthUtil.Linear((Double)min, max, rate);
+		else if(GrowthPattern.LOG == current.getPattern())
+			f = new GrowthUtil.Log((Double)min, max, rate);
 		else
 			throw new IllegalStateException("Could not parse Parameter "+current.getParamName()+", incorrect growth pattern.");
 
@@ -79,7 +78,7 @@ public class ExhaustiveExpGenerator implements ExpGenerator{
 		List<Parameter> rem = size > 1 ? remainingParams.subList(1, size) : null;
 		String formalName = current.getParamName();
 		formalName = (formalName.length() > 1)? "--"+formalName : "-"+formalName;
-			
+
 		Argument.Builder argB = Argument.newBuilder().setFormalName(formalName);
 
 		//The randseed to set each RunSetting's repeatability source with
@@ -87,18 +86,22 @@ public class ExhaustiveExpGenerator implements ExpGenerator{
 		Random rand = null;
 		if(rem == null)
 			rand = new Random(randSeed);
-		
+
 		//This loop seems pretty contrived, it is due to the fact that I increment before testing, the last value
 		//would get omitted. This seems to work for the time being though.
-		for(double value = min, last = Double.NaN;
+		for(Object value = min, last = Double.NaN;
 				last != value;
 				last = value, value = f.hasNext()? f.next() : value){
 			//Check to see if it's an int value - experiment might rely on parsing as int.
-			long intVal = Math.round(value);
-			if(value == intVal)
-				argB.setValue(""+intVal);
+			if(value instanceof Number){
+				long intVal = Math.round((Double)value);
+				if((Double)value == intVal)
+					argB.setValue(""+intVal);
+				else
+					argB.setValue(""+value);
+			}
 			else
-				argB.setValue(""+value);
+				argB.setValue((String)value);
 			b.addArgument(argB.build());
 			if(rem != null)
 				recursivelyBuildSettings(b, maxReps, rem);

@@ -4067,20 +4067,20 @@ public final class DispatcherCentricMessages {
   public interface MachineOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string name = 1;
+    // required string local_name = 1;
     /**
-     * <code>required string name = 1;</code>
+     * <code>required string local_name = 1;</code>
      */
-    boolean hasName();
+    boolean hasLocalName();
     /**
-     * <code>required string name = 1;</code>
+     * <code>required string local_name = 1;</code>
      */
-    java.lang.String getName();
+    java.lang.String getLocalName();
     /**
-     * <code>required string name = 1;</code>
+     * <code>required string local_name = 1;</code>
      */
     com.google.protobuf.ByteString
-        getNameBytes();
+        getLocalNameBytes();
 
     // optional int32 replicates = 2;
     /**
@@ -4179,6 +4179,21 @@ public final class DispatcherCentricMessages {
      * <code>optional .search.OS os = 5 [default = LINUX];</code>
      */
     core.messages.DispatcherCentricMessages.OS getOs();
+
+    // optional string remote_name = 6;
+    /**
+     * <code>optional string remote_name = 6;</code>
+     */
+    boolean hasRemoteName();
+    /**
+     * <code>optional string remote_name = 6;</code>
+     */
+    java.lang.String getRemoteName();
+    /**
+     * <code>optional string remote_name = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getRemoteNameBytes();
   }
   /**
    * Protobuf type {@code search.Machine}
@@ -4233,7 +4248,7 @@ public final class DispatcherCentricMessages {
             }
             case 10: {
               bitField0_ |= 0x00000001;
-              name_ = input.readBytes();
+              localName_ = input.readBytes();
               break;
             }
             case 16: {
@@ -4263,6 +4278,11 @@ public final class DispatcherCentricMessages {
                 bitField0_ |= 0x00000008;
                 os_ = value;
               }
+              break;
+            }
+            case 50: {
+              bitField0_ |= 0x00000010;
+              remoteName_ = input.readBytes();
               break;
             }
           }
@@ -4308,20 +4328,20 @@ public final class DispatcherCentricMessages {
     }
 
     private int bitField0_;
-    // required string name = 1;
-    public static final int NAME_FIELD_NUMBER = 1;
-    private java.lang.Object name_;
+    // required string local_name = 1;
+    public static final int LOCAL_NAME_FIELD_NUMBER = 1;
+    private java.lang.Object localName_;
     /**
-     * <code>required string name = 1;</code>
+     * <code>required string local_name = 1;</code>
      */
-    public boolean hasName() {
+    public boolean hasLocalName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string name = 1;</code>
+     * <code>required string local_name = 1;</code>
      */
-    public java.lang.String getName() {
-      java.lang.Object ref = name_;
+    public java.lang.String getLocalName() {
+      java.lang.Object ref = localName_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -4329,22 +4349,22 @@ public final class DispatcherCentricMessages {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          name_ = s;
+          localName_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>required string name = 1;</code>
+     * <code>required string local_name = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getNameBytes() {
-      java.lang.Object ref = name_;
+        getLocalNameBytes() {
+      java.lang.Object ref = localName_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        name_ = b;
+        localName_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -4500,19 +4520,63 @@ public final class DispatcherCentricMessages {
       return os_;
     }
 
+    // optional string remote_name = 6;
+    public static final int REMOTE_NAME_FIELD_NUMBER = 6;
+    private java.lang.Object remoteName_;
+    /**
+     * <code>optional string remote_name = 6;</code>
+     */
+    public boolean hasRemoteName() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional string remote_name = 6;</code>
+     */
+    public java.lang.String getRemoteName() {
+      java.lang.Object ref = remoteName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          remoteName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string remote_name = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRemoteNameBytes() {
+      java.lang.Object ref = remoteName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        remoteName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
-      name_ = "";
+      localName_ = "";
       replicates_ = 0;
       username_ = "";
       envVariable_ = java.util.Collections.emptyList();
       os_ = core.messages.DispatcherCentricMessages.OS.LINUX;
+      remoteName_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasName()) {
+      if (!hasLocalName()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -4530,7 +4594,7 @@ public final class DispatcherCentricMessages {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getNameBytes());
+        output.writeBytes(1, getLocalNameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, replicates_);
@@ -4544,6 +4608,9 @@ public final class DispatcherCentricMessages {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeEnum(5, os_.getNumber());
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(6, getRemoteNameBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -4555,7 +4622,7 @@ public final class DispatcherCentricMessages {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getNameBytes());
+          .computeBytesSize(1, getLocalNameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -4572,6 +4639,10 @@ public final class DispatcherCentricMessages {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(5, os_.getNumber());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, getRemoteNameBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4690,7 +4761,7 @@ public final class DispatcherCentricMessages {
 
       public Builder clear() {
         super.clear();
-        name_ = "";
+        localName_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         replicates_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -4704,6 +4775,8 @@ public final class DispatcherCentricMessages {
         }
         os_ = core.messages.DispatcherCentricMessages.OS.LINUX;
         bitField0_ = (bitField0_ & ~0x00000010);
+        remoteName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -4735,7 +4808,7 @@ public final class DispatcherCentricMessages {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.name_ = name_;
+        result.localName_ = localName_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
@@ -4757,6 +4830,10 @@ public final class DispatcherCentricMessages {
           to_bitField0_ |= 0x00000008;
         }
         result.os_ = os_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.remoteName_ = remoteName_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4773,9 +4850,9 @@ public final class DispatcherCentricMessages {
 
       public Builder mergeFrom(core.messages.DispatcherCentricMessages.Machine other) {
         if (other == core.messages.DispatcherCentricMessages.Machine.getDefaultInstance()) return this;
-        if (other.hasName()) {
+        if (other.hasLocalName()) {
           bitField0_ |= 0x00000001;
-          name_ = other.name_;
+          localName_ = other.localName_;
           onChanged();
         }
         if (other.hasReplicates()) {
@@ -4815,12 +4892,17 @@ public final class DispatcherCentricMessages {
         if (other.hasOs()) {
           setOs(other.getOs());
         }
+        if (other.hasRemoteName()) {
+          bitField0_ |= 0x00000020;
+          remoteName_ = other.remoteName_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasName()) {
+        if (!hasLocalName()) {
           
           return false;
         }
@@ -4852,76 +4934,76 @@ public final class DispatcherCentricMessages {
       }
       private int bitField0_;
 
-      // required string name = 1;
-      private java.lang.Object name_ = "";
+      // required string local_name = 1;
+      private java.lang.Object localName_ = "";
       /**
-       * <code>required string name = 1;</code>
+       * <code>required string local_name = 1;</code>
        */
-      public boolean hasName() {
+      public boolean hasLocalName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>required string local_name = 1;</code>
        */
-      public java.lang.String getName() {
-        java.lang.Object ref = name_;
+      public java.lang.String getLocalName() {
+        java.lang.Object ref = localName_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          name_ = s;
+          localName_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>required string local_name = 1;</code>
        */
       public com.google.protobuf.ByteString
-          getNameBytes() {
-        java.lang.Object ref = name_;
+          getLocalNameBytes() {
+        java.lang.Object ref = localName_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          name_ = b;
+          localName_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>required string local_name = 1;</code>
        */
-      public Builder setName(
+      public Builder setLocalName(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-        name_ = value;
+        localName_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>required string local_name = 1;</code>
        */
-      public Builder clearName() {
+      public Builder clearLocalName() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        name_ = getDefaultInstance().getName();
+        localName_ = getDefaultInstance().getLocalName();
         onChanged();
         return this;
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>required string local_name = 1;</code>
        */
-      public Builder setNameBytes(
+      public Builder setLocalNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-        name_ = value;
+        localName_ = value;
         onChanged();
         return this;
       }
@@ -5429,6 +5511,80 @@ public final class DispatcherCentricMessages {
       public Builder clearOs() {
         bitField0_ = (bitField0_ & ~0x00000010);
         os_ = core.messages.DispatcherCentricMessages.OS.LINUX;
+        onChanged();
+        return this;
+      }
+
+      // optional string remote_name = 6;
+      private java.lang.Object remoteName_ = "";
+      /**
+       * <code>optional string remote_name = 6;</code>
+       */
+      public boolean hasRemoteName() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional string remote_name = 6;</code>
+       */
+      public java.lang.String getRemoteName() {
+        java.lang.Object ref = remoteName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          remoteName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string remote_name = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRemoteNameBytes() {
+        java.lang.Object ref = remoteName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          remoteName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string remote_name = 6;</code>
+       */
+      public Builder setRemoteName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        remoteName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string remote_name = 6;</code>
+       */
+      public Builder clearRemoteName() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        remoteName_ = getDefaultInstance().getRemoteName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string remote_name = 6;</code>
+       */
+      public Builder setRemoteNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        remoteName_ = value;
         onChanged();
         return this;
       }
@@ -6788,17 +6944,18 @@ public final class DispatcherCentricMessages {
      */
     core.messages.DispatcherCentricMessages.Parameter.GrowthPattern getPattern();
 
-    // repeated double specific_values = 6;
+    // repeated string specific_values = 6;
     /**
-     * <code>repeated double specific_values = 6;</code>
+     * <code>repeated string specific_values = 6;</code>
      *
      * <pre>
      *specific_values is set when the growth pattern is set to specific
      * </pre>
      */
-    java.util.List<java.lang.Double> getSpecificValuesList();
+    java.util.List<java.lang.String>
+    getSpecificValuesList();
     /**
-     * <code>repeated double specific_values = 6;</code>
+     * <code>repeated string specific_values = 6;</code>
      *
      * <pre>
      *specific_values is set when the growth pattern is set to specific
@@ -6806,13 +6963,22 @@ public final class DispatcherCentricMessages {
      */
     int getSpecificValuesCount();
     /**
-     * <code>repeated double specific_values = 6;</code>
+     * <code>repeated string specific_values = 6;</code>
      *
      * <pre>
      *specific_values is set when the growth pattern is set to specific
      * </pre>
      */
-    double getSpecificValues(int index);
+    java.lang.String getSpecificValues(int index);
+    /**
+     * <code>repeated string specific_values = 6;</code>
+     *
+     * <pre>
+     *specific_values is set when the growth pattern is set to specific
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getSpecificValuesBytes(int index);
 
     // optional int32 replicates = 7 [default = 1];
     /**
@@ -6932,25 +7098,12 @@ public final class DispatcherCentricMessages {
               }
               break;
             }
-            case 49: {
-              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                specificValues_ = new java.util.ArrayList<java.lang.Double>();
-                mutable_bitField0_ |= 0x00000020;
-              }
-              specificValues_.add(input.readDouble());
-              break;
-            }
             case 50: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
-                specificValues_ = new java.util.ArrayList<java.lang.Double>();
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                specificValues_ = new com.google.protobuf.LazyStringArrayList();
                 mutable_bitField0_ |= 0x00000020;
               }
-              while (input.getBytesUntilLimit() > 0) {
-                specificValues_.add(input.readDouble());
-              }
-              input.popLimit(limit);
+              specificValues_.add(input.readBytes());
               break;
             }
             case 56: {
@@ -6978,7 +7131,7 @@ public final class DispatcherCentricMessages {
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-          specificValues_ = java.util.Collections.unmodifiableList(specificValues_);
+          specificValues_ = new com.google.protobuf.UnmodifiableLazyStringList(specificValues_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -7301,22 +7454,22 @@ public final class DispatcherCentricMessages {
       return pattern_;
     }
 
-    // repeated double specific_values = 6;
+    // repeated string specific_values = 6;
     public static final int SPECIFIC_VALUES_FIELD_NUMBER = 6;
-    private java.util.List<java.lang.Double> specificValues_;
+    private com.google.protobuf.LazyStringList specificValues_;
     /**
-     * <code>repeated double specific_values = 6;</code>
+     * <code>repeated string specific_values = 6;</code>
      *
      * <pre>
      *specific_values is set when the growth pattern is set to specific
      * </pre>
      */
-    public java.util.List<java.lang.Double>
+    public java.util.List<java.lang.String>
         getSpecificValuesList() {
       return specificValues_;
     }
     /**
-     * <code>repeated double specific_values = 6;</code>
+     * <code>repeated string specific_values = 6;</code>
      *
      * <pre>
      *specific_values is set when the growth pattern is set to specific
@@ -7326,14 +7479,25 @@ public final class DispatcherCentricMessages {
       return specificValues_.size();
     }
     /**
-     * <code>repeated double specific_values = 6;</code>
+     * <code>repeated string specific_values = 6;</code>
      *
      * <pre>
      *specific_values is set when the growth pattern is set to specific
      * </pre>
      */
-    public double getSpecificValues(int index) {
+    public java.lang.String getSpecificValues(int index) {
       return specificValues_.get(index);
+    }
+    /**
+     * <code>repeated string specific_values = 6;</code>
+     *
+     * <pre>
+     *specific_values is set when the growth pattern is set to specific
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getSpecificValuesBytes(int index) {
+      return specificValues_.getByteString(index);
     }
 
     // optional int32 replicates = 7 [default = 1];
@@ -7390,7 +7554,7 @@ public final class DispatcherCentricMessages {
       maxValue_ = 1D;
       growthValue_ = 0.1D;
       pattern_ = core.messages.DispatcherCentricMessages.Parameter.GrowthPattern.LINEAR;
-      specificValues_ = java.util.Collections.emptyList();
+      specificValues_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       replicates_ = 1;
       type_ = core.messages.DispatcherCentricMessages.Parameter.DataType.DOUBLE;
     }
@@ -7426,7 +7590,7 @@ public final class DispatcherCentricMessages {
         output.writeEnum(5, pattern_.getNumber());
       }
       for (int i = 0; i < specificValues_.size(); i++) {
-        output.writeDouble(6, specificValues_.get(i));
+        output.writeBytes(6, specificValues_.getByteString(i));
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeInt32(7, replicates_);
@@ -7465,7 +7629,10 @@ public final class DispatcherCentricMessages {
       }
       {
         int dataSize = 0;
-        dataSize = 8 * getSpecificValuesList().size();
+        for (int i = 0; i < specificValues_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(specificValues_.getByteString(i));
+        }
         size += dataSize;
         size += 1 * getSpecificValuesList().size();
       }
@@ -7603,7 +7770,7 @@ public final class DispatcherCentricMessages {
         bitField0_ = (bitField0_ & ~0x00000008);
         pattern_ = core.messages.DispatcherCentricMessages.Parameter.GrowthPattern.LINEAR;
         bitField0_ = (bitField0_ & ~0x00000010);
-        specificValues_ = java.util.Collections.emptyList();
+        specificValues_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000020);
         replicates_ = 1;
         bitField0_ = (bitField0_ & ~0x00000040);
@@ -7658,7 +7825,8 @@ public final class DispatcherCentricMessages {
         }
         result.pattern_ = pattern_;
         if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          specificValues_ = java.util.Collections.unmodifiableList(specificValues_);
+          specificValues_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              specificValues_);
           bitField0_ = (bitField0_ & ~0x00000020);
         }
         result.specificValues_ = specificValues_;
@@ -7959,27 +8127,27 @@ public final class DispatcherCentricMessages {
         return this;
       }
 
-      // repeated double specific_values = 6;
-      private java.util.List<java.lang.Double> specificValues_ = java.util.Collections.emptyList();
+      // repeated string specific_values = 6;
+      private com.google.protobuf.LazyStringList specificValues_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureSpecificValuesIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          specificValues_ = new java.util.ArrayList<java.lang.Double>(specificValues_);
+          specificValues_ = new com.google.protobuf.LazyStringArrayList(specificValues_);
           bitField0_ |= 0x00000020;
          }
       }
       /**
-       * <code>repeated double specific_values = 6;</code>
+       * <code>repeated string specific_values = 6;</code>
        *
        * <pre>
        *specific_values is set when the growth pattern is set to specific
        * </pre>
        */
-      public java.util.List<java.lang.Double>
+      public java.util.List<java.lang.String>
           getSpecificValuesList() {
         return java.util.Collections.unmodifiableList(specificValues_);
       }
       /**
-       * <code>repeated double specific_values = 6;</code>
+       * <code>repeated string specific_values = 6;</code>
        *
        * <pre>
        *specific_values is set when the growth pattern is set to specific
@@ -7989,66 +8157,101 @@ public final class DispatcherCentricMessages {
         return specificValues_.size();
       }
       /**
-       * <code>repeated double specific_values = 6;</code>
+       * <code>repeated string specific_values = 6;</code>
        *
        * <pre>
        *specific_values is set when the growth pattern is set to specific
        * </pre>
        */
-      public double getSpecificValues(int index) {
+      public java.lang.String getSpecificValues(int index) {
         return specificValues_.get(index);
       }
       /**
-       * <code>repeated double specific_values = 6;</code>
+       * <code>repeated string specific_values = 6;</code>
+       *
+       * <pre>
+       *specific_values is set when the growth pattern is set to specific
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getSpecificValuesBytes(int index) {
+        return specificValues_.getByteString(index);
+      }
+      /**
+       * <code>repeated string specific_values = 6;</code>
        *
        * <pre>
        *specific_values is set when the growth pattern is set to specific
        * </pre>
        */
       public Builder setSpecificValues(
-          int index, double value) {
-        ensureSpecificValuesIsMutable();
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureSpecificValuesIsMutable();
         specificValues_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated double specific_values = 6;</code>
+       * <code>repeated string specific_values = 6;</code>
        *
        * <pre>
        *specific_values is set when the growth pattern is set to specific
        * </pre>
        */
-      public Builder addSpecificValues(double value) {
-        ensureSpecificValuesIsMutable();
+      public Builder addSpecificValues(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureSpecificValuesIsMutable();
         specificValues_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated double specific_values = 6;</code>
+       * <code>repeated string specific_values = 6;</code>
        *
        * <pre>
        *specific_values is set when the growth pattern is set to specific
        * </pre>
        */
       public Builder addAllSpecificValues(
-          java.lang.Iterable<? extends java.lang.Double> values) {
+          java.lang.Iterable<java.lang.String> values) {
         ensureSpecificValuesIsMutable();
         super.addAll(values, specificValues_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated double specific_values = 6;</code>
+       * <code>repeated string specific_values = 6;</code>
        *
        * <pre>
        *specific_values is set when the growth pattern is set to specific
        * </pre>
        */
       public Builder clearSpecificValues() {
-        specificValues_ = java.util.Collections.emptyList();
+        specificValues_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000020);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string specific_values = 6;</code>
+       *
+       * <pre>
+       *specific_values is set when the growth pattern is set to specific
+       * </pre>
+       */
+      public Builder addSpecificValuesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureSpecificValuesIsMutable();
+        specificValues_.add(value);
         onChanged();
         return this;
       }
@@ -8208,25 +8411,26 @@ public final class DispatcherCentricMessages {
       "\n\013exp_machine\030\t \003(\0132\017.search.Machine\022 \n\007" +
       "profile\030\010 \003(\0132\017.search.Profile\022\021\n\trand_s" +
       "eed\030\013 \001(\003\")\n\013EnvVariable\022\013\n\003key\030\001 \002(\t\022\r\n" +
-      "\005value\030\002 \002(\t\"\207\001\n\007Machine\022\014\n\004name\030\001 \002(\t\022\022",
-      "\n\nreplicates\030\002 \001(\005\022\020\n\010username\030\003 \001(\t\022)\n\014" +
-      "env_variable\030\004 \003(\0132\023.search.EnvVariable\022" +
-      "\035\n\002os\030\005 \001(\0162\n.search.OS:\005LINUX\"\232\001\n\007Profi" +
-      "le\022*\n\renv_variables\030\001 \003(\0132\023.search.EnvVa" +
-      "riable\022\033\n\023applicable_machines\030\002 \003(\t\022\035\n\002o" +
-      "s\030\003 \001(\0162\n.search.OS:\005LINUX\022\025\n\nreplicates" +
-      "\030\004 \001(\005:\0011\022\020\n\010username\030\005 \001(\t\"\343\002\n\tParamete" +
-      "r\022\022\n\nparam_name\030\001 \002(\t\022\024\n\tmin_value\030\002 \001(\001" +
-      ":\0010\022\024\n\tmax_value\030\003 \001(\001:\0011\022\031\n\014growth_valu" +
-      "e\030\004 \001(\001:\0030.1\0228\n\007pattern\030\005 \001(\0162\037.search.P",
-      "arameter.GrowthPattern:\006LINEAR\022\027\n\017specif" +
-      "ic_values\030\006 \003(\001\022\025\n\nreplicates\030\007 \001(\005:\0011\0220" +
-      "\n\004type\030\010 \001(\0162\032.search.Parameter.DataType" +
-      ":\006DOUBLE\"2\n\rGrowthPattern\022\n\n\006LINEAR\020\000\022\007\n" +
-      "\003LOG\020\001\022\014\n\010SPECIFIC\020\002\"+\n\010DataType\022\n\n\006DOUB" +
-      "LE\020\000\022\007\n\003INT\020\001\022\n\n\006STRING\020\002*%\n\002OS\022\t\n\005LINUX" +
-      "\020\000\022\007\n\003MAC\020\001\022\013\n\007WINDOWS\020\002B*\n\rcore.message" +
-      "sB\031DispatcherCentricMessages"
+      "\005value\030\002 \002(\t\"\242\001\n\007Machine\022\022\n\nlocal_name\030\001",
+      " \002(\t\022\022\n\nreplicates\030\002 \001(\005\022\020\n\010username\030\003 \001" +
+      "(\t\022)\n\014env_variable\030\004 \003(\0132\023.search.EnvVar" +
+      "iable\022\035\n\002os\030\005 \001(\0162\n.search.OS:\005LINUX\022\023\n\013" +
+      "remote_name\030\006 \001(\t\"\232\001\n\007Profile\022*\n\renv_var" +
+      "iables\030\001 \003(\0132\023.search.EnvVariable\022\033\n\023app" +
+      "licable_machines\030\002 \003(\t\022\035\n\002os\030\003 \001(\0162\n.sea" +
+      "rch.OS:\005LINUX\022\025\n\nreplicates\030\004 \001(\005:\0011\022\020\n\010" +
+      "username\030\005 \001(\t\"\343\002\n\tParameter\022\022\n\nparam_na" +
+      "me\030\001 \002(\t\022\024\n\tmin_value\030\002 \001(\001:\0010\022\024\n\tmax_va" +
+      "lue\030\003 \001(\001:\0011\022\031\n\014growth_value\030\004 \001(\001:\0030.1\022",
+      "8\n\007pattern\030\005 \001(\0162\037.search.Parameter.Grow" +
+      "thPattern:\006LINEAR\022\027\n\017specific_values\030\006 \003" +
+      "(\t\022\025\n\nreplicates\030\007 \001(\005:\0011\0220\n\004type\030\010 \001(\0162" +
+      "\032.search.Parameter.DataType:\006DOUBLE\"2\n\rG" +
+      "rowthPattern\022\n\n\006LINEAR\020\000\022\007\n\003LOG\020\001\022\014\n\010SPE" +
+      "CIFIC\020\002\"+\n\010DataType\022\n\n\006DOUBLE\020\000\022\007\n\003INT\020\001" +
+      "\022\n\n\006STRING\020\002*%\n\002OS\022\t\n\005LINUX\020\000\022\007\n\003MAC\020\001\022\013" +
+      "\n\007WINDOWS\020\002B*\n\rcore.messagesB\031Dispatcher" +
+      "CentricMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8250,7 +8454,7 @@ public final class DispatcherCentricMessages {
           internal_static_search_Machine_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Machine_descriptor,
-              new java.lang.String[] { "Name", "Replicates", "Username", "EnvVariable", "Os", });
+              new java.lang.String[] { "LocalName", "Replicates", "Username", "EnvVariable", "Os", "RemoteName", });
           internal_static_search_Profile_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_search_Profile_fieldAccessorTable = new

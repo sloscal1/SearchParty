@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -27,22 +29,38 @@ public class SQLiteManager {
 	private Setup exp;
 	private int currentExpID;
 	private Set<String> createdResultTables = new HashSet<>();
+	/** Map to an argument name to the appropriate table in the database */
+	private Map<String, Integer> runTableMap;
 
 	public SQLiteManager(Setup inputExp) throws SQLException{
 		dbConn = DriverManager.getConnection("jdbc:sqlite:"+inputExp.getDatabasePath());
 		stmt = dbConn.createStatement();
-		runTableName = getTableNameFrom(inputExp.getExperimentName());
+		runTableName = getTableNameFrom(inputExp.getExperimentName()).trim();
 		this.exp = inputExp;
 		
+		runTableMap = new HashMap<>();
 		StringBuilder rp = new StringBuilder();
-
-		for(DispatcherCentricMessages.Parameter p : exp.getParamsList())
-			rp.append(" "+p.getParamName()+",");
+		
+		int pos = 0;
+		for(DispatcherCentricMessages.Parameter p : exp.getParamsList()){
+			String pName = p.getParamName();
+			rp.append(" "+escape(pName)+",");
+			if(pName.length() > 1)
+				runTableMap.put("--"+pName, pos++);
+			else
+				runTableMap.put("-"+pName, pos++);
+		}
 		
 		rp.append(" "+ExpGenerator.RAND_SEED_ARG_NAME);
+		runTableMap.put("--"+ExpGenerator.RAND_SEED_ARG_NAME, pos++);
 		runParams = rp.toString();
 	}
 
+	private String escape(String name){
+		String ret = name.replace('.', '_');
+		return ret.replace('-', '_');
+	}
+	
 	private String getTableNameFrom(String experimentName) {
 		return experimentName;
 	}
@@ -76,10 +94,10 @@ public class SQLiteManager {
 		//One table per test method with all parameter settings and a unique key
 		try {
 			stmt.executeUpdate("CREATE TABLE ALL_EXP ( "
-					+ "ExpID INT PRIMARY KEY, "
+					+ "ExpID INTEGER PRIMARY KEY, "
 					+ "Name TEXT NOT NULL, "
 					+ "Proto BLOB NOT NULL, "
-					+ "RunTime INT NOT NULL)");
+					+ "RunTime INTEGER NOT NULL)");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -91,15 +109,15 @@ public class SQLiteManager {
 		//The column names are the parameter names:
 		StringBuilder sb = new StringBuilder();
 
-		for(DispatcherCentricMessages.Parameter p : exp.getParamsList())
-			sb.append(" "+p.getParamName()+" "+getDBType(p.getType())+",");
 		sb.append(" "+ExpGenerator.RAND_SEED_ARG_NAME+" INT NOT NULL");
+		for(DispatcherCentricMessages.Parameter p : exp.getParamsList())
+			sb.append(" "+escape(p.getParamName())+" "+getDBType(p.getType())+",");
 
 		//Create the table
 		try {
 			stmt.executeUpdate("CREATE TABLE "+runTableName+" ( "
-					+ "ExpID INT NOT NULL, "
-					+ "RunID INT PRIMARY KEY, "
+					+ "ExpID INTEGER NOT NULL, "
+					+ "RunID INTEGER PRIMARY KEY, "
 					+ sb.toString() +")");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -129,19 +147,23 @@ public class SQLiteManager {
 	}
 
 	public String insertRun(RunSettings run){
+		
 		String runPrefix = null;
-		StringBuilder values = new StringBuilder();
+
+		String[] argPos = new String[run.getArgumentCount()];
 		for(Argument arg : run.getArgumentList()){
 			Scanner scan = new Scanner(arg.getValue());
 			if(scan.hasNextDouble())
-				values.append(arg.getValue());
+				argPos[runTableMap.get(arg.getFormalName())] = arg.getValue();
 			else
-				values.append("'"+arg.getValue()+"'");
-			values.append(",");
+				argPos[runTableMap.get(arg.getFormalName())] = "'"+arg.getValue()+"'";
 			scan.close();
 		}
-		values.deleteCharAt(values.length()-1);
-
+		StringBuilder values = new StringBuilder();
+		for(int i = 0; i < argPos.length-1; ++i)
+			values.append(argPos[i]+",");
+		values.append(argPos[argPos.length-1]);
+		
 		try {
 			System.out.println("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
 					+currentExpID+", "+values.toString()+");");
@@ -150,8 +172,8 @@ public class SQLiteManager {
 			ResultSet ret = stmt.executeQuery("SELECT ExpID, RunID FROM "+runTableName+" ORDER BY ExpID DESC LIMIT 1;");
 			runPrefix = ret.getString(1)+"_"+ret.getString(2);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(1);
 		}
 		return runPrefix;
 	}
@@ -166,7 +188,7 @@ public class SQLiteManager {
 			StringBuilder columns = new StringBuilder();
 			for(Result r : msg.getReportedValueList())
 				columns.append(" "+r.getName()+" DOUBLE,");
-			columns.append(" Timestamp INT,");
+			columns.append(" Timestamp INTEGER,");
 			columns.append(" Machine TEXT");
 
 			try {

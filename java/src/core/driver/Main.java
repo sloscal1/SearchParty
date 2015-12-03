@@ -19,7 +19,7 @@ package core.driver;
 import java.util.Arrays;
 
 import core.party.Dispatcher;
-import core.party.Searcher;
+import core.party.SearcherShell;
 
 /**
  * This is the entry point for the searchparty jar and will split between the
@@ -44,6 +44,6 @@ public class Main {
 		if(dispatcher)
 			Dispatcher.main(args);
 		else
-			Searcher.main(args);
+			SearcherShell.main(args);
 	}
 }

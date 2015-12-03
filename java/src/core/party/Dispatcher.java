@@ -191,7 +191,6 @@ public class Dispatcher {
 
 		public ExperimentDispatcher(Context cxt) {
 			this.cxt = cxt;
-			System.out.println("Making experiment...");
 		}
 		@Override
 		public void run() {
@@ -203,7 +202,6 @@ public class Dispatcher {
 			portLock.unlock();
 			
 			experiments.setReceiveTimeOut(2000);
-			System.out.println("Dispatching exps...");
 			for(;activeMachines.availablePermits() != 0;){
 				byte[] msg = experiments.recv();
 				if(msg != null){
@@ -247,6 +245,7 @@ public class Dispatcher {
 				try {
 					byte[] msg = results.recv();
 					if(msg != null){
+						System.out.println(new String(msg)+" **************************************************");
 						dbMan.insertResults(ExperimentResults.ResultMessage.parseFrom(msg));
 					}
 				} catch (InvalidProtocolBufferException e) {
@@ -274,7 +273,7 @@ public class Dispatcher {
 
 		public void run() {
 			System.out.println("Machine: "+m);
-			MachineState state = new MachineState(exp, m.getName());
+			MachineState state = new MachineState(exp, m.getLocalName());
 			//Signal the remote machine to start its Searcher
 			String user = m.hasUsername() ? m.getUsername() : defaultUser;
 			//Need to find where searchparty.jar is on the remote machine:
@@ -283,7 +282,7 @@ public class Dispatcher {
 			for(int i = 0; spLoc == null && i < cpEntries.length; ++i)
 				if(cpEntries[i].contains("searchparty.jar"))
 					spLoc = cpEntries[i];
-			ProcessBuilder builder = new ProcessBuilder("ssh", user+"@"+m.getName(),
+			ProcessBuilder builder = new ProcessBuilder("ssh", user+"@"+m.getRemoteName(),
 					"java -jar "+spLoc+" --searcher -i \""+inputExp.toString().replaceAll("\n", " ").replaceAll("\"", "\\\\\"")
 					+ "\" -c \""+Contract.newBuilder().setDispatchAddress(localIPv4)
 					.setExperimentPort(expPort)
@@ -300,9 +299,9 @@ public class Dispatcher {
 					System.out.println("SENDER: "+Thread.currentThread().getId()+" "+output.nextLine());
 				p.waitFor();
 				output.close();
-				System.out.println("The Searcher: "+m.getName()+" terminated.");
+				System.out.println("The Searcher: "+m.getRemoteName()+" terminated.");
 			} catch (IOException e) {
-				System.err.println("Cannot start Searcher process on "+m.getName()+": ");
+				System.err.println("Cannot start Searcher process on "+m.getRemoteName()+": ");
 				e.printStackTrace();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
