@@ -51,6 +51,7 @@ import core.messages.DispatcherCentricMessages.Machine;
 import core.messages.DispatcherCentricMessages.Setup;
 import core.messages.ExperimentResults;
 import core.messages.ExperimentResults.Result;
+import core.messages.SearcherCentricMessages.Argument;
 import core.messages.SearcherCentricMessages.Contract;
 import core.messages.SearcherCentricMessages.RunSettings;
 
@@ -137,7 +138,6 @@ public class Dispatcher {
 			System.err.println("Could not create temporary file, printing to console."); 
 			e.printStackTrace();
 		}
-		
 		//Need to get the name of the node that is running the dispatcher
 		try {
 			localIPv4 = InetAddress.getLocalHost().getHostAddress();
@@ -145,7 +145,6 @@ public class Dispatcher {
 			System.err.println("Cannot get Dispatcher IPv4, attempting to use localhost.");
 			localIPv4 = "127.0.0.1";
 		}
-
 		//Set up the database
 		try {
 			dbMan = new SQLiteManager(inputExp);
@@ -159,9 +158,8 @@ public class Dispatcher {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally{
-			System.exit(0);	
-		}
+			System.exit(1);
+		} 
 		
 		final ZMQ.Context cxt = ZMQ.context(1);
 		//Setup experiment request socket
@@ -193,6 +191,7 @@ public class Dispatcher {
 
 		public ExperimentDispatcher(Context cxt) {
 			this.cxt = cxt;
+			System.out.println("Making experiment...");
 		}
 		@Override
 		public void run() {
@@ -204,13 +203,18 @@ public class Dispatcher {
 			portLock.unlock();
 			
 			experiments.setReceiveTimeOut(2000);
+			System.out.println("Dispatching exps...");
 			for(;activeMachines.availablePermits() != 0;){
 				byte[] msg = experiments.recv();
 				if(msg != null){
 					//Got a request, if there are more left and a running experimenter machine, send one
 					if(gen.hasNext()){
 						RunSettings run = gen.next();
-						dbMan.insertRun(run);
+						String resultsTablePrefix = dbMan.insertRun(run);
+						run = RunSettings.newBuilder(run).addArgument(
+								Argument.newBuilder()
+								.setFormalName("--result-table-prefix")
+								.setValue(resultsTablePrefix).build()).build();
 						experiments.send(run.toByteArray(), ZMQ.NOBLOCK);
 					}else{
 						System.out.println("Sending a term exp");

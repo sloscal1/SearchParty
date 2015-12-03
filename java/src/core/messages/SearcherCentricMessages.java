@@ -860,6 +860,36 @@ public final class SearcherCentricMessages {
      * </pre>
      */
     boolean getTerminal();
+
+    // optional string results_table_prefix = 3;
+    /**
+     * <code>optional string results_table_prefix = 3;</code>
+     *
+     * <pre>
+     *The prefix that should be used to uniquely identify the corresponding
+     *results table(s) in the database
+     * </pre>
+     */
+    boolean hasResultsTablePrefix();
+    /**
+     * <code>optional string results_table_prefix = 3;</code>
+     *
+     * <pre>
+     *The prefix that should be used to uniquely identify the corresponding
+     *results table(s) in the database
+     * </pre>
+     */
+    java.lang.String getResultsTablePrefix();
+    /**
+     * <code>optional string results_table_prefix = 3;</code>
+     *
+     * <pre>
+     *The prefix that should be used to uniquely identify the corresponding
+     *results table(s) in the database
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getResultsTablePrefixBytes();
   }
   /**
    * Protobuf type {@code search.RunSettings}
@@ -927,6 +957,11 @@ public final class SearcherCentricMessages {
             case 16: {
               bitField0_ |= 0x00000001;
               terminal_ = input.readBool();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000002;
+              resultsTablePrefix_ = input.readBytes();
               break;
             }
           }
@@ -1052,9 +1087,68 @@ public final class SearcherCentricMessages {
       return terminal_;
     }
 
+    // optional string results_table_prefix = 3;
+    public static final int RESULTS_TABLE_PREFIX_FIELD_NUMBER = 3;
+    private java.lang.Object resultsTablePrefix_;
+    /**
+     * <code>optional string results_table_prefix = 3;</code>
+     *
+     * <pre>
+     *The prefix that should be used to uniquely identify the corresponding
+     *results table(s) in the database
+     * </pre>
+     */
+    public boolean hasResultsTablePrefix() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional string results_table_prefix = 3;</code>
+     *
+     * <pre>
+     *The prefix that should be used to uniquely identify the corresponding
+     *results table(s) in the database
+     * </pre>
+     */
+    public java.lang.String getResultsTablePrefix() {
+      java.lang.Object ref = resultsTablePrefix_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          resultsTablePrefix_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string results_table_prefix = 3;</code>
+     *
+     * <pre>
+     *The prefix that should be used to uniquely identify the corresponding
+     *results table(s) in the database
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getResultsTablePrefixBytes() {
+      java.lang.Object ref = resultsTablePrefix_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        resultsTablePrefix_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       argument_ = java.util.Collections.emptyList();
       terminal_ = false;
+      resultsTablePrefix_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1080,6 +1174,9 @@ public final class SearcherCentricMessages {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeBool(2, terminal_);
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(3, getResultsTablePrefixBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1096,6 +1193,10 @@ public final class SearcherCentricMessages {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(2, terminal_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getResultsTablePrefixBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1226,6 +1327,8 @@ public final class SearcherCentricMessages {
         }
         terminal_ = false;
         bitField0_ = (bitField0_ & ~0x00000002);
+        resultsTablePrefix_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -1267,6 +1370,10 @@ public final class SearcherCentricMessages {
           to_bitField0_ |= 0x00000001;
         }
         result.terminal_ = terminal_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.resultsTablePrefix_ = resultsTablePrefix_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1311,6 +1418,11 @@ public final class SearcherCentricMessages {
         }
         if (other.hasTerminal()) {
           setTerminal(other.getTerminal());
+        }
+        if (other.hasResultsTablePrefix()) {
+          bitField0_ |= 0x00000004;
+          resultsTablePrefix_ = other.resultsTablePrefix_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1702,6 +1814,110 @@ public final class SearcherCentricMessages {
       public Builder clearTerminal() {
         bitField0_ = (bitField0_ & ~0x00000002);
         terminal_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional string results_table_prefix = 3;
+      private java.lang.Object resultsTablePrefix_ = "";
+      /**
+       * <code>optional string results_table_prefix = 3;</code>
+       *
+       * <pre>
+       *The prefix that should be used to uniquely identify the corresponding
+       *results table(s) in the database
+       * </pre>
+       */
+      public boolean hasResultsTablePrefix() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional string results_table_prefix = 3;</code>
+       *
+       * <pre>
+       *The prefix that should be used to uniquely identify the corresponding
+       *results table(s) in the database
+       * </pre>
+       */
+      public java.lang.String getResultsTablePrefix() {
+        java.lang.Object ref = resultsTablePrefix_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          resultsTablePrefix_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string results_table_prefix = 3;</code>
+       *
+       * <pre>
+       *The prefix that should be used to uniquely identify the corresponding
+       *results table(s) in the database
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getResultsTablePrefixBytes() {
+        java.lang.Object ref = resultsTablePrefix_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          resultsTablePrefix_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string results_table_prefix = 3;</code>
+       *
+       * <pre>
+       *The prefix that should be used to uniquely identify the corresponding
+       *results table(s) in the database
+       * </pre>
+       */
+      public Builder setResultsTablePrefix(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        resultsTablePrefix_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string results_table_prefix = 3;</code>
+       *
+       * <pre>
+       *The prefix that should be used to uniquely identify the corresponding
+       *results table(s) in the database
+       * </pre>
+       */
+      public Builder clearResultsTablePrefix() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        resultsTablePrefix_ = getDefaultInstance().getResultsTablePrefix();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string results_table_prefix = 3;</code>
+       *
+       * <pre>
+       *The prefix that should be used to uniquely identify the corresponding
+       *results table(s) in the database
+       * </pre>
+       */
+      public Builder setResultsTablePrefixBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        resultsTablePrefix_ = value;
         onChanged();
         return this;
       }
@@ -2386,11 +2602,12 @@ public final class SearcherCentricMessages {
     java.lang.String[] descriptorData = {
       "\n\024proto/contract.proto\022\006search\"Q\n\010Contra" +
       "ct\022\030\n\020dispatch_address\030\001 \002(\t\022\027\n\017experime" +
-      "nt_port\030\002 \002(\005\022\022\n\nreply_port\030\003 \001(\005\"J\n\013Run" +
+      "nt_port\030\002 \002(\005\022\022\n\nreply_port\030\003 \001(\005\"h\n\013Run" +
       "Settings\022\"\n\010argument\030\001 \003(\0132\020.search.Argu" +
-      "ment\022\027\n\010terminal\030\002 \001(\010:\005false\".\n\010Argumen" +
-      "t\022\023\n\013formal_name\030\001 \002(\t\022\r\n\005value\030\002 \002(\tB(\n" +
-      "\rcore.messagesB\027SearcherCentricMessages"
+      "ment\022\027\n\010terminal\030\002 \001(\010:\005false\022\034\n\024results" +
+      "_table_prefix\030\003 \001(\t\".\n\010Argument\022\023\n\013forma" +
+      "l_name\030\001 \002(\t\022\r\n\005value\030\002 \002(\tB(\n\rcore.mess" +
+      "agesB\027SearcherCentricMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2408,7 +2625,7 @@ public final class SearcherCentricMessages {
           internal_static_search_RunSettings_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_RunSettings_descriptor,
-              new java.lang.String[] { "Argument", "Terminal", });
+              new java.lang.String[] { "Argument", "Terminal", "ResultsTablePrefix", });
           internal_static_search_Argument_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_search_Argument_fieldAccessorTable = new

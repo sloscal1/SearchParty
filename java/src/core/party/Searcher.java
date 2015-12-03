@@ -180,7 +180,7 @@ public class Searcher {
 							if(msg != null){
 								//Modify the message with it's local info (running machine name, local uid, time completed)
 								ResultMessage rm = ResultMessage.parseFrom(msg);
-								rm = ResultMessage.newBuilder(rm).setMachineName(machineState.getLocalName())
+								rm = ResultMessage.newBuilder(rm).setMachineName("'"+machineState.getLocalName()+"'")
 															.setUid(uid)
 															.setTimestamp(new GregorianCalendar().getTime().getTime()).build();
 								results.put(rm);

@@ -17,6 +17,7 @@ import core.messages.ExperimentResults.Result;
 import core.messages.ExperimentResults.ResultMessage;
 import core.messages.SearcherCentricMessages.Argument;
 import core.messages.SearcherCentricMessages.RunSettings;
+import core.party.ExpGenerator;
 
 public class SQLiteManager {
 	private Connection dbConn;
@@ -29,10 +30,17 @@ public class SQLiteManager {
 
 	public SQLiteManager(Setup inputExp) throws SQLException{
 		dbConn = DriverManager.getConnection("jdbc:sqlite:"+inputExp.getDatabasePath());
-		dbConn.setAutoCommit(false);
 		stmt = dbConn.createStatement();
 		runTableName = getTableNameFrom(inputExp.getExperimentName());
 		this.exp = inputExp;
+		
+		StringBuilder rp = new StringBuilder();
+
+		for(DispatcherCentricMessages.Parameter p : exp.getParamsList())
+			rp.append(" "+p.getParamName()+",");
+		
+		rp.append(" "+ExpGenerator.RAND_SEED_ARG_NAME);
+		runParams = rp.toString();
 	}
 
 	private String getTableNameFrom(String experimentName) {
@@ -82,18 +90,16 @@ public class SQLiteManager {
 		//For all experiments of the same name, use another table to list out the parameters (reduce clutter in the main table)
 		//The column names are the parameter names:
 		StringBuilder sb = new StringBuilder();
-		runParams = "";
-		for(DispatcherCentricMessages.Parameter p : exp.getParamsList()){
+
+		for(DispatcherCentricMessages.Parameter p : exp.getParamsList())
 			sb.append(" "+p.getParamName()+" "+getDBType(p.getType())+",");
-			runParams += p.getParamName()+",";
-		}
-		sb.deleteCharAt(sb.length()-1);
+		sb.append(" "+ExpGenerator.RAND_SEED_ARG_NAME+" INT NOT NULL");
+
 		//Create the table
 		try {
 			stmt.executeUpdate("CREATE TABLE "+runTableName+" ( "
 					+ "ExpID INT NOT NULL, "
 					+ "RunID INT PRIMARY KEY, "
-					+ "Seed INT NOT NULL, "
 					+ sb.toString() +")");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -122,7 +128,8 @@ public class SQLiteManager {
 		}
 	}
 
-	public void insertRun(RunSettings run){
+	public String insertRun(RunSettings run){
+		String runPrefix = null;
 		StringBuilder values = new StringBuilder();
 		for(Argument arg : run.getArgumentList()){
 			Scanner scan = new Scanner(arg.getValue());
@@ -136,12 +143,17 @@ public class SQLiteManager {
 		values.deleteCharAt(values.length()-1);
 
 		try {
+			System.out.println("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
+					+currentExpID+", "+values.toString()+");");
 			stmt.executeUpdate("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
 					+currentExpID+", "+values.toString()+");");
+			ResultSet ret = stmt.executeQuery("SELECT ExpID, RunID FROM "+runTableName+" ORDER BY ExpID DESC LIMIT 1;");
+			runPrefix = ret.getString(1)+"_"+ret.getString(2);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return runPrefix;
 	}
 	//One table per parameter settings key with all result values
 	//create table per (if executable and all start parameters are the same, it should go to the same table.)
@@ -149,7 +161,7 @@ public class SQLiteManager {
 	public void insertResults(ResultMessage msg) {
 		//See if this table exists:
 		//TODO: The DB table name needs to be more specific, maybe include exp_id and run_id to completely identify it.
-		
+
 		if(!createdResultTables.contains(msg.getTableName())){
 			StringBuilder columns = new StringBuilder();
 			for(Result r : msg.getReportedValueList())
@@ -158,6 +170,8 @@ public class SQLiteManager {
 			columns.append(" Machine TEXT");
 
 			try {
+				System.out.println("CREATE TABLE "+msg.getTableName()+" ( "
+						+columns.toString()+")");
 				stmt.executeUpdate("CREATE TABLE "+msg.getTableName()+" ( "
 						+columns.toString()+")");
 				createdResultTables.add(msg.getTableName());
@@ -166,7 +180,7 @@ public class SQLiteManager {
 				e.printStackTrace();
 			}
 		}
-		
+
 		//Now put these values into the appropriate table
 		StringBuilder columnNames = new StringBuilder();
 		StringBuilder values = new StringBuilder();
@@ -175,8 +189,18 @@ public class SQLiteManager {
 			values.append(" "+r.getValue()+",");
 		}
 		try {
-			stmt.executeUpdate("INSERT INTO "+msg.getTableName()+"("+columnNames.toString()+" Timestamp, Machine )+"
+			stmt.executeUpdate("INSERT INTO "+msg.getTableName()+"("+columnNames.toString()+" Timestamp, Machine ) "
 					+ " VALUES("+values.toString()+" "+msg.getTimestamp()+", "+msg.getMachineName()+");");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void close(){
+		try {
+			stmt.close();
+			dbConn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

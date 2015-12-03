@@ -1,9 +1,9 @@
 /*
-Copyright 2015 Steven Loscalzo
+   Copyright 2015 Steven Loscalzo
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
 
@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
-*/
+ */
 
 package search;
 
@@ -24,24 +24,27 @@ option java_outer_classname = "SearcherCentricMessages";
 //pertinent details needed to get the experimentation architecture
 //up and running.
 message Contract{
-	//The IPv4 address where the Dispatcher can be found.
-	//e.g., 127.0.0.1, localhost, etc.
-	required string dispatch_address = 1;
-	//The port that the dispatcher will be listening to.
-	required int32 experiment_port = 2;
-	//The secret to share in the communications (should be unique per contract)
-	optional int32 reply_port = 3;
+  //The IPv4 address where the Dispatcher can be found.
+  //e.g., 127.0.0.1, localhost, etc.
+  required string dispatch_address = 1;
+  //The port that the dispatcher will be listening to.
+  required int32 experiment_port = 2;
+  //The secret to share in the communications (should be unique per contract)
+  optional int32 reply_port = 3;
 }
 
 //Encapsulates the specific parameter settings of this experiment
 message RunSettings{
-	//The arguments to pass to the experiment program
-	repeated Argument argument = 1;
-	//True when there are no further experiments
-	optional bool terminal = 2 [default = false];
+  //The arguments to pass to the experiment program
+  repeated Argument argument = 1;
+  //True when there are no further experiments
+  optional bool terminal = 2 [default = false];
+  //The prefix that should be used to uniquely identify the corresponding
+  //results table(s) in the database
+  optional string results_table_prefix = 3;
 }
 
 message Argument{
-	required string formal_name = 1;
-	required string value = 2;
+  required string formal_name = 1;
+  required string value = 2;
 }
