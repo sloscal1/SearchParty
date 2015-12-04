@@ -14,7 +14,7 @@ params{
 }
 params{
 	param_name : "main-class"
-	specific_values : "mil.af.rl.novelty.NoveltySearchSP"
+	specific_values : "mil.af.rl.novelty.NoveltyEvolver"
 }
 params{
 	param_name : "behavior_vector_generator.num_samples"
@@ -47,10 +47,12 @@ profile{
 	
 	replicates : 6
 
+	working_dir : "/home/sloscal1/Experiments/NS_20151203"
+
 	env_variables{
 		key : "CLASSPATH"
 		value :
-		"/home/sloscal1/Experiments/NS_20151203/bin:/home/sloscal1/Experiments/NS_20151203/properties:lib/anji.jar:lib/commons-lang3-3.1.jar:lib/commons-math3-3.5.jar:lib/jakarta-regexp-1.5.jar:lib/jgap.jar:lib/log4j.jar:lib/weka.jar:/home/sloscal1/Programming/jars/jeromq-3.6.0-SNAPSHOT.jar:/home/sloscal1/git/SearchParty/searchparty.jar"
+		"bin:properties:lib/anji.jar:lib/commons-lang3-3.1.jar:lib/commons-math3-3.5.jar:lib/jakarta-regexp-1.5.jar:lib/jgap.jar:lib/log4j.jar:lib/weka.jar:/home/sloscal1/Programming/jars/jeromq-3.6.0-SNAPSHOT.jar:/home/sloscal1/git/SearchParty/searchparty.jar"
 	}
 	env_variables{
 		key : "LD_LIBRARY_PATH"

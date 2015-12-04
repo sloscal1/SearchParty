@@ -16,11 +16,11 @@ limitations under the License.
 
 package core.party;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -170,6 +170,9 @@ public class Searcher {
 			builder.redirectErrorStream(true);
 			for(Entry<String, String> var : machineState.getEnvironmentVariables().entrySet())
 				builder.environment().put(var.getKey(), var.getValue());
+			//Set the working directory
+			builder.directory(new File(machineState.getWorkingDir()));
+			
 			//Experiment UID
 			final long uid = nextUID();
 			//Start up a thread to unambiguously get the results from this experiment.
@@ -200,7 +203,7 @@ public class Searcher {
 			Process proc = null;
 			int retVal = -1;
 			try {
-				System.out.println(builder.command());
+//				System.out.println(builder.command());
 				proc = builder.start();
 				Scanner scan = new Scanner(proc.getInputStream());
 				while(scan.hasNextLine())
@@ -337,8 +340,6 @@ public class Searcher {
 	}
 	
 	public static void main(String[] args) throws Exception{
-		System.out.println(System.getenv("LD_LIBRARY_PATH"));
-		System.out.println(System.getenv("CLASSPATH"));
 		Map<ProgramParameter, Object> vals = ProgramParameter.getValues(args, allParams, allParams);
 		if(vals != null)
 			new Searcher((Setup)vals.get(allParams.get(0)), (Contract)vals.get(allParams.get(1)));

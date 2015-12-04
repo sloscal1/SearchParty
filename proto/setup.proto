@@ -64,6 +64,10 @@ message Machine{
 	//The number of replicates this machine can handle. No default given so that the default value will not override a profile value.
 	optional int32 replicates = 2;
 	optional string username = 3;
+	//The working directory to run the experiment from.
+	//Relative paths for the environment variables can be
+	//expected to run from this directory.
+	optional string working_dir = 7;
 	//One of the following:
 	//A list of environment variables that should be set to properly run the
 	//experiment on this machine, these will override values set in the profile
@@ -80,6 +84,9 @@ message Profile{
 	optional OS os = 3 [default = LINUX];
 	optional int32 replicates = 4 [default = 1];
 	optional string username = 5;
+	//The working directory to execute the experiment command from. If
+	//it does not exist, the program will crash.
+	optional string working_dir = 6;
 }
 
 enum OS{

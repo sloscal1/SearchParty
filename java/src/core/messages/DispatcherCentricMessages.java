@@ -4115,6 +4115,39 @@ public final class DispatcherCentricMessages {
     com.google.protobuf.ByteString
         getUsernameBytes();
 
+    // optional string working_dir = 7;
+    /**
+     * <code>optional string working_dir = 7;</code>
+     *
+     * <pre>
+     *The working directory to run the experiment from.
+     *Relative paths for the environment variables can be
+     *expected to run from this directory.
+     * </pre>
+     */
+    boolean hasWorkingDir();
+    /**
+     * <code>optional string working_dir = 7;</code>
+     *
+     * <pre>
+     *The working directory to run the experiment from.
+     *Relative paths for the environment variables can be
+     *expected to run from this directory.
+     * </pre>
+     */
+    java.lang.String getWorkingDir();
+    /**
+     * <code>optional string working_dir = 7;</code>
+     *
+     * <pre>
+     *The working directory to run the experiment from.
+     *Relative paths for the environment variables can be
+     *expected to run from this directory.
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getWorkingDirBytes();
+
     // repeated .search.EnvVariable env_variable = 4;
     /**
      * <code>repeated .search.EnvVariable env_variable = 4;</code>
@@ -4262,9 +4295,9 @@ public final class DispatcherCentricMessages {
               break;
             }
             case 34: {
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
                 envVariable_ = new java.util.ArrayList<core.messages.DispatcherCentricMessages.EnvVariable>();
-                mutable_bitField0_ |= 0x00000008;
+                mutable_bitField0_ |= 0x00000010;
               }
               envVariable_.add(input.readMessage(core.messages.DispatcherCentricMessages.EnvVariable.PARSER, extensionRegistry));
               break;
@@ -4275,14 +4308,19 @@ public final class DispatcherCentricMessages {
               if (value == null) {
                 unknownFields.mergeVarintField(5, rawValue);
               } else {
-                bitField0_ |= 0x00000008;
+                bitField0_ |= 0x00000010;
                 os_ = value;
               }
               break;
             }
             case 50: {
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000020;
               remoteName_ = input.readBytes();
+              break;
+            }
+            case 58: {
+              bitField0_ |= 0x00000008;
+              workingDir_ = input.readBytes();
               break;
             }
           }
@@ -4293,7 +4331,7 @@ public final class DispatcherCentricMessages {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
           envVariable_ = java.util.Collections.unmodifiableList(envVariable_);
         }
         this.unknownFields = unknownFields.build();
@@ -4438,6 +4476,67 @@ public final class DispatcherCentricMessages {
       }
     }
 
+    // optional string working_dir = 7;
+    public static final int WORKING_DIR_FIELD_NUMBER = 7;
+    private java.lang.Object workingDir_;
+    /**
+     * <code>optional string working_dir = 7;</code>
+     *
+     * <pre>
+     *The working directory to run the experiment from.
+     *Relative paths for the environment variables can be
+     *expected to run from this directory.
+     * </pre>
+     */
+    public boolean hasWorkingDir() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string working_dir = 7;</code>
+     *
+     * <pre>
+     *The working directory to run the experiment from.
+     *Relative paths for the environment variables can be
+     *expected to run from this directory.
+     * </pre>
+     */
+    public java.lang.String getWorkingDir() {
+      java.lang.Object ref = workingDir_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          workingDir_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string working_dir = 7;</code>
+     *
+     * <pre>
+     *The working directory to run the experiment from.
+     *Relative paths for the environment variables can be
+     *expected to run from this directory.
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getWorkingDirBytes() {
+      java.lang.Object ref = workingDir_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        workingDir_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     // repeated .search.EnvVariable env_variable = 4;
     public static final int ENV_VARIABLE_FIELD_NUMBER = 4;
     private java.util.List<core.messages.DispatcherCentricMessages.EnvVariable> envVariable_;
@@ -4511,7 +4610,7 @@ public final class DispatcherCentricMessages {
      * <code>optional .search.OS os = 5 [default = LINUX];</code>
      */
     public boolean hasOs() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>optional .search.OS os = 5 [default = LINUX];</code>
@@ -4527,7 +4626,7 @@ public final class DispatcherCentricMessages {
      * <code>optional string remote_name = 6;</code>
      */
     public boolean hasRemoteName() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>optional string remote_name = 6;</code>
@@ -4567,6 +4666,7 @@ public final class DispatcherCentricMessages {
       localName_ = "";
       replicates_ = 0;
       username_ = "";
+      workingDir_ = "";
       envVariable_ = java.util.Collections.emptyList();
       os_ = core.messages.DispatcherCentricMessages.OS.LINUX;
       remoteName_ = "";
@@ -4605,11 +4705,14 @@ public final class DispatcherCentricMessages {
       for (int i = 0; i < envVariable_.size(); i++) {
         output.writeMessage(4, envVariable_.get(i));
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeEnum(5, os_.getNumber());
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeBytes(6, getRemoteNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(7, getWorkingDirBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -4636,13 +4739,17 @@ public final class DispatcherCentricMessages {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, envVariable_.get(i));
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(5, os_.getNumber());
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, getRemoteNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(7, getWorkingDirBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4767,16 +4874,18 @@ public final class DispatcherCentricMessages {
         bitField0_ = (bitField0_ & ~0x00000002);
         username_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
+        workingDir_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
         if (envVariableBuilder_ == null) {
           envVariable_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000010);
         } else {
           envVariableBuilder_.clear();
         }
         os_ = core.messages.DispatcherCentricMessages.OS.LINUX;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        remoteName_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
+        remoteName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -4817,21 +4926,25 @@ public final class DispatcherCentricMessages {
           to_bitField0_ |= 0x00000004;
         }
         result.username_ = username_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.workingDir_ = workingDir_;
         if (envVariableBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          if (((bitField0_ & 0x00000010) == 0x00000010)) {
             envVariable_ = java.util.Collections.unmodifiableList(envVariable_);
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000010);
           }
           result.envVariable_ = envVariable_;
         } else {
           result.envVariable_ = envVariableBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.os_ = os_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000010;
+        }
+        result.os_ = os_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
         }
         result.remoteName_ = remoteName_;
         result.bitField0_ = to_bitField0_;
@@ -4863,11 +4976,16 @@ public final class DispatcherCentricMessages {
           username_ = other.username_;
           onChanged();
         }
+        if (other.hasWorkingDir()) {
+          bitField0_ |= 0x00000008;
+          workingDir_ = other.workingDir_;
+          onChanged();
+        }
         if (envVariableBuilder_ == null) {
           if (!other.envVariable_.isEmpty()) {
             if (envVariable_.isEmpty()) {
               envVariable_ = other.envVariable_;
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000010);
             } else {
               ensureEnvVariableIsMutable();
               envVariable_.addAll(other.envVariable_);
@@ -4880,7 +4998,7 @@ public final class DispatcherCentricMessages {
               envVariableBuilder_.dispose();
               envVariableBuilder_ = null;
               envVariable_ = other.envVariable_;
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000010);
               envVariableBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getEnvVariableFieldBuilder() : null;
@@ -4893,7 +5011,7 @@ public final class DispatcherCentricMessages {
           setOs(other.getOs());
         }
         if (other.hasRemoteName()) {
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000040;
           remoteName_ = other.remoteName_;
           onChanged();
         }
@@ -5131,13 +5249,123 @@ public final class DispatcherCentricMessages {
         return this;
       }
 
+      // optional string working_dir = 7;
+      private java.lang.Object workingDir_ = "";
+      /**
+       * <code>optional string working_dir = 7;</code>
+       *
+       * <pre>
+       *The working directory to run the experiment from.
+       *Relative paths for the environment variables can be
+       *expected to run from this directory.
+       * </pre>
+       */
+      public boolean hasWorkingDir() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional string working_dir = 7;</code>
+       *
+       * <pre>
+       *The working directory to run the experiment from.
+       *Relative paths for the environment variables can be
+       *expected to run from this directory.
+       * </pre>
+       */
+      public java.lang.String getWorkingDir() {
+        java.lang.Object ref = workingDir_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          workingDir_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string working_dir = 7;</code>
+       *
+       * <pre>
+       *The working directory to run the experiment from.
+       *Relative paths for the environment variables can be
+       *expected to run from this directory.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getWorkingDirBytes() {
+        java.lang.Object ref = workingDir_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          workingDir_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string working_dir = 7;</code>
+       *
+       * <pre>
+       *The working directory to run the experiment from.
+       *Relative paths for the environment variables can be
+       *expected to run from this directory.
+       * </pre>
+       */
+      public Builder setWorkingDir(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        workingDir_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string working_dir = 7;</code>
+       *
+       * <pre>
+       *The working directory to run the experiment from.
+       *Relative paths for the environment variables can be
+       *expected to run from this directory.
+       * </pre>
+       */
+      public Builder clearWorkingDir() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        workingDir_ = getDefaultInstance().getWorkingDir();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string working_dir = 7;</code>
+       *
+       * <pre>
+       *The working directory to run the experiment from.
+       *Relative paths for the environment variables can be
+       *expected to run from this directory.
+       * </pre>
+       */
+      public Builder setWorkingDirBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        workingDir_ = value;
+        onChanged();
+        return this;
+      }
+
       // repeated .search.EnvVariable env_variable = 4;
       private java.util.List<core.messages.DispatcherCentricMessages.EnvVariable> envVariable_ =
         java.util.Collections.emptyList();
       private void ensureEnvVariableIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
           envVariable_ = new java.util.ArrayList<core.messages.DispatcherCentricMessages.EnvVariable>(envVariable_);
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000010;
          }
       }
 
@@ -5352,7 +5580,7 @@ public final class DispatcherCentricMessages {
       public Builder clearEnvVariable() {
         if (envVariableBuilder_ == null) {
           envVariable_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000010);
           onChanged();
         } else {
           envVariableBuilder_.clear();
@@ -5471,7 +5699,7 @@ public final class DispatcherCentricMessages {
           envVariableBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               core.messages.DispatcherCentricMessages.EnvVariable, core.messages.DispatcherCentricMessages.EnvVariable.Builder, core.messages.DispatcherCentricMessages.EnvVariableOrBuilder>(
                   envVariable_,
-                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  ((bitField0_ & 0x00000010) == 0x00000010),
                   getParentForChildren(),
                   isClean());
           envVariable_ = null;
@@ -5485,7 +5713,7 @@ public final class DispatcherCentricMessages {
        * <code>optional .search.OS os = 5 [default = LINUX];</code>
        */
       public boolean hasOs() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
        * <code>optional .search.OS os = 5 [default = LINUX];</code>
@@ -5500,7 +5728,7 @@ public final class DispatcherCentricMessages {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000020;
         os_ = value;
         onChanged();
         return this;
@@ -5509,7 +5737,7 @@ public final class DispatcherCentricMessages {
        * <code>optional .search.OS os = 5 [default = LINUX];</code>
        */
       public Builder clearOs() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000020);
         os_ = core.messages.DispatcherCentricMessages.OS.LINUX;
         onChanged();
         return this;
@@ -5521,7 +5749,7 @@ public final class DispatcherCentricMessages {
        * <code>optional string remote_name = 6;</code>
        */
       public boolean hasRemoteName() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
        * <code>optional string remote_name = 6;</code>
@@ -5561,7 +5789,7 @@ public final class DispatcherCentricMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000040;
         remoteName_ = value;
         onChanged();
         return this;
@@ -5570,7 +5798,7 @@ public final class DispatcherCentricMessages {
        * <code>optional string remote_name = 6;</code>
        */
       public Builder clearRemoteName() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         remoteName_ = getDefaultInstance().getRemoteName();
         onChanged();
         return this;
@@ -5583,7 +5811,7 @@ public final class DispatcherCentricMessages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000020;
+  bitField0_ |= 0x00000040;
         remoteName_ = value;
         onChanged();
         return this;
@@ -5702,6 +5930,36 @@ public final class DispatcherCentricMessages {
      */
     com.google.protobuf.ByteString
         getUsernameBytes();
+
+    // optional string working_dir = 6;
+    /**
+     * <code>optional string working_dir = 6;</code>
+     *
+     * <pre>
+     *The working directory to execute the experiment command from. If
+     *it does not exist, the program will crash.
+     * </pre>
+     */
+    boolean hasWorkingDir();
+    /**
+     * <code>optional string working_dir = 6;</code>
+     *
+     * <pre>
+     *The working directory to execute the experiment command from. If
+     *it does not exist, the program will crash.
+     * </pre>
+     */
+    java.lang.String getWorkingDir();
+    /**
+     * <code>optional string working_dir = 6;</code>
+     *
+     * <pre>
+     *The working directory to execute the experiment command from. If
+     *it does not exist, the program will crash.
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getWorkingDirBytes();
   }
   /**
    * Protobuf type {@code search.Profile}
@@ -5789,6 +6047,11 @@ public final class DispatcherCentricMessages {
             case 42: {
               bitField0_ |= 0x00000004;
               username_ = input.readBytes();
+              break;
+            }
+            case 50: {
+              bitField0_ |= 0x00000008;
+              workingDir_ = input.readBytes();
               break;
             }
           }
@@ -5998,12 +6261,71 @@ public final class DispatcherCentricMessages {
       }
     }
 
+    // optional string working_dir = 6;
+    public static final int WORKING_DIR_FIELD_NUMBER = 6;
+    private java.lang.Object workingDir_;
+    /**
+     * <code>optional string working_dir = 6;</code>
+     *
+     * <pre>
+     *The working directory to execute the experiment command from. If
+     *it does not exist, the program will crash.
+     * </pre>
+     */
+    public boolean hasWorkingDir() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string working_dir = 6;</code>
+     *
+     * <pre>
+     *The working directory to execute the experiment command from. If
+     *it does not exist, the program will crash.
+     * </pre>
+     */
+    public java.lang.String getWorkingDir() {
+      java.lang.Object ref = workingDir_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          workingDir_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string working_dir = 6;</code>
+     *
+     * <pre>
+     *The working directory to execute the experiment command from. If
+     *it does not exist, the program will crash.
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getWorkingDirBytes() {
+      java.lang.Object ref = workingDir_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        workingDir_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       envVariables_ = java.util.Collections.emptyList();
       applicableMachines_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       os_ = core.messages.DispatcherCentricMessages.OS.LINUX;
       replicates_ = 1;
       username_ = "";
+      workingDir_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6038,6 +6360,9 @@ public final class DispatcherCentricMessages {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(5, getUsernameBytes());
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(6, getWorkingDirBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -6071,6 +6396,10 @@ public final class DispatcherCentricMessages {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(5, getUsernameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, getWorkingDirBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -6203,6 +6532,8 @@ public final class DispatcherCentricMessages {
         bitField0_ = (bitField0_ & ~0x00000008);
         username_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
+        workingDir_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -6258,6 +6589,10 @@ public final class DispatcherCentricMessages {
           to_bitField0_ |= 0x00000004;
         }
         result.username_ = username_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.workingDir_ = workingDir_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -6319,6 +6654,11 @@ public final class DispatcherCentricMessages {
         if (other.hasUsername()) {
           bitField0_ |= 0x00000010;
           username_ = other.username_;
+          onChanged();
+        }
+        if (other.hasWorkingDir()) {
+          bitField0_ |= 0x00000020;
+          workingDir_ = other.workingDir_;
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -6871,6 +7211,110 @@ public final class DispatcherCentricMessages {
   }
   bitField0_ |= 0x00000010;
         username_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional string working_dir = 6;
+      private java.lang.Object workingDir_ = "";
+      /**
+       * <code>optional string working_dir = 6;</code>
+       *
+       * <pre>
+       *The working directory to execute the experiment command from. If
+       *it does not exist, the program will crash.
+       * </pre>
+       */
+      public boolean hasWorkingDir() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional string working_dir = 6;</code>
+       *
+       * <pre>
+       *The working directory to execute the experiment command from. If
+       *it does not exist, the program will crash.
+       * </pre>
+       */
+      public java.lang.String getWorkingDir() {
+        java.lang.Object ref = workingDir_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          workingDir_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string working_dir = 6;</code>
+       *
+       * <pre>
+       *The working directory to execute the experiment command from. If
+       *it does not exist, the program will crash.
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getWorkingDirBytes() {
+        java.lang.Object ref = workingDir_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          workingDir_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string working_dir = 6;</code>
+       *
+       * <pre>
+       *The working directory to execute the experiment command from. If
+       *it does not exist, the program will crash.
+       * </pre>
+       */
+      public Builder setWorkingDir(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        workingDir_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string working_dir = 6;</code>
+       *
+       * <pre>
+       *The working directory to execute the experiment command from. If
+       *it does not exist, the program will crash.
+       * </pre>
+       */
+      public Builder clearWorkingDir() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        workingDir_ = getDefaultInstance().getWorkingDir();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string working_dir = 6;</code>
+       *
+       * <pre>
+       *The working directory to execute the experiment command from. If
+       *it does not exist, the program will crash.
+       * </pre>
+       */
+      public Builder setWorkingDirBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        workingDir_ = value;
         onChanged();
         return this;
       }
@@ -8411,26 +8855,27 @@ public final class DispatcherCentricMessages {
       "\n\013exp_machine\030\t \003(\0132\017.search.Machine\022 \n\007" +
       "profile\030\010 \003(\0132\017.search.Profile\022\021\n\trand_s" +
       "eed\030\013 \001(\003\")\n\013EnvVariable\022\013\n\003key\030\001 \002(\t\022\r\n" +
-      "\005value\030\002 \002(\t\"\242\001\n\007Machine\022\022\n\nlocal_name\030\001",
+      "\005value\030\002 \002(\t\"\267\001\n\007Machine\022\022\n\nlocal_name\030\001",
       " \002(\t\022\022\n\nreplicates\030\002 \001(\005\022\020\n\010username\030\003 \001" +
-      "(\t\022)\n\014env_variable\030\004 \003(\0132\023.search.EnvVar" +
-      "iable\022\035\n\002os\030\005 \001(\0162\n.search.OS:\005LINUX\022\023\n\013" +
-      "remote_name\030\006 \001(\t\"\232\001\n\007Profile\022*\n\renv_var" +
-      "iables\030\001 \003(\0132\023.search.EnvVariable\022\033\n\023app" +
-      "licable_machines\030\002 \003(\t\022\035\n\002os\030\003 \001(\0162\n.sea" +
-      "rch.OS:\005LINUX\022\025\n\nreplicates\030\004 \001(\005:\0011\022\020\n\010" +
-      "username\030\005 \001(\t\"\343\002\n\tParameter\022\022\n\nparam_na" +
-      "me\030\001 \002(\t\022\024\n\tmin_value\030\002 \001(\001:\0010\022\024\n\tmax_va" +
-      "lue\030\003 \001(\001:\0011\022\031\n\014growth_value\030\004 \001(\001:\0030.1\022",
-      "8\n\007pattern\030\005 \001(\0162\037.search.Parameter.Grow" +
-      "thPattern:\006LINEAR\022\027\n\017specific_values\030\006 \003" +
-      "(\t\022\025\n\nreplicates\030\007 \001(\005:\0011\0220\n\004type\030\010 \001(\0162" +
-      "\032.search.Parameter.DataType:\006DOUBLE\"2\n\rG" +
-      "rowthPattern\022\n\n\006LINEAR\020\000\022\007\n\003LOG\020\001\022\014\n\010SPE" +
-      "CIFIC\020\002\"+\n\010DataType\022\n\n\006DOUBLE\020\000\022\007\n\003INT\020\001" +
-      "\022\n\n\006STRING\020\002*%\n\002OS\022\t\n\005LINUX\020\000\022\007\n\003MAC\020\001\022\013" +
-      "\n\007WINDOWS\020\002B*\n\rcore.messagesB\031Dispatcher" +
-      "CentricMessages"
+      "(\t\022\023\n\013working_dir\030\007 \001(\t\022)\n\014env_variable\030" +
+      "\004 \003(\0132\023.search.EnvVariable\022\035\n\002os\030\005 \001(\0162\n" +
+      ".search.OS:\005LINUX\022\023\n\013remote_name\030\006 \001(\t\"\257" +
+      "\001\n\007Profile\022*\n\renv_variables\030\001 \003(\0132\023.sear" +
+      "ch.EnvVariable\022\033\n\023applicable_machines\030\002 " +
+      "\003(\t\022\035\n\002os\030\003 \001(\0162\n.search.OS:\005LINUX\022\025\n\nre" +
+      "plicates\030\004 \001(\005:\0011\022\020\n\010username\030\005 \001(\t\022\023\n\013w" +
+      "orking_dir\030\006 \001(\t\"\343\002\n\tParameter\022\022\n\nparam_" +
+      "name\030\001 \002(\t\022\024\n\tmin_value\030\002 \001(\001:\0010\022\024\n\tmax_",
+      "value\030\003 \001(\001:\0011\022\031\n\014growth_value\030\004 \001(\001:\0030." +
+      "1\0228\n\007pattern\030\005 \001(\0162\037.search.Parameter.Gr" +
+      "owthPattern:\006LINEAR\022\027\n\017specific_values\030\006" +
+      " \003(\t\022\025\n\nreplicates\030\007 \001(\005:\0011\0220\n\004type\030\010 \001(" +
+      "\0162\032.search.Parameter.DataType:\006DOUBLE\"2\n" +
+      "\rGrowthPattern\022\n\n\006LINEAR\020\000\022\007\n\003LOG\020\001\022\014\n\010S" +
+      "PECIFIC\020\002\"+\n\010DataType\022\n\n\006DOUBLE\020\000\022\007\n\003INT" +
+      "\020\001\022\n\n\006STRING\020\002*%\n\002OS\022\t\n\005LINUX\020\000\022\007\n\003MAC\020\001" +
+      "\022\013\n\007WINDOWS\020\002B*\n\rcore.messagesB\031Dispatch" +
+      "erCentricMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8454,13 +8899,13 @@ public final class DispatcherCentricMessages {
           internal_static_search_Machine_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Machine_descriptor,
-              new java.lang.String[] { "LocalName", "Replicates", "Username", "EnvVariable", "Os", "RemoteName", });
+              new java.lang.String[] { "LocalName", "Replicates", "Username", "WorkingDir", "EnvVariable", "Os", "RemoteName", });
           internal_static_search_Profile_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_search_Profile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_search_Profile_descriptor,
-              new java.lang.String[] { "EnvVariables", "ApplicableMachines", "Os", "Replicates", "Username", });
+              new java.lang.String[] { "EnvVariables", "ApplicableMachines", "Os", "Replicates", "Username", "WorkingDir", });
           internal_static_search_Parameter_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_search_Parameter_fieldAccessorTable = new

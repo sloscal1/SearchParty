@@ -165,8 +165,8 @@ public class SQLiteManager {
 		values.append(argPos[argPos.length-1]);
 		
 		try {
-			System.out.println("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
-					+currentExpID+", "+values.toString()+");");
+//			System.out.println("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
+//					+currentExpID+", "+values.toString()+");");
 			stmt.executeUpdate("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
 					+currentExpID+", "+values.toString()+");");
 			ResultSet ret = stmt.executeQuery("SELECT ExpID, RunID FROM "+runTableName+" ORDER BY ExpID DESC LIMIT 1;");

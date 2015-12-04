@@ -23,6 +23,7 @@ public class MachineState{
 	private volatile boolean active = true;
 	private String execCommand;
 	private String localName;
+	private String workingDir = null; //Means use the current working directory
 	
 	public MachineState(Setup exp) throws UnknownHostException{
 		this(exp, InetAddress.getLocalHost().getHostName());
@@ -43,7 +44,9 @@ public class MachineState{
 			if(p.getApplicableMachinesList().contains(name)){
 				for(EnvVariable env : p.getEnvVariablesList())
 					envVariables.put(env.getKey(), env.getValue());
-				numReplicates = p.getReplicates();				
+				numReplicates = p.getReplicates();
+				if(p.hasWorkingDir())
+					workingDir = p.getWorkingDir();
 				profileFound = true;
 			}
 		}
@@ -57,11 +60,13 @@ public class MachineState{
 					envVariables.put(env.getKey(), env.getValue());
 				if(m.hasReplicates())
 					numReplicates = m.getReplicates();
+				if(m.hasWorkingDir())
+					workingDir = m.getWorkingDir();
 				machineFound = true;
 			}
 		}			
 	}
-	
+
 	public String getLocalName(){
 		return localName;
 	}
@@ -84,5 +89,9 @@ public class MachineState{
 
 	public String getExecutableCommand() {
 		return execCommand;
+	}
+	
+	public String getWorkingDir(){
+		return workingDir;
 	}
 }
