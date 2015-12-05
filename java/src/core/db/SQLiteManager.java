@@ -109,10 +109,11 @@ public class SQLiteManager {
 		//The column names are the parameter names:
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(" "+ExpGenerator.RAND_SEED_ARG_NAME+" INT NOT NULL");
+		
 		for(DispatcherCentricMessages.Parameter p : exp.getParamsList())
 			sb.append(" "+escape(p.getParamName())+" "+getDBType(p.getType())+",");
-
+		sb.append(" "+ExpGenerator.RAND_SEED_ARG_NAME+" INT NOT NULL");
+		
 		//Create the table
 		try {
 			stmt.executeUpdate("CREATE TABLE "+runTableName+" ( "
