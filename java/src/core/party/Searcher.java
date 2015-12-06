@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
-*/
+ */
 
 package core.party;
 
@@ -107,7 +107,7 @@ public class Searcher {
 	private BlockingQueue<ExperimentResults.ResultMessage> results = new LinkedBlockingQueue<ExperimentResults.ResultMessage>();
 	/** The machine particular setup information from this machine */
 	private MachineState machineState;
-	
+
 	/**
 	 * Receives the address:port of the Dispatcher.
 	 * @throws UnknownHostException 
@@ -117,11 +117,25 @@ public class Searcher {
 		System.out.println(InetAddress.getLocalHost().getHostName()+": "+machineState.getNumReplicates());
 		incomplete = new ArrayBlockingQueue<RunSettings>(machineState.getNumReplicates());
 		final ZMQ.Context cxt = ZMQ.context(1);
-		//This thread receives results from the local experiment processes and passes them along to the Dispatcher
-		new Thread(new ResultHandler(cxt, msg)).start();
-
-		//This thread starts experiments as they become available
-		new Thread(new ExperimentHandler(cxt, msg)).start();
+		
+		Thread results = null;
+		Thread experiments = null;
+		try{
+			//This thread receives results from the local experiment processes and passes them along to the Dispatcher
+			results = new Thread(new ResultHandler(cxt, msg));
+			results.start();
+			
+			//This thread starts experiments as they become available
+			experiments = new Thread(new ExperimentHandler(cxt, msg));
+			experiments.start();
+			
+			results.join();
+			experiments.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}finally{
+			if(cxt != null) cxt.term();
+		}
 	}
 
 	/**
@@ -130,7 +144,7 @@ public class Searcher {
 	public synchronized static long nextUID(){
 		return UIDgenerator++;
 	}
-	
+
 	/**
 	 * Starts up an experiment on this machine, called from ExperimentHnadler.
 	 * 
@@ -152,6 +166,8 @@ public class Searcher {
 			final ZMQ.Socket local = context.socket(ZMQ.PULL); 
 			local.setReceiveTimeOut(10000);
 			int listeningPort = local.bindToRandomPort("tcp://"+InetAddress.getLocalHost().getHostAddress());
+			System.out.println("Searcher bound to port: "+listeningPort);
+
 			//Build up the command that we're going to run on this machine
 			String[] parts = machineState.getExecutableCommand().split("\\s+");
 			String[] command = new String[exp.getArgumentCount()*2+parts.length+1];
@@ -172,12 +188,13 @@ public class Searcher {
 				builder.environment().put(var.getKey(), var.getValue());
 			//Set the working directory
 			builder.directory(new File(machineState.getWorkingDir()));
-			
+
 			//Experiment UID
 			final long uid = nextUID();
 			//Start up a thread to unambiguously get the results from this experiment.
 			new  Thread(){
 				public void run() {
+					try{
 					for(;keepGoing;){
 						byte[] msg = local.recv();
 						try {
@@ -185,8 +202,8 @@ public class Searcher {
 								//Modify the message with it's local info (running machine name, local uid, time completed)
 								ResultMessage rm = ResultMessage.parseFrom(msg);
 								rm = ResultMessage.newBuilder(rm).setMachineName("'"+machineState.getLocalName()+"'")
-															.setUid(uid)
-															.setTimestamp(new GregorianCalendar().getTime().getTime()).build();
+										.setUid(uid)
+										.setTimestamp(new GregorianCalendar().getTime().getTime()).build();
 								results.put(rm);
 							}
 						} catch (InvalidProtocolBufferException e) {
@@ -196,14 +213,17 @@ public class Searcher {
 							System.err.println("Got more results than capacity allows..."); //Should not be possible.
 						}
 					}
+					}finally{
+						if(local != null) local.close();
+					}
 				};
 			}.start();
-			
+
 			//Actually run the task:
 			Process proc = null;
 			int retVal = -1;
 			try {
-//				System.out.println(builder.command());
+				//				System.out.println(builder.command());
 				proc = builder.start();
 				Scanner scan = new Scanner(proc.getInputStream());
 				while(scan.hasNextLine())
@@ -236,71 +256,77 @@ public class Searcher {
 	private class ExperimentHandler implements Runnable{
 		private ZMQ.Context cxt;
 		private Contract msg;
-		
+
 		public ExperimentHandler(ZMQ.Context cxt, Contract msg) {
 			this.cxt = cxt;
 			this.msg = msg;
 		}
-		
+
 		@Override
 		public void run() {
-			ZMQ.Socket experiments = cxt.socket(ZMQ.REQ);
-			experiments.setReceiveTimeOut(1000);
-			experiments.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getExperimentPort());
-			//Now loop on Experiment type messages
-			//Need to setup the executor service to run the experiments locally:
-			ExecutorService exec = Executors.newFixedThreadPool(machineState.getNumReplicates());
-			List<Future<Integer>> results = new ArrayList<>();
-			RunSettings sentinal = RunSettings.newBuilder().buildPartial();
-			for(;!exec.isShutdown();){
-				try {
-//					System.out.println("Connected and waiting on some experiments...");
-					incomplete.put(sentinal); //Block until we have a thread that's ready for a task...
-					incomplete.take(); //Take the dummy sentinel off
-					experiments.send("gimme");
-					byte[] msg = experiments.recv(); //Get the new task
-					if(msg != null){
-						RunSettings exp = RunSettings.parseFrom(msg);
-						if(!exp.getTerminal() || exp.getArgumentCount() != 0){
-							incomplete.put(exp);
-							results.add(exec.submit(new ExperimentTask(exp)));
+			ZMQ.Socket experiments = null;
+			try{
+				experiments = cxt.socket(ZMQ.REQ);
+
+				experiments.setReceiveTimeOut(1000);
+				System.out.println("Searcher connecting to Dispatcher experiment sender at: tcp://"+msg.getDispatchAddress()+":"+msg.getExperimentPort());
+				experiments.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getExperimentPort());
+				//Now loop on Experiment type messages
+				//Need to setup the executor service to run the experiments locally:
+				ExecutorService exec = Executors.newFixedThreadPool(machineState.getNumReplicates());
+				List<Future<Integer>> results = new ArrayList<>();
+				RunSettings sentinal = RunSettings.newBuilder().buildPartial();
+				for(;!exec.isShutdown();){
+					try {
+						//					System.out.println("Connected and waiting on some experiments...");
+						incomplete.put(sentinal); //Block until we have a thread that's ready for a task...
+						incomplete.take(); //Take the dummy sentinel off
+						experiments.send("gimme");
+						byte[] msg = experiments.recv(); //Get the new task
+						if(msg != null){
+							RunSettings exp = RunSettings.parseFrom(msg);
+							if(!exp.getTerminal() || exp.getArgumentCount() != 0){
+								incomplete.put(exp);
+								results.add(exec.submit(new ExperimentTask(exp)));
+							}
+							if(exp.getTerminal()){
+								exec.shutdown();
+							}
 						}
-						if(exp.getTerminal()){
-							exec.shutdown();
-						}
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (InvalidProtocolBufferException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ZMQException e){
+						System.out.println("Caught...");
+						e.printStackTrace();
+						if(!exec.isShutdown()) exec.shutdown();
 					}
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (InvalidProtocolBufferException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ZMQException e){
-					System.out.println("Caught...");
-					e.printStackTrace();
-					if(!exec.isShutdown()) exec.shutdown();
 				}
-			}
-			//Wait for all the tasks to complete...
-			for(Future<Integer> f : results)
+				//Wait for all the tasks to complete...
+				for(Future<Integer> f : results)
+					try {
+						f.get();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						System.out.println("Does this not get propagated back???");
+						e.printStackTrace();
+					}	
 				try {
-					f.get();
+					Thread.sleep(1000); //Give it a few seconds before ending the results thread...
+					Searcher.this.machineState.setActive(false);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (ExecutionException e) {
-					System.out.println("Does this not get propagated back???");
-					e.printStackTrace();
-				}	
-			try {
-				Thread.sleep(1000); //Give it a few seconds before ending the results thread...
-				Searcher.this.machineState.setActive(false);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				}
+				System.out.println("Exp listener done");
+			}finally{
+				if(experiments != null) experiments.close();
 			}
-			System.out.println("Exp listener done");
-			experiments.close();
 		}
 	}
 
@@ -314,31 +340,34 @@ public class Searcher {
 	private class ResultHandler implements Runnable{
 		private ZMQ.Context cxt;
 		private Contract msg;
-		
+
 		public ResultHandler(ZMQ.Context cxt, Contract msg) {
 			this.cxt = cxt;
 			this.msg = msg;
 		}
-		
+
 		@Override
 		public void run() {
-			ZMQ.Socket results = cxt.socket(ZMQ.PUSH);
-			results.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getReplyPort());
-			for(;Searcher.this.machineState.isActive();){
-				try {
-					ResultMessage rm = Searcher.this.results.poll(50, TimeUnit.SECONDS);
-					if(rm != null)
-						results.send(rm.toByteArray(), ZMQ.NOBLOCK);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			ZMQ.Socket results = null;
+			try{
+				results = cxt.socket(ZMQ.PUSH);
+				System.out.println("Searcher connecting to Dispatcher Result Listener at: tcp://"+msg.getDispatchAddress()+":"+msg.getReplyPort());
+				results.connect("tcp://"+msg.getDispatchAddress()+":"+msg.getReplyPort());
+				for(;Searcher.this.machineState.isActive();){
+					try {
+						ResultMessage rm = Searcher.this.results.poll(50, TimeUnit.SECONDS);
+						if(rm != null)
+							results.send(rm.toByteArray(), ZMQ.NOBLOCK);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
+			}finally{
+				if(results != null) results.close();
 			}
-			results.close();
-			cxt.term();
 		}
 	}
-	
+
 	public static void main(String[] args) throws Exception{
 		Map<ProgramParameter, Object> vals = ProgramParameter.getValues(args, allParams, allParams);
 		if(vals != null)

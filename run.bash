@@ -1,8 +1,8 @@
 #! /bin/bash
 
 ###### OVERALL VARIABLES #
-JAR_DIR=/home/sloscal1/Programming/jars
-CLASSPATH=$JAR_DIR/sqlite-jdbc-3.8.11.2.jar:$JAR_DIR/protobuf-java-2.6.1.jar:$JAR_DIR/jeromq-0.3.6-SNAPSHOT.jar:$JAR_DIR/java-getopt-1.0.14.jar
+JAR_DIR=/home/sloscal1/jars
+CLASSPATH=$JAR_DIR/sqlite-jdbc-3.8.11.2.jar:$JAR_DIR/protobuf-java-2.5.0.jar:$JAR_DIR/jeromq-0.3.6-SNAPSHOT.jar:$JAR_DIR/java-getopt-1.0.14.jar
 JAVA_CLASS_DIR=bin
 JAVA_SRC_DIR=java/src
 PROTO_DIR=proto

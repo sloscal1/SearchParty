@@ -51,6 +51,7 @@ import core.messages.DispatcherCentricMessages.Machine;
 import core.messages.DispatcherCentricMessages.Setup;
 import core.messages.ExperimentResults;
 import core.messages.ExperimentResults.Result;
+import core.messages.ExperimentResults.ResultMessage;
 import core.messages.SearcherCentricMessages.Argument;
 import core.messages.SearcherCentricMessages.Contract;
 import core.messages.SearcherCentricMessages.RunSettings;
@@ -242,14 +243,16 @@ public class Dispatcher {
 			portReady.signal();
 			portLock.unlock();
 			for(;activeMachines.availablePermits() != 0;){
+				byte[] msg = null;
 				try {
-					byte[] msg = results.recv();
+					msg = results.recv();
 					if(msg != null){
-						System.out.println(new String(msg)+" **************************************************");
-						dbMan.insertResults(ExperimentResults.ResultMessage.parseFrom(msg));
+						ResultMessage rm = ExperimentResults.ResultMessage.parseFrom(msg);
+						dbMan.insertResults(rm);
 					}
 				} catch (InvalidProtocolBufferException e) {
-					// TODO Auto-generated catch block
+					//Can happen due to residual info or something...
+					System.out.println(new String(msg));
 					e.printStackTrace();
 				}
 			}
@@ -260,6 +263,7 @@ public class Dispatcher {
 			System.out.println("All experiments finished.");
 		}
 	}
+	
 	public class DeploySearcher implements Runnable{
 		private Machine m;
 		private Setup exp;

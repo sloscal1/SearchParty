@@ -1,5 +1,6 @@
 package core.party;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,14 +58,16 @@ public class SearcherShell {
 		Map<ProgramParameter, Object> vals = ProgramParameter.getValues(args, allParams, allParams);
 		if(vals != null){
 			MachineState state = new MachineState((Setup)vals.get(allParams.get(0)));
-			Map<String, String> envVars = state.getEnvironmentVariables();
+			
 			ProcessBuilder pb = new ProcessBuilder("java", "core.party.Searcher", args[0], args[1], args[2], args[3]);
 			pb.redirectErrorStream(true);
-			System.out.println("=====");
-			for(String key : envVars.keySet()){
+
+			pb.directory(new File(state.getWorkingDir()));
+			
+			Map<String, String> envVars = state.getEnvironmentVariables();
+			for(String key : envVars.keySet())
 				pb.environment().put(key, envVars.get(key));
-				System.out.println(key+" "+envVars.get(key));
-			}
+			
 			Process proc = pb.start();
 			Scanner in = new Scanner(proc.getInputStream());
 			while(in.hasNextLine())

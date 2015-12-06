@@ -62,14 +62,14 @@ public class SQLiteManager {
 	}
 	
 	private String getTableNameFrom(String experimentName) {
-		return experimentName;
+		return "TID_"+experimentName;
 	}
 
 	public boolean runsTableExists(){
 		boolean retVal = false;
 		ResultSet runsTable;
 		try {
-			runsTable = stmt.executeQuery("SELECT * FROM ALL_EXP WHERE Name='"+runTableName+"';");
+			runsTable = stmt.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='"+runTableName+"';");
 			retVal = runsTable.next();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -171,7 +171,7 @@ public class SQLiteManager {
 			stmt.executeUpdate("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
 					+currentExpID+", "+values.toString()+");");
 			ResultSet ret = stmt.executeQuery("SELECT ExpID, RunID FROM "+runTableName+" ORDER BY ExpID DESC LIMIT 1;");
-			runPrefix = ret.getString(1)+"_"+ret.getString(2);
+			runPrefix = "TID_"+ret.getString(1)+"_"+ret.getString(2);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -193,9 +193,9 @@ public class SQLiteManager {
 			columns.append(" Machine TEXT");
 
 			try {
-				System.out.println("CREATE TABLE "+msg.getTableName()+" ( "
+				System.out.println("CREATE TABLE "+msg.getTableName()+" ("
 						+columns.toString()+")");
-				stmt.executeUpdate("CREATE TABLE "+msg.getTableName()+" ( "
+				stmt.executeUpdate("CREATE TABLE "+msg.getTableName()+" ("
 						+columns.toString()+")");
 				createdResultTables.add(msg.getTableName());
 			} catch (SQLException e) {
