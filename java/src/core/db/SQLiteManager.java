@@ -1,3 +1,18 @@
+/*
+Copyright 2015 Steven Loscalzo
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License. 
+ */
 package core.db;
 
 import java.sql.Connection;
@@ -31,7 +46,8 @@ public class SQLiteManager {
 	private Set<String> createdResultTables = new HashSet<>();
 	/** Map to an argument name to the appropriate table in the database */
 	private Map<String, Integer> runTableMap;
-
+	private int resultsBeforeCommit = 0;
+	
 	public SQLiteManager(Setup inputExp) throws SQLException{
 		dbConn = DriverManager.getConnection("jdbc:sqlite:"+inputExp.getDatabasePath());
 		stmt = dbConn.createStatement();
@@ -51,6 +67,7 @@ public class SQLiteManager {
 				runTableMap.put("-"+pName, pos++);
 		}
 		
+		dbConn.setAutoCommit(false);
 		rp.append(" "+ExpGenerator.RAND_SEED_ARG_NAME);
 		runTableMap.put("--"+ExpGenerator.RAND_SEED_ARG_NAME, pos++);
 		runParams = rp.toString();
@@ -112,7 +129,7 @@ public class SQLiteManager {
 		
 		for(DispatcherCentricMessages.Parameter p : exp.getParamsList())
 			sb.append(" "+escape(p.getParamName())+" "+getDBType(p.getType())+",");
-		sb.append(" "+ExpGenerator.RAND_SEED_ARG_NAME+" INT NOT NULL");
+		sb.append(" "+escape(ExpGenerator.RAND_SEED_ARG_NAME)+" INT NOT NULL");
 		
 		//Create the table
 		try {
@@ -120,6 +137,7 @@ public class SQLiteManager {
 					+ "ExpID INTEGER NOT NULL, "
 					+ "RunID INTEGER PRIMARY KEY, "
 					+ sb.toString() +")");
+			dbConn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -140,10 +158,10 @@ public class SQLiteManager {
 					+new GregorianCalendar().getTimeInMillis()+");");
 			ResultSet idVal = stmt.executeQuery("SELECT ExpID FROM ALL_EXP ORDER BY ExpID DESC LIMIT 1;");
 			currentExpID = idVal.getInt(1);
+			dbConn.commit();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-
 		}
 	}
 
@@ -166,12 +184,11 @@ public class SQLiteManager {
 		values.append(argPos[argPos.length-1]);
 		
 		try {
-//			System.out.println("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
-//					+currentExpID+", "+values.toString()+");");
 			stmt.executeUpdate("INSERT INTO "+runTableName+"( ExpID, "+runParams+") VALUES ("
 					+currentExpID+", "+values.toString()+");");
-			ResultSet ret = stmt.executeQuery("SELECT ExpID, RunID FROM "+runTableName+" ORDER BY ExpID DESC LIMIT 1;");
+			ResultSet ret = stmt.executeQuery("SELECT ExpID, RunID FROM "+runTableName+" ORDER BY ExpID DESC, RunID DESC LIMIT 1;");
 			runPrefix = "TID_"+ret.getString(1)+"_"+ret.getString(2);
+			dbConn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(1);
@@ -182,10 +199,10 @@ public class SQLiteManager {
 	//create table per (if executable and all start parameters are the same, it should go to the same table.)
 
 	public void insertResults(ResultMessage msg) {
-		//See if this table exists:
-		//TODO: The DB table name needs to be more specific, maybe include exp_id and run_id to completely identify it.
-
+		//See if this table exists:		
+		System.out.println("DB WANTS: "+msg.getTableName());
 		if(!createdResultTables.contains(msg.getTableName())){
+			System.out.println("DB CREATING: "+msg.getTableName());
 			StringBuilder columns = new StringBuilder();
 			for(Result r : msg.getReportedValueList())
 				columns.append(" "+r.getName()+" DOUBLE,");
@@ -193,11 +210,10 @@ public class SQLiteManager {
 			columns.append(" Machine TEXT");
 
 			try {
-				System.out.println("CREATE TABLE "+msg.getTableName()+" ("
-						+columns.toString()+")");
 				stmt.executeUpdate("CREATE TABLE "+msg.getTableName()+" ("
 						+columns.toString()+")");
 				createdResultTables.add(msg.getTableName());
+				dbConn.commit();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -214,6 +230,11 @@ public class SQLiteManager {
 		try {
 			stmt.executeUpdate("INSERT INTO "+msg.getTableName()+"("+columnNames.toString()+" Timestamp, Machine ) "
 					+ " VALUES("+values.toString()+" "+msg.getTimestamp()+", "+msg.getMachineName()+");");
+			++resultsBeforeCommit;
+			if(resultsBeforeCommit >= 100){
+				dbConn.commit();
+				resultsBeforeCommit = 0;
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
