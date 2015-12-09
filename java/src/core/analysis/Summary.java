@@ -14,21 +14,23 @@ public class Summary extends CompNode{
 
 	@Override
 	public Object execute() {
-		double[] retVal = null;
+		List<Double> retVal = new ArrayList<>(4);
 		Object obj = src.execute();
+		if(src instanceof Phony)
+			obj = getInput("DATA");
 		if(obj instanceof Iterable){
 			Iterable<Object> iter = (Iterable<Object>)obj;
+			System.out.println(obj.getClass());
 			List<Double> values = new ArrayList<Double>();
 			for(Object o : iter)
 				values.add((Double)o);
 			double[] arrVals = new double[values.size()];
 			for(int i = 0; i < arrVals.length; ++i)
 				arrVals[i] = values.get(i);
-			retVal = new double[4];
-			retVal[0] = StatUtils.mean(arrVals);
-			retVal[1] = new StandardDeviation().evaluate(arrVals, retVal[0]);
-			retVal[2] = StatUtils.max(arrVals);
-			retVal[3] = StatUtils.max(arrVals);			
+			retVal.add(StatUtils.mean(arrVals));
+			retVal.add(new StandardDeviation().evaluate(arrVals, retVal.get(0)));
+			retVal.add(StatUtils.min(arrVals));
+			retVal.add(StatUtils.max(arrVals));			
 		}
 		return retVal;
 	}
