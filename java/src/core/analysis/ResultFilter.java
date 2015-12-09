@@ -9,7 +9,7 @@ import java.util.List;
  * @author sloscal1
  *
  */
-public interface ResultFilter {
+public interface ResultFilter<T> extends ResultProvider<T>{
 
 	/**
 	 * Gets list of the outputs produced by this filter.
@@ -29,8 +29,9 @@ public interface ResultFilter {
 	 * listed by this objects getInputs method.
 	 * @param input must not be null
 	 */
-	void addInput(String inputName, ResultValue<?> input);
+	ResultFilter<T> addInput(String inputName, ResultFilter<?> input);
 	
+	ResultFilter<T> addInput(ResultFilter<?> inGen);
 	/**
 	 * Apply this filter to the set inputs.
 	 * 

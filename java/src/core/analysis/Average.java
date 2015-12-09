@@ -38,13 +38,14 @@ public class Average implements ResultFilter {
 	}
 
 	@Override
-	public void addInput(String inputName, ResultValue<?> input) {
+	public ResultFilter addInput(String inputName, ResultValue<?> input) {
 		if("Data".equalsIgnoreCase(inputName)){
 			if(input instanceof Iterable)
 				inputs.put("Data", input);
 			else throw new IllegalArgumentException("Average input: Data must be Iterable.");
 		}
 		else throw new IllegalArgumentException("Average has no input named: "+inputName);
+		return this;
 	}
 
 	@SuppressWarnings("unchecked")
