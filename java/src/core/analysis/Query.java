@@ -26,7 +26,6 @@ public class Query extends CompNode {
 					+" FROM " + getInput("FROM")
 					+(getInput("WHERE") != null ?" WHERE " + getInput("WHERE"):"")
 					+";";
-			System.out.println(sql);
 			ResultSet res = stmt.executeQuery(sql);
 			ResultSetMetaData meta = res.getMetaData();
 			
@@ -34,8 +33,6 @@ public class Query extends CompNode {
 			List<Integer> colTypes = new ArrayList<>(nCols);
 			for(int i = 1; i <= nCols; ++i)
 				colTypes.add(meta.getColumnType(i));
-			System.out.println(colTypes);
-			System.out.println(Types.CHAR);
 			while(res.next()){
 				if(nCols > 1){
 					List<Object> row = new ArrayList<>(nCols);

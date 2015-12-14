@@ -60,38 +60,52 @@ public abstract class CompNode implements Computable {
 		CompNode forwardGenOp = new DummyFill("GenOp");
 		CompNode forwardRunOp = new DummyFill("RunOp");
 		CompNode forwardOverallOp = new DummyFill("OverallOp");
-
+		
 		//Get all fitness values from a particular generation of a particular run
+		// 1 x 4
 		CompNode s1 = new Summary(new Query().input("DB", "results.db")
 				.input("BASE", "SELECT Fitness")
 				.markForFilling(forwardRunOp, "FROM")
 				.input("WHERE", new Concatenation().input("1", "Generation=").markForFilling(forwardGenOp, "2")));
 		
 		//Get the set of generation values that are valid for this table
-		Filter genOp = new Filter(new Query().input("DB", "results.db")
+		// g x 4
+		CompNode genOp = new Filter(new Query().input("DB", "results.db")
 				.input("BASE", "SELECT DISTINCT Generation")
 				.markForFilling(forwardRunOp, "FROM"),
 				s1,
 				forwardGenOp);
-
-		//Get the table names that contain information of interest...
-		Filter runOp = new Filter(new Query().input("DB", "results.db")
+		
+		CompNode tableName = new Query().input("DB", "results.db")
 				.input("BASE", "SELECT name")
 				.input("FROM", "sqlite_master")
-				.input("WHERE", "name LIKE 'TID_20_%_RUN'"),
-				new Transpose(genOp),
+				.input("WHERE", "name LIKE 'TID_20_%_RUN'");
+		
+		
+		//Get the table names that contain information of interest...
+		//N x g x 4
+		CompNode runOp = new Filter(tableName,
+				genOp,
 				forwardRunOp);
-
+					
+		new LineGraph(new Slice(new Filter(new Transpose(runOp),
+							 new Summary(new Slice(new Phony(forwardOverallOp))
+							 .input("SLICE_LAYER", 1)
+							 .input("COMPONENT", 3)),
+							 forwardOverallOp)).input("SLICE_LAYER", 1).input("COMPONENT", 2))
+			.input("TITLE", "Avg. Fitness")
+			.input("X-AXIS", "Generation")
+			.input("Y-AXIS", "Fitness").execute();
+//		new Print(runOp).execute();
+		
 		//There is a problem here! The runOp results are 3 dimensional so Summary doesn't know what to do.
 		//Need to reshape the matrix, currently it is something like:
 		//NumRunsx4xNumGenerations
 		//Think I'm going to need some slice type operation or permute
 		//NumRunsxNumGenerations
-		//
-		Filter overall = new Filter(runOp,
-				new Summary(new Phony()).markForFilling(forwardOverallOp, "DATA"),
-				forwardOverallOp);
-
-		new Print(overall).execute();
+		//m1015
+		
+		//For each table
+		//Find max generations
 	}
 }

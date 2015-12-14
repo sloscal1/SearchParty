@@ -14,16 +14,20 @@ public class Transpose extends CompNode {
 		Iterable<Iterable<Object>> res = (Iterable<Iterable<Object>>)src.execute();
 		//Copy the data into an indexable structure
 		List<List<Object>> objs = new ArrayList<List<Object>>();
+		//Find the max length of the array to change:
+		int maxLen = Integer.MIN_VALUE;
 		for(Iterable<Object> r : res){
 			List<Object> list = new ArrayList<Object>();
 			for(Object obj : r)
 				list.add(obj);
 			objs.add(list);
+			if(maxLen < list.size())
+				maxLen = list.size();
 		}
 		
 		//Transpose that structure (need to do some padding too...)
 		List<List<Object>> transpose = new ArrayList<List<Object>>();
-		for(int c = 0; c < objs.get(0).size(); ++c){
+		for(int c = 0; c < maxLen; ++c){
 			List<Object> newRow = new ArrayList<>(objs.size());
 			for(int r = 0; r < objs.size(); ++r){
 				if(c >= objs.get(r).size())

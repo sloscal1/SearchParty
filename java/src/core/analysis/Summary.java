@@ -16,11 +16,9 @@ public class Summary extends CompNode{
 	public Object execute() {
 		List<Double> retVal = new ArrayList<>(4);
 		Object obj = src.execute();
-		if(src instanceof Phony)
-			obj = getInput("DATA");
+			
 		if(obj instanceof Iterable){
 			Iterable<Object> iter = (Iterable<Object>)obj;
-			System.out.println(obj.getClass());
 			List<Double> values = new ArrayList<Double>();
 			for(Object o : iter)
 				values.add((Double)o);

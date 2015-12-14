@@ -14,11 +14,14 @@ public class Print extends CompNode {
 	}
 
 	private void printRecursive(Object obj, String depth){
+		String nextDepth = ": ";
 		if(obj instanceof Iterable){
-			for(Object o : (Iterable<Object>)obj)
-					printRecursive(o, depth+"*");
+			nextDepth = (!"".equals(depth))? depth+"x" : depth;
+			int pos = 0;
+			for(Object o : (Iterable<?>)obj)
+					printRecursive(o,nextDepth+(pos++));
 		}
 		else
-			System.out.println(depth+obj.toString());
+			System.out.println(depth+nextDepth+obj.toString());
 	}
 }
